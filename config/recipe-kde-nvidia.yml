@@ -1,0 +1,13 @@
+name: fedora-generic-kde-nvidia
+description: Custom BlueBuild KDE image. (Generic, with NVIDIA support)
+
+base-image: ghcr.io/ublue-os/kinoite-nvidia
+image-version: latest
+
+modules:
+
+  # Common
+  - from-file: image_configs/common.yml
+
+  # KDE
+  - from-file: image_configs/kde.yml

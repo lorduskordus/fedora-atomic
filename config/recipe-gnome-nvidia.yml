@@ -1,0 +1,13 @@
+name: fedora-generic-gnome-nvidia
+description: Custom BlueBuild GNOME image. (Generic, with NVIDIA support)
+
+base-image: ghcr.io/ublue-os/silverblue-nvidia
+image-version: 39
+
+modules:
+
+  # Common
+  - from-file: image_configs/common.yml
+  
+  # GNOME
+  - from-file: image_configs/gnome.yml

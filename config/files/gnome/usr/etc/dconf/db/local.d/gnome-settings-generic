@@ -1,0 +1,79 @@
+[org/gnome/desktop/interface]
+gtk-theme='adw-gtk3'
+cursor-theme='Bibata-Modern-Classic'
+icon-theme='MoreWaita'
+font-antialiasing='rgba'
+font-hinting='full'
+font-name='Inter 12'
+document-font-name='Inter 12'
+monospace-font-name='Monospace 12'
+enable-hot-corners=false
+clock-show-date=true
+show-battery-percentage=true
+
+[org/gnome/desktop/wm/preferences]
+button-layout=':minimize,maximize,close'
+titlebar-font='Inter Bold 12'
+
+[org/gnome/desktop/sound]
+theme-name='zorin'
+
+[org/gnome/desktop/peripherals/touchpad]
+tap-to-click=true
+
+[org/gnome/desktop/peripherals/keyboard]
+numlock-state=true
+remember-numlock-state=true
+
+[org/gnome/desktop/input-sources]
+per-window=true
+show-all-sources=true
+mru-sources=[('xkb', 'cz'), ('xkb', 'cz+coder')]
+sources=[('xkb', 'cz'), ('xkb', 'cz+coder')]
+
+[org/gnome/desktop/privacy]
+disable-camera=true
+disable-microphone=true
+old-files-age=uint32 7
+recent-files-max-age=30
+remove-old-temp-files=true
+remove-old-trash-files=true
+
+[org/gnome/system/location]
+enabled=true
+
+[org/gnome/mutter]
+center-new-windows=true
+
+[org/gnome/nautilus/preferences]
+show-create-link=true
+
+[org/gnome/shell]
+favorite-apps=['org.gnome.Nautilus.desktop', 'org.mozilla.firefox.desktop', 'org.gnome.Geary.desktop', 'org.gnome.Calendar.desktop', 'org.gnome.Music.desktop', 'org.gnome.Software.desktop']
+
+[org/gnome/software]
+allow-updates=false
+download-updates=false
+download-updates-notify=false
+packaging-format-preference=['flatpak:flathub-user']
+
+[org/gnome/nautilus/list-view]
+use-tree-view=true
+
+[org/gnome/terminal/legacy]
+theme-variant='system'
+
+[org/gnome/settings-daemon/plugins/color]
+night-light-enabled=true
+night-light-schedule-automatic=true
+night-light-temperature=uint32 3700
+
+[org/gnome/settings-daemon/plugins/power]
+power-button-action='nothing'
+sleep-inactive-ac-timeout=7200
+sleep-inactive-battery-timeout=3600
+sleep-inactive-ac-type='nothing'
+
+[org/gnome/TextEditor]
+restore-session=false
+highlight-current-line=true

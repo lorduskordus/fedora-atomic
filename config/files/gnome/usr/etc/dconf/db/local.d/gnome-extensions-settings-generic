@@ -1,0 +1,21 @@
+[org/gnome/shell]
+enabled-extensions=['dash-to-panel@jderose9.github.com', 'appindicatorsupport@rgcjonas.gmail.com', 'gsconnect@andyholmes.github.io', 'just-perfection-desktop@just-perfection', 'blur-my-shell@aunetx']
+
+[org/gnome/shell/extensions/appindicator]
+icon-opacity=255
+icon-saturation=0.99999999999999989
+icon-size=0
+legacy-tray-enabled=true
+tray-pos='right'
+
+[org/gnome/shell/extensions/just-perfection]
+startup-status=0
+keyboard-layout=false
+osd-position=5
+world-clock=false
+workspace-peek=false
+search=false
+workspace-switcher-should-show=true
+
+[org/gnome/shell/extensions/caffeine]
+enable-fullscreen=false

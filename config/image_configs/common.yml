@@ -1,0 +1,66 @@
+modules:
+
+  - type: rpm-ostree
+    repos:
+      # COPR for morewaita-icon-theme
+      - https://copr.fedorainfracloud.org/coprs/dusansimic/themes/repo/fedora-%OS_VERSION%/dusansimic-themes.repo
+    install:
+      - adw-gtk3-theme
+      - morewaita-icon-theme
+      - intel-gpu-tools
+      - nm-connection-editor-desktop
+    remove:
+      - firefox
+      - firefox-langpacks
+
+  - type: default-flatpaks
+    notify: true
+    system:
+      repo-url: https://dl.flathub.org/repo/flathub.flatpakrepo
+      repo-name: flathub-system
+      repo-title: "Flathub (systém)"
+      install:
+        - org.freedesktop.Platform.ffmpeg-full/x86_64/23.08
+        - org.freedesktop.Platform.VAAPI.Intel/x86_64/23.08
+        - org.freedesktop.Platform.VaInfo/x86_64/23.08
+        - org.winehq.Wine//stable-23.08
+        - org.freedesktop.Platform.VulkanLayer.MangoHud//23.08
+        - org.mozilla.firefox
+        - org.onlyoffice.desktopeditors
+        - org.videolan.VLC
+        - io.mpv.Mpv
+        - org.gnome.Lollypop
+        - org.gnome.Loupe
+        - org.gnome.Snapshot
+        - org.gnome.SoundRecorder
+        - com.github.marhkb.Pods
+        - io.github.flattool.Warehouse
+        - org.gnome.Calculator
+        - org.gnome.Evince
+        - org.gnome.TextEditor
+        - net.nokyan.Resources
+        - com.tomjwatson.Emote
+    user:
+      repo-url: https://dl.flathub.org/repo/flathub.flatpakrepo
+      repo-name: flathub-user
+      repo-title: "Flathub (uživatel)"
+
+  - type: bling
+    install:
+      - ublue-update
+
+  - type: files
+    files:
+      - common/usr: /usr
+
+  - type: fonts
+    fonts:
+      google-fonts:
+        - Inter
+
+  - type: systemd
+    user:
+      enabled:
+        - podman.socket
+
+  - type: signing

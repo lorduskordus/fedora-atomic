@@ -1,5 +1,6 @@
 ublue_variants:
-  - label: blue-build/template
+  - label: lorduskordus/fedora-generic
     ks: /kickstart/ublue-os.ks
     flavors:
-      - label: blue-build/template
+      - label: fedora-generic-gnome-nvidia
+      - label: fedora-generic-kde-nvidia

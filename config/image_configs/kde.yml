@@ -1,0 +1,31 @@
+modules:
+
+  - type: rpm-ostree
+    repos:
+      # COPR for Koi, switch between light & dark themes.
+      - https://copr.fedorainfracloud.org/coprs/birkch/Koi/repo/fedora-%OS_VERSION%/birkch-Koi-fedora.repo
+    install:
+      - Koi # For switching between light & dark themes.
+      - kalendar
+      - kdepim-addons
+    remove:
+      - filelight
+      - kate
+      - kate-plugins
+      - kfind
+      - kcharselect
+      - kmousetool
+
+  - type: default-flatpaks
+    notify: true
+    system:
+      install:
+        - org.kde.krdc
+        - org.kde.filelight
+        - org.kde.kclock
+        - org.kde.kweather
+        #- org.kde.ark
+        #- org.kde.kalk
+        #- org.kde.okular
+        #- org.kde.elisa
+        #- org.kde.kwrite

@@ -1,0 +1,16 @@
+[org/gnome/desktop/wm/keybindings]
+toggle-fullscreen=['<Super>f']
+
+[org/gnome/settings-daemon/plugins/media-keys]
+home=['<Super>e']
+custom-keybindings=['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/']
+
+[org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0]
+binding='<Shift><Control>Escape'
+command='/usr/bin/flatpak run net.nokyan.Resources'
+name='System monitoring'
+
+[org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1]
+binding='<Control><Alt>e'
+command='/usr/bin/flatpak run com.tomjwatson.Emote'
+name='Emoticons'
