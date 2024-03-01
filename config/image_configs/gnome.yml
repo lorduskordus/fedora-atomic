@@ -24,9 +24,30 @@ modules:
       - gnome-classic-session
 
   - type: default-flatpaks
-    notify: true
     system:
       install:
+      # ------ Common ------ #
+        - org.freedesktop.Platform.ffmpeg-full/x86_64/23.08
+        - org.freedesktop.Platform.VAAPI.Intel/x86_64/23.08
+        - org.freedesktop.Platform.VaInfo/x86_64/23.08
+        - org.winehq.Wine//stable-23.08
+        - org.freedesktop.Platform.VulkanLayer.MangoHud//23.08
+        - org.mozilla.firefox
+        - org.onlyoffice.desktopeditors
+        - org.videolan.VLC
+        - io.mpv.Mpv
+        - org.gnome.Lollypop
+        - org.gnome.Loupe
+        - org.gnome.Snapshot
+        - org.gnome.SoundRecorder
+        - com.github.marhkb.Pods
+        - io.github.flattool.Warehouse
+        - org.gnome.Calculator
+        - org.gnome.Evince
+        - org.gnome.TextEditor
+        - net.nokyan.Resources
+        - com.tomjwatson.Emote
+      # ------ GNOME ------ #
         - com.github.tchx84.Flatseal
         - com.mattjakeman.ExtensionManager
         - org.gnome.Calendar
