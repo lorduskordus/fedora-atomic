@@ -69,7 +69,7 @@ modules:
 
   - type: script
     scripts:
-      - gnome/custom-dash-to-panel.sh
+      - custom-dash-to-panel.sh
 
   # Apply the triple buffer patch.
   - type: rpm-ostree-override
