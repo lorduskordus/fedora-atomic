@@ -8,10 +8,6 @@ These images have additional 'minimal' QoL changes applied on top and serve as a
 
 * [Fedora LK](https://github.com/lorduskordus/fedora-lk) - containing images I daily drive
 
-## ISO
-
-Get it [here](https://github.com/lorduskordus/fedora-generic/releases/tag/auto-iso).
-
 ## Images
 
 ##### GNOME (NVIDIA)
