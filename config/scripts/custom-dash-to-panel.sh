@@ -2,7 +2,7 @@
 
 # Sets rounded corners for a horizontal Dash-to-Panel layout.
 
-set -oue pipefail
+set -euo pipefail
 
 # Setup variables
 ADD_PANEL_HEIGHT=8 # Should be exactly twice of BORDERS
