@@ -10,11 +10,11 @@ modules:
       - kdepim-addons
     remove:
       - filelight
-      - kate
-      - kate-plugins
       - kfind
       - kcharselect
       - kmousetool
+      #- kate
+      #- kate-plugins
 
   - type: default-flatpaks
     system:
