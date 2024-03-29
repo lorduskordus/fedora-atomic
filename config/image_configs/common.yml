@@ -9,6 +9,7 @@ modules:
       - morewaita-icon-theme
       - intel-gpu-tools
       - nm-connection-editor-desktop
+      - rsms-inter-fonts
     remove:
       - firefox
       - firefox-langpacks
@@ -54,10 +55,10 @@ modules:
     files:
       - common/usr: /usr
 
-  - type: fonts
-    fonts:
-      google-fonts:
-        - Inter
+  #- type: fonts
+  #  fonts:
+  #    google-fonts:
+  #      - Inter
 
   - type: systemd
     user:
