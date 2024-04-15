@@ -28,8 +28,7 @@ remember-numlock-state=true
 [org/gnome/desktop/input-sources]
 per-window=true
 show-all-sources=true
-mru-sources=[('xkb', 'cz'), ('xkb', 'cz+coder')]
-sources=[('xkb', 'cz'), ('xkb', 'cz+coder')]
+sources=[('xkb', 'cz')]
 
 [org/gnome/desktop/privacy]
 disable-camera=true
