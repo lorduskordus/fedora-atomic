@@ -25,11 +25,6 @@ tap-to-click=true
 numlock-state=true
 remember-numlock-state=true
 
-[org/gnome/desktop/input-sources]
-per-window=true
-show-all-sources=true
-sources=[('xkb', 'cz')]
-
 [org/gnome/desktop/privacy]
 disable-camera=true
 disable-microphone=true
