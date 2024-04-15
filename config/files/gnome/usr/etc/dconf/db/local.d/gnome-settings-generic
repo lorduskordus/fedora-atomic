@@ -4,16 +4,16 @@ cursor-theme='Bibata-Modern-Classic'
 icon-theme='MoreWaita'
 font-antialiasing='rgba'
 font-hinting='full'
-font-name='Inter 12'
-document-font-name='Inter 12'
-monospace-font-name='Monospace 12'
+font-name='Inter 11'
+document-font-name='Inter 11'
+monospace-font-name='Monospace 11'
 enable-hot-corners=false
 clock-show-date=true
 show-battery-percentage=true
 
 [org/gnome/desktop/wm/preferences]
 button-layout=':minimize,maximize,close'
-titlebar-font='Inter Bold 12'
+titlebar-font='Inter Bold 11'
 
 [org/gnome/desktop/sound]
 theme-name='zorin'
