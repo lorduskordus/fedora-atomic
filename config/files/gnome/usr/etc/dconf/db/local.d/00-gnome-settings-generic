@@ -18,9 +18,6 @@ titlebar-font='Inter Bold 11'
 [org/gnome/desktop/sound]
 theme-name='zorin'
 
-[org/gnome/desktop/peripherals/touchpad]
-tap-to-click=true
-
 [org/gnome/desktop/peripherals/keyboard]
 numlock-state=true
 remember-numlock-state=true
