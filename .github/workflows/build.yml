@@ -23,7 +23,9 @@ jobs:
         recipe:
           # !! Add your recipes here 
           - recipe-gnome-nvidia.yml
+          - recipe-gnome.yml
           - recipe-kde-nvidia.yml
+          - recipe-kde.yml
     steps:
        # the build is fully handled by the reusable github action
       - name: Build Custom Image

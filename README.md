@@ -12,11 +12,23 @@ These images have additional 'minimal' QoL changes applied on top and serve as a
 
 ## Images
 
-##### GNOME (NVIDIA)
+### MAIN
+
+#### GNOME
+```
+ostree-image-signed:docker://ghcr.io/lorduskordus/fedora-base-gnome
+```
+#### KDE
+```
+ostree-image-signed:docker://ghcr.io/lorduskordus/fedora-base-kde
+```
+### NVIDIA
+
+#### GNOME
 ```
 ostree-image-signed:docker://ghcr.io/lorduskordus/fedora-base-gnome-nvidia
 ```
-##### KDE (NVIDIA)
+#### KDE
 ```
 ostree-image-signed:docker://ghcr.io/lorduskordus/fedora-base-kde-nvidia
 ```
