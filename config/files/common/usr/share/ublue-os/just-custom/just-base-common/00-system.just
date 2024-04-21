@@ -6,7 +6,7 @@ switch-to-image ACTION="prompt":
     AVAILABLE_DESKTOPS="gnome \
                         kde"
 
-    CUR_IMAGE=$(rpm-ostree status | grep '●' | cut -d' ' -f2)
+    CUR_IMAGE=$(rpm-ostree status 2> /dev/null | grep '●' | cut -d' ' -f2)
 
     OWNER=$(cut -d'/' -f4 <<< ${CUR_IMAGE})
     IMAGE=$(echo ${CUR_IMAGE} | cut -d'/' -f5 | cut -d':' -f1)
