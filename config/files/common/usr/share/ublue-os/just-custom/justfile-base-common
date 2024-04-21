@@ -1,1 +1,2 @@
 import "/usr/share/ublue-os/just-custom/just-base-common/00-system.just"
+import "/usr/share/ublue-os/just-custom/just-base-common/01-flatpak.just"
