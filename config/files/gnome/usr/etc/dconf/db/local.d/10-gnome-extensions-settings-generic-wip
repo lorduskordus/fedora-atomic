@@ -21,7 +21,7 @@ blur=false
 
 [org/gnome/shell/extensions/blur-my-shell/overview]
 blur=true
-style-components=0
+style-components=2
 
 [org/gnome/shell/extensions/blur-my-shell/panel]
 blur=true
