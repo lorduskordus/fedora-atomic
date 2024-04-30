@@ -3,31 +3,6 @@ switch-to-image ACTION="prompt":
     #!/usr/bin/env bash
     source /usr/lib/ujust/ujust.sh
 
-    AVAILABLE_DESKTOPS="gnome \
-                        kde"
-
-    CUR_IMAGE=$(rpm-ostree status 2> /dev/null | grep '●' | cut -d' ' -f2)
-
-    OWNER=$(cut -d'/' -f4 <<< ${CUR_IMAGE})
-    IMAGE=$(echo ${CUR_IMAGE} | cut -d'/' -f5 | cut -d':' -f1)
-    TAG=$(cut -d':' -f4 <<< ${CUR_IMAGE})
-
-    IMAGE_TYPE=$(cut -d'-' -f1-2 <<< ${IMAGE})
-
-    for desktop in ${AVAILABLE_DESKTOPS}; do
-        AVAILABLE_IMAGES+="${IMAGE_TYPE}-${desktop} "
-    done
-
-    PREFIX=$(cut -d'/' -f1-3 <<< ${CUR_IMAGE})
-    PREFIX_SIGNED="ostree-image-signed:docker://ghcr.io"
-    PREFIX_UNSIGNED="ostree-unverified-registry:ghcr.io"
-
-    if [ "${PREFIX}" == "${PREFIX_SIGNED}" ]; then
-        SIGNED="yes"
-    else
-        SIGNED="no"
-    fi
-
     show_info () {
         echo "  ● ${bold}From${normal}:     ${OWNER}"
         echo "  ● ${bold}Image${normal}:    ${IMAGE}"
@@ -126,6 +101,36 @@ switch-to-image ACTION="prompt":
         switch_to ${IMAGE}
     }
 
+    AVAILABLE_DESKTOPS="gnome \
+                        kde"
+
+    CUR_IMAGE=$(rpm-ostree status 2> /dev/null | grep '●' | cut -d' ' -f2)
+
+    PREFIX_SIGNED="ostree-image-signed:docker://ghcr.io"
+    PREFIX_UNSIGNED="ostree-unverified-registry:ghcr.io"
+
+    if grep -qw "${PREFIX_SIGNED}" <<< ${CUR_IMAGE}; then
+        PREFIX=${PREFIX_SIGNED}
+        SIGNED="yes"
+    elif grep -qw "${PREFIX_UNSIGNED}" <<< ${CUR_IMAGE}; then
+        PREFIX=${PREFIX_UNSIGNED}
+        SIGNED="no"
+    else
+        echo "Couldn't get the prefix of current image."
+        exit 1
+    fi
+
+    CUR_IMAGE_NO_PREFIX=$(sed "s|${PREFIX}/||" <<< ${CUR_IMAGE})
+
+    OWNER=$(cut -d'/' -f1 <<< ${CUR_IMAGE_NO_PREFIX})
+    IMAGE=$(echo ${CUR_IMAGE_NO_PREFIX} | cut -d'/' -f2 | cut -d':' -f1)
+    TAG=$(cut -d':' -f2 <<< ${CUR_IMAGE_NO_PREFIX})
+
+    IMAGE_TYPE=$(cut -d'-' -f1-2 <<< ${IMAGE})
+    for desktop in ${AVAILABLE_DESKTOPS}; do
+        AVAILABLE_IMAGES+="${IMAGE_TYPE}-${desktop} "
+    done
+
     OPTION={{ ACTION }}
     if [ "${OPTION}" == "prompt" ]; then
         clear
@@ -134,10 +139,18 @@ switch-to-image ACTION="prompt":
         echo -e "\nChoose your new ${bold}IMAGE${normal}.\n"
 
         MENU_IMAGES=$(sed -E "s/${IMAGE}//;s/[[:space:]]\{2,\}/[[:space:]]/" <<< ${AVAILABLE_IMAGES})
-        OPTION=$(ugum choose ${MENU_IMAGES} "..something else")
+
+        if [ "${SIGNED}" == "no" ]; then
+            OPTION=$(ugum choose "current image, but signed" ${MENU_IMAGES} "..something else")
+        else
+            OPTION=$(ugum choose ${MENU_IMAGES} "..something else")
+        fi
     fi
 
-    if [ "${OPTION}" == "${IMAGE}" ]; then
+    if [ "${OPTION}" == "current image, but signed" ]; then
+        SIGNED="yes"
+        switch_to ${IMAGE}
+    elif [ "${OPTION}" == "${IMAGE}" ]; then
         echo "Already on the same image."
         exit 0
     elif [ "${OPTION}" == "..something else" ]; then
@@ -155,6 +168,13 @@ switch-to-image ACTION="prompt":
         done
 
         if ${image_found}; then
+            if [ "${SIGNED}" == "no" ]; then
+                unset SIGNED
+                echo "Use signed version of the image ?"
+                while [ "${SIGNED}" != "yes" ] && [ "${SIGNED}" != "no" ]; do
+                    SIGNED=$(ugum choose "yes" "no")
+                done
+            fi
             switch_to ${OPTION}
         else
             echo "The input: '${OPTION}' is not valid."
