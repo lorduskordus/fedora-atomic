@@ -77,8 +77,5 @@ modules:
     repo:
       - https://copr.fedorainfracloud.org/coprs/trixieua/mutter-patched/repo/fedora-%OS_VERSION%/trixieua-mutter-patched.repo
     replace:
-      - gnome-shell
       - mutter
       - mutter-common
-      - xorg-x11-server-Xwayland
-      - gdm
