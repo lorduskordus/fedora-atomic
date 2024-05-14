@@ -8,6 +8,7 @@ modules:
       - Koi # For switching between light & dark themes.
       - merkuro # KDE Calendar
       - kdepim-addons # KDE Calendar system integration.
+      - kdepim-runtime # Needed for adding accounts in the KDE Calendar.
     remove:
       - filelight
       - kfind
