@@ -55,11 +55,6 @@ modules:
     files:
       - common/usr: /usr
 
-  #- type: fonts
-  #  fonts:
-  #    google-fonts:
-  #      - Inter
-
   - type: systemd
     user:
       enabled:

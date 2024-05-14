@@ -6,15 +6,13 @@ modules:
       - https://copr.fedorainfracloud.org/coprs/birkch/Koi/repo/fedora-%OS_VERSION%/birkch-Koi-fedora.repo
     install:
       - Koi # For switching between light & dark themes.
-      - kalendar
-      - kdepim-addons
+      - merkuro # KDE Calendar
+      - kdepim-addons # KDE Calendar system integration.
     remove:
       - filelight
       - kfind
       - kcharselect
       - kmousetool
-      #- kate
-      #- kate-plugins
 
   - type: default-flatpaks
     system:
