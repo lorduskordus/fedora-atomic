@@ -25,7 +25,7 @@ modules:
         - org.winehq.Wine//stable-23.08
         - org.freedesktop.Platform.VulkanLayer.MangoHud//23.08
         - org.mozilla.firefox
-        - org.onlyoffice.desktopeditors
+        - org.libreoffice.LibreOffice
         - org.videolan.VLC
         - io.mpv.Mpv
         - org.gnome.Lollypop
@@ -33,10 +33,10 @@ modules:
         - org.gnome.Snapshot
         - org.gnome.SoundRecorder
         - com.github.marhkb.Pods
+        - io.github.dvlv.boxbuddyrs
         - io.github.flattool.Warehouse
         - org.gnome.Calculator
         - org.gnome.Evince
-        - org.gnome.TextEditor
         - net.nokyan.Resources
         - com.tomjwatson.Emote
         # ------ KDE ------ #

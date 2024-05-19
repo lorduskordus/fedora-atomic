@@ -1,12 +1,8 @@
 modules:
 
   - type: rpm-ostree
-    repos:
-      # COPR for morewaita-icon-theme
-      - https://copr.fedorainfracloud.org/coprs/dusansimic/themes/repo/fedora-%OS_VERSION%/dusansimic-themes.repo
     install:
       - adw-gtk3-theme
-      - morewaita-icon-theme
       - intel-gpu-tools
       - nm-connection-editor-desktop
       - rsms-inter-fonts
@@ -28,7 +24,7 @@ modules:
         - org.winehq.Wine//stable-23.08
         - org.freedesktop.Platform.VulkanLayer.MangoHud//23.08
         - org.mozilla.firefox
-        - org.onlyoffice.desktopeditors
+        - org.libreoffice.LibreOffice
         - org.videolan.VLC
         - io.mpv.Mpv
         - org.gnome.Lollypop
@@ -36,10 +32,10 @@ modules:
         - org.gnome.Snapshot
         - org.gnome.SoundRecorder
         - com.github.marhkb.Pods
+        - io.github.dvlv.boxbuddyrs
         - io.github.flattool.Warehouse
         - org.gnome.Calculator
         - org.gnome.Evince
-        - org.gnome.TextEditor
         - net.nokyan.Resources
         - com.tomjwatson.Emote
     user:

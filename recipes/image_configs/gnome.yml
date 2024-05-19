@@ -4,6 +4,8 @@ modules:
     repos:
       # COPR for nautilus-admin, enables shortcut 'Open as Admin' in Nautilus.
       - https://copr.fedorainfracloud.org/coprs/tomaszgasior/mushrooms/repo/fedora-%OS_VERSION%/tomaszgasior-mushrooms.repo
+      # COPR for morewaita-icon-theme
+      - https://copr.fedorainfracloud.org/coprs/dusansimic/themes/repo/fedora-%OS_VERSION%/dusansimic-themes.repo
     install:
       - gnome-shell-extension-appindicator
       - gnome-shell-extension-dash-to-panel
@@ -15,6 +17,7 @@ modules:
       - gnome-shell-extension-caffeine
       - firewall-config
       - nautilus-admin # Enables shortcut 'Open as Admin' in Nautilus.
+      - morewaita-icon-theme
     remove:
       - gnome-tour
       - gnome-shell-extension-apps-menu
@@ -34,7 +37,7 @@ modules:
         - org.winehq.Wine//stable-23.08
         - org.freedesktop.Platform.VulkanLayer.MangoHud//23.08
         - org.mozilla.firefox
-        - org.onlyoffice.desktopeditors
+        - org.libreoffice.LibreOffice
         - org.videolan.VLC
         - io.mpv.Mpv
         - org.gnome.Lollypop
@@ -42,10 +45,10 @@ modules:
         - org.gnome.Snapshot
         - org.gnome.SoundRecorder
         - com.github.marhkb.Pods
+        - io.github.dvlv.boxbuddyrs
         - io.github.flattool.Warehouse
         - org.gnome.Calculator
         - org.gnome.Evince
-        - org.gnome.TextEditor
         - net.nokyan.Resources
         - com.tomjwatson.Emote
         # ------ GNOME ------ #
@@ -59,6 +62,7 @@ modules:
         - org.gnome.Weather
         - org.gnome.baobab
         - org.gnome.clocks
+        - org.gnome.TextEditor
 
   - type: bling
     install:
