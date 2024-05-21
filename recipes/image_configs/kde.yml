@@ -52,3 +52,7 @@ modules:
         #- org.kde.okular
         #- org.kde.elisa
         #- org.kde.kwrite
+
+  - type: files
+    files:
+      - kde/usr: /usr
