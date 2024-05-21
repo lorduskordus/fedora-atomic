@@ -11,6 +11,9 @@ modules:
       - kdepim-runtime # Needed for adding accounts in the KDE Calendar.
     remove:
       - filelight
+      - kate
+      - kate-plugins
+      - kate-krunner-plugin
       - kfind
       - kcharselect
       - kmousetool
