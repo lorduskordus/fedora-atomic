@@ -14,6 +14,7 @@ modules:
       - kate
       - kate-plugins
       - kate-krunner-plugin
+      - kwrite
       - kfind
       - kcharselect
       - kmousetool
@@ -47,11 +48,11 @@ modules:
         - org.kde.filelight
         - org.kde.kclock
         - org.kde.kweather
+        - org.kde.okular
+        - org.kde.kwrite
         #- org.kde.ark
         #- org.kde.kalk
-        #- org.kde.okular
         #- org.kde.elisa
-        #- org.kde.kwrite
 
   - type: files
     files:
