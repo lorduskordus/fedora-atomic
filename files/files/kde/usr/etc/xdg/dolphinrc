@@ -1,0 +1,7 @@
+[General]
+RememberOpenedTabs=false
+ShowStatusBar=false
+
+[MainWindow]
+MenuBar=Disabled
+ToolBarsMovable=Disabled
