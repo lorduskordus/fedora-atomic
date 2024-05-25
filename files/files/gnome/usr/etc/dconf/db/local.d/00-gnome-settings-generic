@@ -40,7 +40,7 @@ center-new-windows=true
 show-create-link=true
 
 [org/gnome/shell]
-favorite-apps=['org.gnome.Nautilus.desktop', 'org.mozilla.firefox.desktop', 'org.gnome.Geary.desktop', 'org.gnome.Calendar.desktop', 'org.gnome.Music.desktop', 'org.gnome.Software.desktop']
+favorite-apps=['org.gnome.Nautilus.desktop', 'org.mozilla.firefox.desktop', 'eu.betterbird.Betterbird', 'org.gnome.Calendar.desktop', 'org.gnome.Lollypop', 'org.gnome.Software.desktop']
 
 [org/gnome/software]
 allow-updates=false
