@@ -38,6 +38,7 @@ modules:
         - org.gnome.Evince
         - net.nokyan.Resources
         - com.tomjwatson.Emote
+        - eu.betterbird.Betterbird # Switch to 'org.mozilla.Thunderbird' after it has tray support.
     user:
       repo-url: https://dl.flathub.org/repo/flathub.flatpakrepo
       repo-name: flathub-user

@@ -43,6 +43,7 @@ modules:
         - org.gnome.Evince
         - net.nokyan.Resources
         - com.tomjwatson.Emote
+        - eu.betterbird.Betterbird # Switch to 'org.mozilla.Thunderbird' after it has tray support.
         # ------ KDE ------ #
         - org.kde.krdc
         - org.kde.filelight

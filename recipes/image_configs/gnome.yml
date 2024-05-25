@@ -51,14 +51,12 @@ modules:
         - org.gnome.Evince
         - net.nokyan.Resources
         - com.tomjwatson.Emote
+        - eu.betterbird.Betterbird # Switch to 'org.mozilla.Thunderbird' after it has tray support.
         # ------ GNOME ------ #
         - com.github.tchx84.Flatseal
         - com.mattjakeman.ExtensionManager
         - org.gnome.Calendar
-        - org.gnome.Extensions
         - org.gnome.FileRoller
-        - org.gnome.Geary
-        - org.gnome.NautilusPreviewer
         - org.gnome.Weather
         - org.gnome.baobab
         - org.gnome.clocks
