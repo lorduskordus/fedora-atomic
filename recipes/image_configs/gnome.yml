@@ -74,6 +74,13 @@ modules:
     scripts:
       - custom-dash-to-panel.sh
 
+  - type: gnome-extensions
+    install:
+      - ArcMenu
+      - Legacy (GTK3) Theme Scheme Auto Switcher
+      - Night Theme Switcher
+      - Tiling Assistant
+
   # Apply the triple buffer patch.
   - type: rpm-ostree-override
     repo:

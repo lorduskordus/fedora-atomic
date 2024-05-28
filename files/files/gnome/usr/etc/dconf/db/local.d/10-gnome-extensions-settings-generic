@@ -1,5 +1,5 @@
 [org/gnome/shell]
-enabled-extensions=['dash-to-panel@jderose9.github.com', 'appindicatorsupport@rgcjonas.gmail.com', 'gsconnect@andyholmes.github.io', 'just-perfection-desktop@just-perfection', 'blur-my-shell@aunetx']
+enabled-extensions=['appindicatorsupport@rgcjonas.gmail.com', 'gsconnect@andyholmes.github.io', 'just-perfection-desktop@just-perfection', 'caffeine@patapon.info', 'arcmenu@arcmenu.com', 'dash-to-panel@jderose9.github.com', 'blur-my-shell@aunetx', 'tiling-assistant@leleat-on-github', 'nightthemeswitcher@romainvigier.fr', 'legacyschemeautoswitcher@joshimukul29.gmail.com']
 
 [org/gnome/shell/extensions/appindicator]
 icon-opacity=255
@@ -19,3 +19,27 @@ workspace-switcher-should-show=true
 
 [org/gnome/shell/extensions/caffeine]
 enable-fullscreen=false
+
+[org/gnome/shell/extensions/nightthemeswitcher/gtk-variants]
+enabled=true
+day='adw-gtk3'
+night='adw-gtk3-dark'
+
+[org/gnome/shell/extensions/tiling-assistant]
+enable-raise-tile-group=false
+enable-tiling-popup=false
+single-screen-gap=10
+window-gap=10
+active-window-hint=0
+
+[org/gnome/shell/extensions/arcmenu]
+arc-menu-icon=71
+custom-menu-button-icon-size=30.0
+force-menu-location='BottomCentered'
+menu-button-appearance='Icon'
+menu-button-icon='Menu_Icon'
+menu-height=850
+menu-item-grid-icon-size='Large'
+menu-layout='Pop'
+position-in-panel='Center'
+show-activities-button=true
