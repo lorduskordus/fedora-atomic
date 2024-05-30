@@ -1,6 +1,5 @@
 _default:
     #!/usr/bin/bash
-    source /usr/lib/ujust/libformatting.sh
     /usr/bin/ijust --list --list-heading $'Available commands:\n' --list-prefix $' - '
 
 # Imports
