@@ -1,6 +1,3 @@
-set allow-duplicate-recipes := true
-set ignore-comments := true
-
 _default:
     #!/usr/bin/bash
     source /usr/lib/ujust/libformatting.sh
