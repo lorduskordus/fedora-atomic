@@ -52,6 +52,10 @@ modules:
     files:
       - common/usr: /usr
 
+  - type: justfiles
+    include:
+      - common
+
   - type: systemd
     user:
       enabled:

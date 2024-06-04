@@ -70,6 +70,10 @@ modules:
     files:
       - gnome/usr: /usr
 
+  - type: justfiles
+    include:
+      - gnome
+
   - type: script
     scripts:
       - custom-dash-to-panel.sh
