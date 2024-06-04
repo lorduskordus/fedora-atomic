@@ -8,8 +8,6 @@ JUSTFILES_IMPORT_FILE="/usr/share/ublue-os/just/60-custom.just"
 JUSTFILES_FOLDER="${CONFIG_DIRECTORY}/justfiles"
 BLUEBUILD_FOLDER="/usr/share/bluebuild/justfiles"
 
-echo "Installing justfiles module"
-
 # Abort if justfiles folder is not present
 if [ ! -d "${JUSTFILES_FOLDER}" ]; then
     echo "Module failed because the folder '${JUSTFILES_FOLDER}' was not found."
@@ -27,9 +25,12 @@ for selected in "${JUSTFILES_SELECTED[@]}"; do
         echo "Module failed because no justfiles were found in '${JUSTFILES_FOLDER}/${selected}'"
         exit 1
     else
+        echo "---------- Adding folder/file '${selected}' ---------"
+        echo "-- Copying folders/files"
         mkdir -p "${BLUEBUILD_FOLDER}/$(dirname ${selected})"
         cp -rfT "${JUSTFILES_FOLDER}/${selected}" "${BLUEBUILD_FOLDER}/${selected}"
-        echo -e "\nJustfile import lines for folder/file '${selected}' being added:\n"
+        echo "Copied '${JUSTFILES_FOLDER}/${selected}' to '${BLUEBUILD_FOLDER}/${selected}'"
+        echo "-- Adding import lines"
         for justfile in "${JUSTFILES[@]}"; do
             IMPORT_LINE="import \"${BLUEBUILD_FOLDER}/${justfile}\""
             if grep -wq "${IMPORT_LINE}" "${JUSTFILES_IMPORT_FILE}"; then
@@ -39,5 +40,6 @@ for selected in "${JUSTFILES_SELECTED[@]}"; do
                 echo "${IMPORT_LINE}" | tee -a "${JUSTFILES_IMPORT_FILE}"
             fi
         done
+        echo "------------------------------------------------"
     fi
 done
