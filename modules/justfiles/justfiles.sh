@@ -28,7 +28,7 @@ for selected in "${JUSTFILES_SELECTED[@]}"; do
         exit 1
     else
         mkdir -p "${BLUEBUILD_FOLDER}/$(dirname ${selected})"
-        cp -rf "${JUSTFILES_FOLDER}/${selected}" "${BLUEBUILD_FOLDER}/${selected}"
+        cp -rfT "${JUSTFILES_FOLDER}/${selected}" "${BLUEBUILD_FOLDER}/${selected}"
         echo -e "\nJustfile import lines for folder/file '${selected}' being added:\n"
         for justfile in "${JUSTFILES[@]}"; do
             IMPORT_LINE="import \"${BLUEBUILD_FOLDER}/${justfile}\""
