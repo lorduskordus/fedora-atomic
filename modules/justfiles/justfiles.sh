@@ -11,7 +11,7 @@ DEST_FOLDER="/usr/share/bluebuild/justfiles"
 
 # Abort if justfiles folder is not present
 if [ ! -d "${CONFIG_FOLDER}" ]; then
-    echo "Module failed because the folder '${CONFIG_FOLDER}' was not found."
+    echo "Error: The config folder '${CONFIG_FOLDER}' was not found."
     exit 1
 fi
 
@@ -55,6 +55,7 @@ for selected in "${CONFIG_SELECTION[@]}"; do
             fi
 
         done
+        
         echo "------------------------------------------------"
     fi
 
