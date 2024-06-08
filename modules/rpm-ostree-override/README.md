@@ -8,16 +8,17 @@ The module then replaces the packages declared under `replace:` using `rpm-ostre
 
 Lastly, the repository file is removed from `/etc/yum.repos.d/`.
 
-The module can only replace packages from one repository at a time. If you want to do multiple replacements from different repositories, use the module again separately for all your repositories.
+The module can only replace packages from one repository at a time. If you want to do multiple replacements from different repositories, use the module again separately for all the repositories you wish to replace packages from.
 
 ## Example Configuration:
 
 ```yaml
 type: rpm-ostree-override
-repo:
-    - https://copr.fedorainfracloud.org/coprs/trixieua/mutter-patched/repo/fedora-%OS_VERSION%/trixieua-mutter-patched.repo
+repo: https://copr.fedorainfracloud.org/coprs/trixieua/mutter-patched/repo/fedora-%OS_VERSION%/trixieua-mutter-patched.repo
 replace:
+    - gnome-shell
     - mutter
     - mutter-common
     - xorg-x11-server-Xwayland
+    - gdm
 ```
