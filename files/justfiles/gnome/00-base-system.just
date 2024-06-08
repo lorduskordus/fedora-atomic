@@ -2,7 +2,7 @@
 copy-monitor-to-gdm:
     #!/usr/bin/env bash
     if [ -s ~/.config/monitors.xml ]; then
-        sudo install -o gdm -g gdm -m 644 ~/.config/monitors.xml ~gdm/.config/
+        pkexec install -o gdm -g gdm -m 644 ~/.config/monitors.xml ~gdm/.config/
     else
         echo "Missing monitor configuration."
         exit 1
