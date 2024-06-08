@@ -10,7 +10,7 @@ Lastly, the repository file is removed from `/etc/yum.repos.d/`.
 
 The module can only replace packages from one repository at a time. If you want to do multiple replacements from different repositories, use the module again separately for all the repositories you wish to replace packages from.
 
-## Example Configuration:
+### Example Configuration
 
 ```yaml
 type: rpm-ostree-override
