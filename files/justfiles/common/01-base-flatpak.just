@@ -19,7 +19,7 @@ fix-flatpak-theming ACTION="prompt":
     if [ "${OPTION}" == "prompt" ]; then
         OPTION=$(ugum choose "system & user" "only system" "only user")
     fi
-    
+
     if [ "${OPTION}" == "system & user" ]; then
         override_flatpak_perms --user
         override_flatpak_perms --system

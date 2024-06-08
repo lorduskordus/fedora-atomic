@@ -63,7 +63,7 @@ switch-to-image ACTION="prompt":
             read -p "  ● ${bold}Image${normal}: " NEW_IMAGE
             echo "[Current: ${TAG}]"
             read -p "  ● ${bold}Tag${normal}: " NEW_TAG
-            
+
             while true; do
                 echo "[Current: ${SIGNED}]"
                 read -p "  ● ${bold}Signed${normal}(yes/no): " NEW_SIGNED
@@ -84,13 +84,13 @@ switch-to-image ACTION="prompt":
             else
                 NEW_OWNER=${OWNER}
             fi
-            
+
             if [ -n "${NEW_IMAGE}" ]; then
                 IMAGE=${NEW_IMAGE}
             else
                 NEW_IMAGE=${IMAGE}
             fi
-            
+
             if [ -n "${NEW_TAG}" ]; then
                 TAG=${NEW_TAG}
             else
