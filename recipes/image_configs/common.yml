@@ -11,13 +11,13 @@ modules:
       - firefox-langpacks
 
   - type: default-flatpaks
+    source: ghcr.io/lorduskordus/modules
     notify: true
     system:
       repo-url: https://dl.flathub.org/repo/flathub.flatpakrepo
       repo-name: flathub-system
       repo-title: "Flathub (systém)"
       install:
-        # ------ Common ------ #
         - org.freedesktop.Platform.ffmpeg-full/x86_64/23.08
         - org.freedesktop.Platform.VAAPI.Intel/x86_64/23.08
         - org.freedesktop.Platform.VaInfo/x86_64/23.08
@@ -53,6 +53,7 @@ modules:
       - common/usr: /usr
 
   - type: justfiles
+    source: ghcr.io/lorduskordus/modules
     include:
       - common
 
