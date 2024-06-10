@@ -30,6 +30,7 @@ modules:
         - org.gnome.Loupe
         - org.gnome.Snapshot
         - org.gnome.SoundRecorder
+        - io.github.fabrialberio.pinapp
         - com.github.marhkb.Pods
         - io.github.dvlv.boxbuddyrs
         - io.github.flattool.Warehouse
