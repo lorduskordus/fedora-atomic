@@ -11,7 +11,7 @@ modules:
       - firefox-langpacks
 
   - type: default-flatpaks
-    source: ghcr.io/lorduskordus/modules
+    source: ghcr.io/lorduskordus/bluebuild-modules
     notify: true
     system:
       repo-url: https://dl.flathub.org/repo/flathub.flatpakrepo
@@ -53,7 +53,7 @@ modules:
       - common/usr: /usr
 
   - type: justfiles
-    source: ghcr.io/lorduskordus/modules
+    source: ghcr.io/lorduskordus/bluebuild-modules
     include:
       - common
 
