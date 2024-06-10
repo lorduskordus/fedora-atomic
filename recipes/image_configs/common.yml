@@ -22,7 +22,6 @@ modules:
         - org.freedesktop.Platform.VAAPI.Intel/x86_64/23.08
         - org.freedesktop.Platform.VaInfo/x86_64/23.08
         - org.winehq.Wine//stable-23.08
-        - org.freedesktop.Platform.VulkanLayer.MangoHud//23.08
         - org.mozilla.firefox
         - org.libreoffice.LibreOffice
         - org.videolan.VLC
@@ -38,7 +37,8 @@ modules:
         - org.gnome.Evince
         - net.nokyan.Resources
         - com.tomjwatson.Emote
-        - eu.betterbird.Betterbird # Switch to 'org.mozilla.Thunderbird' after it has tray support.
+        - eu.betterbird.Betterbird # Switch to 'org.mozilla.Thunderbird' when it gets tray support.
+        - org.localsend.localsend_app
     user:
       repo-url: https://dl.flathub.org/repo/flathub.flatpakrepo
       repo-name: flathub-user
