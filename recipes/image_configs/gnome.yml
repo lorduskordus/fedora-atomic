@@ -64,6 +64,7 @@ modules:
       - Legacy (GTK3) Theme Scheme Auto Switcher
       - Night Theme Switcher
       - Tiling Assistant
+      #- Pano - Clipboard Manager # Enable when pushed to EGO.
 
   # Apply the triple buffer patch.
   - type: rpm-ostree-override

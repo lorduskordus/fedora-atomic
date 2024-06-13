@@ -1,5 +1,5 @@
 [org/gnome/shell]
-enabled-extensions=['appindicatorsupport@rgcjonas.gmail.com', 'gsconnect@andyholmes.github.io', 'just-perfection-desktop@just-perfection', 'caffeine@patapon.info', 'arcmenu@arcmenu.com', 'dash-to-panel@jderose9.github.com', 'blur-my-shell@aunetx', 'tiling-assistant@leleat-on-github', 'nightthemeswitcher@romainvigier.fr', 'legacyschemeautoswitcher@joshimukul29.gmail.com']
+enabled-extensions=['appindicatorsupport@rgcjonas.gmail.com', 'gsconnect@andyholmes.github.io', 'just-perfection-desktop@just-perfection', 'caffeine@patapon.info', 'arcmenu@arcmenu.com', 'dash-to-panel@jderose9.github.com', 'blur-my-shell@aunetx', 'tiling-assistant@leleat-on-github', 'nightthemeswitcher@romainvigier.fr', 'legacyschemeautoswitcher@joshimukul29.gmail.com', 'pano@elhan.io']
 
 [org/gnome/shell/extensions/appindicator]
 icon-opacity=255
@@ -31,6 +31,21 @@ enable-tiling-popup=false
 single-screen-gap=10
 window-gap=10
 active-window-hint=0
+
+[org/gnome/shell/extensions/pano]
+global-shortcut=['<Super>v']
+session-only-mode=true
+show-indicator=false
+send-notification-on-copy=false
+play-audio-on-copy=false
+keep-search-entry=false
+
+[org/gnome/shell/extensions/pano/file-item]
+body-bg-color='rgb(192,191,188)'
+
+[org/gnome/shell/extensions/pano/text-item]
+body-bg-color='rgb(192,191,188)'
+header-bg-color='rgb(46,108,52)'
 
 [org/gnome/shell/extensions/arcmenu]
 arcmenu-hotkey=['Super_L']
