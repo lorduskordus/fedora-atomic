@@ -33,6 +33,7 @@ window-gap=10
 active-window-hint=0
 
 [org/gnome/shell/extensions/arcmenu]
+arcmenu-hotkey=['Super_L']
 arc-menu-icon=71
 custom-menu-button-icon-size=30.0
 force-menu-location='BottomCentered'

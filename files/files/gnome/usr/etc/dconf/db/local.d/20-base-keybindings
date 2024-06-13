@@ -1,8 +1,13 @@
+[org/gnome/shell/keybindings]
+toggle-message-tray=['<Super>m']
+toggle-overview=['<Super>w']
+
 [org/gnome/desktop/wm/keybindings]
 toggle-fullscreen=['<Super>f']
 
 [org/gnome/settings-daemon/plugins/media-keys]
 home=['<Super>e']
+play=['Pause']
 custom-keybindings=['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/']
 
 [org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0]
