@@ -18,6 +18,9 @@ modules:
       - firewall-config
       - nautilus-admin # Enables shortcut 'Open as Admin' in Nautilus.
       - morewaita-icon-theme
+      # Needed for Pano clipboard.
+      - libgda
+      - libgda-sqlite
     remove:
       - gnome-tour
       - gnome-shell-extension-apps-menu
