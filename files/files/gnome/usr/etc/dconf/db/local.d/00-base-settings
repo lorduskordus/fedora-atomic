@@ -35,6 +35,7 @@ enabled=true
 
 [org/gnome/mutter]
 center-new-windows=true
+experimental-features=['variable-refresh-rate']
 
 [org/gnome/nautilus/preferences]
 show-create-link=true
