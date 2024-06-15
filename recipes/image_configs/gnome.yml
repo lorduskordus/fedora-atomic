@@ -72,7 +72,7 @@ modules:
   # Apply the triple buffer patch.
   - type: rpm-ostree-override
     source: ghcr.io/lorduskordus/bluebuild-modules
-    repo: https://copr.fedorainfracloud.org/coprs/trixieua/mutter-patched/repo/fedora-%OS_VERSION%/trixieua-mutter-patched.repo
+    repo: https://copr.fedorainfracloud.org/coprs/trixieua/mutter-patched/repo/fedora-%OS_VERSION%/trixieua-mutter-patched-fedora-%OS_VERSION%.repo
     replace:
       - gnome-shell
       - mutter
