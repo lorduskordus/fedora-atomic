@@ -11,6 +11,7 @@ tray-pos='right'
 [org/gnome/shell/extensions/just-perfection]
 startup-status=0
 keyboard-layout=false
+notification-banner-position=3
 osd-position=5
 world-clock=false
 workspace-peek=false
