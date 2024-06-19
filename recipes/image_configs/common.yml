@@ -30,11 +30,10 @@ modules:
         - org.gnome.Snapshot
         - org.gnome.SoundRecorder
         - io.github.fabrialberio.pinapp
-        - com.github.marhkb.Pods
         - io.github.dvlv.boxbuddyrs
         - io.github.flattool.Warehouse
         - org.gnome.Calculator
-        - org.gnome.Evince
+        - org.gnome.Papers
         - net.nokyan.Resources
         - com.tomjwatson.Emote
         - eu.betterbird.Betterbird # Switch to 'org.mozilla.Thunderbird' when it gets tray support.
@@ -57,10 +56,5 @@ modules:
     validate: true
     include:
       - common
-
-  - type: systemd
-    user:
-      enabled:
-        - podman.socket
 
   - type: signing
