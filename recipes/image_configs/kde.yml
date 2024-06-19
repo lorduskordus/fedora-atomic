@@ -20,7 +20,6 @@ modules:
       - kmousetool
 
   - type: default-flatpaks
-    source: ghcr.io/lorduskordus/bluebuild-modules
     system:
       install:
         - org.kde.krdc

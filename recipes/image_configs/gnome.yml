@@ -31,7 +31,6 @@ modules:
       - gnome-classic-session-xsession
 
   - type: default-flatpaks
-    source: ghcr.io/lorduskordus/bluebuild-modules
     system:
       install:
         - com.github.tchx84.Flatseal
