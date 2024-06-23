@@ -2,10 +2,10 @@ modules:
 
   - type: rpm-ostree
     repos:
-      # COPR for nautilus-admin, enables shortcut 'Open as Admin' in Nautilus.
-      - https://copr.fedorainfracloud.org/coprs/tomaszgasior/mushrooms/repo/fedora-%OS_VERSION%/tomaszgasior-mushrooms.repo
+      # COPR for nautilus-admin, enables shortcut 'Open as Admin' in Nautilus
+      - https://copr.fedorainfracloud.org/coprs/tomaszgasior/mushrooms/repo/fedora-%OS_VERSION%/tomaszgasior-mushrooms-fedora-%OS_VERSION%.repo
       # COPR for morewaita-icon-theme
-      - https://copr.fedorainfracloud.org/coprs/dusansimic/themes/repo/fedora-%OS_VERSION%/dusansimic-themes.repo
+      - https://copr.fedorainfracloud.org/coprs/dusansimic/themes/repo/fedora-%OS_VERSION%/dusansimic-themes-fedora-%OS_VERSION%.repo
     install:
       - gnome-shell-extension-appindicator
       - gnome-shell-extension-dash-to-panel
@@ -16,9 +16,9 @@ modules:
       - gnome-shell-extension-user-theme
       - gnome-shell-extension-caffeine
       - firewall-config
-      - nautilus-admin # Enables shortcut 'Open as Admin' in Nautilus.
+      - nautilus-admin
       - morewaita-icon-theme
-      # Needed for Pano clipboard.
+      # Needed for Pano clipboard
       - libgda
       - libgda-sqlite
     remove:
@@ -66,7 +66,7 @@ modules:
       - Legacy (GTK3) Theme Scheme Auto Switcher
       - Night Theme Switcher
       - Tiling Assistant
-      #- Pano - Clipboard Manager # Enable when pushed to EGO.
+      #- Pano - Clipboard Manager # Enable when pushed to EGO
 
   # Apply the triple buffer patch.
   - type: rpm-ostree-override

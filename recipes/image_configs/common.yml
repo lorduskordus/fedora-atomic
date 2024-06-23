@@ -36,7 +36,7 @@ modules:
         - org.gnome.Papers
         - net.nokyan.Resources
         - com.tomjwatson.Emote
-        - eu.betterbird.Betterbird # Switch to 'org.mozilla.Thunderbird' when it gets tray support.
+        - eu.betterbird.Betterbird # Switch to 'org.mozilla.Thunderbird' when it gets tray support
         - org.localsend.localsend_app
     user:
       repo-url: https://dl.flathub.org/repo/flathub.flatpakrepo
