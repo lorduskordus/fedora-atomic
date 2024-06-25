@@ -10,24 +10,23 @@ modules:
       - kdepim-addons # KDE Calendar system integration
       - kdepim-runtime # Needed for adding accounts in the KDE Calendar
     remove:
-      - filelight
       - kate
       - kate-plugins
       - kate-krunner-plugin
-      - kwrite
       - kfind
       - kcharselect
-      - kmousetool
+      #- filelight
+      #- kwrite
 
   - type: default-flatpaks
     system:
       install:
-        - org.kde.krdc
-        - org.kde.filelight
         - org.kde.kclock
         - org.kde.kweather
         - org.kde.okular
-        - org.kde.kwrite
+        #- org.kde.filelight
+        #- org.kde.kwrite
+        #- org.kde.krdc
         #- org.kde.ark
         #- org.kde.kalk
         #- org.kde.elisa
