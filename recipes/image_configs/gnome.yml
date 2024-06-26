@@ -29,6 +29,15 @@ modules:
       - gnome-shell-extension-window-list
       - gnome-classic-session
       - gnome-classic-session-xsession
+    # Apply the triple buffer patch.
+    replace:
+      - from-repo: https://copr.fedorainfracloud.org/coprs/trixieua/mutter-patched/repo/fedora-%OS_VERSION%/trixieua-mutter-patched-fedora-%OS_VERSION%.repo
+        packages:
+          - gnome-shell
+          - mutter
+          - mutter-common
+          - xorg-x11-server-Xwayland
+          - gdm
 
   - type: default-flatpaks
     system:
@@ -67,15 +76,3 @@ modules:
       - Night Theme Switcher
       - Tiling Assistant
       #- Pano - Clipboard Manager # Enable when pushed to EGO
-
-  # Apply the triple buffer patch.
-  - type: rpm-ostree-override
-    source: ghcr.io/lorduskordus/bluebuild-modules
-    replace:
-      - from-repo: https://copr.fedorainfracloud.org/coprs/trixieua/mutter-patched/repo/fedora-%OS_VERSION%/trixieua-mutter-patched-fedora-%OS_VERSION%.repo
-        packages:
-          - gnome-shell
-          - mutter
-          - mutter-common
-          - xorg-x11-server-Xwayland
-          - gdm
