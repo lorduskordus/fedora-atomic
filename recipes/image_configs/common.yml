@@ -52,7 +52,6 @@ modules:
       - common/usr: /usr
 
   - type: justfiles
-    source: ghcr.io/lorduskordus/bluebuild-modules
     validate: true
     include:
       - common
