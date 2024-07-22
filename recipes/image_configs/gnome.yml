@@ -57,7 +57,8 @@ modules:
 
   - type: files
     files:
-      - gnome/usr: /usr
+      - source: system/gnome
+        destination: /
 
   - type: justfiles
     validate: true

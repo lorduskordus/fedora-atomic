@@ -33,4 +33,5 @@ modules:
 
   - type: files
     files:
-      - kde/usr: /usr
+      - source: system/kde
+        destination: /

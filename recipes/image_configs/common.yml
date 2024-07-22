@@ -45,7 +45,8 @@ modules:
 
   - type: files
     files:
-      - common/usr: /usr
+      - source: system/common
+        destination: /
 
   - type: justfiles
     validate: true
