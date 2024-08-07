@@ -101,10 +101,11 @@ switch-to-image ACTION="prompt":
         switch_to ${IMAGE}
     }
 
-    AVAILABLE_DESKTOPS="gnome \
+    AVAILABLE_DESKTOPS="cosmic \
+                        gnome \
                         kde"
 
-    CUR_IMAGE=$(rpm-ostree status 2> /dev/null | grep '●' | cut -d' ' -f2)
+    CUR_IMAGE=$(rpm-ostree status -b 2> /dev/null | grep '●' | cut -d' ' -f2)
 
     PREFIX_SIGNED="ostree-image-signed:docker://ghcr.io"
     PREFIX_UNSIGNED="ostree-unverified-registry:ghcr.io"
