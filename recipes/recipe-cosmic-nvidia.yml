@@ -2,7 +2,7 @@ name: fedora-base-cosmic-nvidia
 description: Custom Fedora COSMIC image based on uBlue, built with BlueBuild. (Base, with NVIDIA support)
 
 base-image: ghcr.io/ublue-os/cosmic-base-nvidia
-image-version: 40-amd64
+image-version: 40
 
 modules:
 
