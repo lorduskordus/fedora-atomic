@@ -12,27 +12,27 @@ These images have additional 'minimal' QoL changes applied on top and serve as a
 
 ## Images
 
-#### COSMIC
+##### COSMIC
 ```
 ostree-image-signed:docker://ghcr.io/lorduskordus/fedora-base-cosmic
 ```
-#### COSMIC (NVIDIA)
+##### COSMIC (NVIDIA)
 ```
 ostree-image-signed:docker://ghcr.io/lorduskordus/fedora-base-cosmic-nvidia
 ```
-#### GNOME
+##### GNOME
 ```
 ostree-image-signed:docker://ghcr.io/lorduskordus/fedora-base-gnome
 ```
-#### GNOME (NVIDIA)
+##### GNOME (NVIDIA)
 ```
 ostree-image-signed:docker://ghcr.io/lorduskordus/fedora-base-gnome-nvidia
 ```
-#### KDE
+##### KDE
 ```
 ostree-image-signed:docker://ghcr.io/lorduskordus/fedora-base-kde
 ```
-#### KDE (NVIDIA)
+##### KDE (NVIDIA)
 ```
 ostree-image-signed:docker://ghcr.io/lorduskordus/fedora-base-kde-nvidia
 ```
