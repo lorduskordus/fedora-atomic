@@ -1,7 +1,7 @@
 name: fedora-base-cosmic
 description: Custom Fedora COSMIC image based on uBlue, built with BlueBuild. (Base)
 
-base-image: ghcr.io/ublue-os/cosmic-base
+base-image: ghcr.io/ublue-os/cosmic
 image-version: 40
 
 modules:
