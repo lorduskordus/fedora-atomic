@@ -7,7 +7,7 @@ image-version: 40
 modules:
 
   # Common
-  - from-file: image_configs/common.yml
+  - from-file: common/config.yml
   
   # COSMIC
-  #- from-file: image_configs/cosmic.yml
+  #- from-file: cosmic/config.yml

@@ -7,7 +7,7 @@ image-version: 40
 modules:
 
   # Common
-  - from-file: image_configs/common.yml
+  - from-file: common/config.yml
 
   # KDE
-  - from-file: image_configs/kde.yml
+  - from-file: kde/config.yml
