@@ -67,7 +67,7 @@ modules:
 
   - type: script
     scripts:
-      - custom-dash-to-panel.sh
+      - gnome/custom-dash-to-panel.sh
 
   - type: gnome-extensions
     install:
