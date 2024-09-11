@@ -39,10 +39,6 @@ modules:
       repo-name: flathub-user
       repo-title: "Flathub (uživatel)"
 
-  - type: bling
-    install:
-      - ublue-update
-
   - type: files
     files:
       - source: system/common
