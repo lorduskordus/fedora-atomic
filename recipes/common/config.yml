@@ -14,7 +14,7 @@ modules:
     system:
       repo-url: https://dl.flathub.org/repo/flathub.flatpakrepo
       repo-name: flathub-system
-      repo-title: "Flathub (systém)"
+      repo-title: "Flathub (system)"
       install:
         - org.mozilla.firefox
         - org.libreoffice.LibreOffice
@@ -36,7 +36,7 @@ modules:
     user:
       repo-url: https://dl.flathub.org/repo/flathub.flatpakrepo
       repo-name: flathub-user
-      repo-title: "Flathub (uživatel)"
+      repo-title: "Flathub"
 
   - type: files
     files:
