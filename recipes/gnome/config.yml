@@ -27,6 +27,7 @@ modules:
       - gnome-shell-extension-background-logo
       - gnome-shell-extension-launch-new-instance
       - gnome-shell-extension-window-list
+      - gnome-session-xsession
       - gnome-classic-session
       - gnome-classic-session-xsession
     # Apply the triple buffer patch.
