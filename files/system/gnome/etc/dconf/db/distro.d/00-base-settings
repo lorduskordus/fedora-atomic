@@ -35,7 +35,7 @@ enabled=false
 
 [org/gnome/mutter]
 center-new-windows=true
-experimental-features=['variable-refresh-rate']
+experimental-features=['scale-monitor-framebuffer', 'variable-refresh-rate', 'xwayland-native-scaling']
 
 [org/gnome/nautilus/preferences]
 show-create-link=true
