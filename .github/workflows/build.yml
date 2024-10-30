@@ -27,9 +27,6 @@ jobs:
           - gnome/recipe-nvidia.yml
           - kde/recipe.yml
           - kde/recipe-nvidia.yml
-          # BETA
-          - gnome-beta/recipe.yml
-          - gnome-beta/recipe-nvidia.yml
     steps:
        # the build is fully handled by the reusable github action
       - name: Build Custom Image

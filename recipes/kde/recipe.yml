@@ -2,7 +2,7 @@ name: fedora-base-kde
 description: Custom Fedora KDE image based on uBlue, built with BlueBuild. (Base)
 
 base-image: ghcr.io/ublue-os/kinoite-main
-image-version: 40
+image-version: 41
 
 modules:
 

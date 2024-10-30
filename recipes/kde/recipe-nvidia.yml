@@ -2,7 +2,7 @@ name: fedora-base-kde-nvidia
 description: Custom Fedora KDE image based on uBlue, built with BlueBuild. (Base, with NVIDIA support)
 
 base-image: ghcr.io/ublue-os/kinoite-nvidia
-image-version: 40
+image-version: 41
 
 modules:
 
