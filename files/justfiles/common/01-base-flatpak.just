@@ -38,5 +38,5 @@ fix-flatpak-theming ACTION="prompt":
 # Install Flatpak codecs
 install-flatpak-codecs:
     #!/usr/bin/env bash
-    CODECS_STR="org.freedesktop.Platform.ffmpeg-full/x86_64/23.08 org.freedesktop.Platform.VAAPI.Intel/x86_64/23.08"
+    CODECS_STR="org.freedesktop.Platform.ffmpeg-full/x86_64/24.08 org.freedesktop.Platform.VAAPI.Intel/x86_64/24.08"
     flatpak install --system ${CODECS_STR}
