@@ -9,6 +9,7 @@ modules:
       - nm-connection-editor-desktop
       - rsms-inter-fonts
       - bibata-cursor-themes
+      - micro
     remove:
       - firefox
       - firefox-langpacks
