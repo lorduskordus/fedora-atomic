@@ -1,0 +1,4 @@
+[org/gnome/TextEditor]
+highlight-current-line=true
+restore-session=false
+show-line-numbers=true
