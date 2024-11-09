@@ -21,12 +21,13 @@ modules:
       - libgda
       - libgda-sqlite
     remove:
-      - gnome-classic-session
-      - gnome-tour
       - gnome-shell-extension-apps-menu
       - gnome-shell-extension-background-logo
       - gnome-shell-extension-launch-new-instance
       - gnome-shell-extension-window-list
+      - gnome-classic-session
+      - gnome-tour
+      - gnome-system-monitor
     # Apply the triple buffer patch.
     replace:
       - from-repo: https://copr.fedorainfracloud.org/coprs/trixieua/mutter-patched/repo/fedora-%OS_VERSION%/trixieua-mutter-patched-fedora-%OS_VERSION%.repo
