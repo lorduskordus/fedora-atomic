@@ -10,6 +10,7 @@ modules:
       - rsms-inter-fonts
       - bibata-cursor-themes
       - micro
+      - tldr
     remove:
       - firefox
       - firefox-langpacks
