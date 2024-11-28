@@ -1,0 +1,9 @@
+# Install CoreOS kernel
+COPY --from=ghcr.io/ublue-os/coreos-stable-kernel:41 /tmp/rpms /tmp/coreos-rpms
+RUN --mount=type=cache,dst=/var/cache/rpm-ostree \
+    echo "Installing CoreOS kernel" && \
+    rpm-ostree cliwrap install-to-root / && \
+    rpm-ostree override replace --experimental \
+    /tmp/coreos-rpms/kernel-[0-9]*.rpm \
+    /tmp/coreos-rpms/kernel-core-*.rpm \
+    /tmp/coreos-rpms/kernel-modules-*.rpm

@@ -1,0 +1,5 @@
+modules:
+
+  - type: containerfile
+    containerfiles:
+      - kernel-coreos
