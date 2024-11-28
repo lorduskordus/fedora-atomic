@@ -1,12 +1,13 @@
 name: fedora-base-gnome-nvidia
 description: Custom Fedora GNOME image based on uBlue, built with BlueBuild. (Base, with NVIDIA support)
 
-base-image: ghcr.io/ublue-os/silverblue-nvidia
+base-image: ghcr.io/ublue-os/silverblue-main
 image-version: 41
 
 modules:
 
   # Common
+  - from-file: common/kernel-coreos-nvidia.yml
   - from-file: common/config.yml
   
   # GNOME
