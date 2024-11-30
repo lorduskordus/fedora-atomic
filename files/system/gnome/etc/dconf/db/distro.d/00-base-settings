@@ -62,3 +62,8 @@ power-button-action='nothing'
 sleep-inactive-ac-timeout=7200
 sleep-inactive-battery-timeout=3600
 sleep-inactive-ac-type='nothing'
+
+[org/gnome/TextEditor]
+highlight-current-line=true
+restore-session=false
+show-line-numbers=true

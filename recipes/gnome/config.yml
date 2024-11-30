@@ -14,9 +14,11 @@ modules:
       - gnome-shell-extension-blur-my-shell
       - gnome-shell-extension-user-theme
       - gnome-shell-extension-caffeine
-      - firewall-config
-      - nautilus-admin
       - morewaita-icon-theme
+      - firewall-config
+      - dconf-editor
+      - nautilus-admin
+      - gnome-text-editor
       # Needed for Pano clipboard
       - libgda
       - libgda-sqlite
@@ -48,7 +50,6 @@ modules:
         - org.gnome.Weather
         - org.gnome.baobab
         - org.gnome.clocks
-        - org.gnome.TextEditor
 
   - type: bling
     install:
