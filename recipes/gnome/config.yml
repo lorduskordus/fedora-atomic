@@ -51,10 +51,6 @@ modules:
         - org.gnome.baobab
         - org.gnome.clocks
 
-  - type: bling
-    install:
-      - dconf-update-service
-
   - type: files
     files:
       - source: system/gnome
@@ -64,10 +60,11 @@ modules:
     validate: true
     include:
       - gnome
-
-  - type: script
-    scripts:
-      - gnome/custom-dash-to-panel.sh
+  
+  - type: hide-app-launchers
+    source: ghcr.io/lorduskordus/bluebuild-modules
+    hide:
+      - org.gnome.Extensions
 
   - type: gnome-extensions
     install:
@@ -77,3 +74,11 @@ modules:
       - Tiling Assistant
       - Just Perfection
       #- Pano - Clipboard Manager # Enable when pushed to EGO
+
+  - type: script
+    scripts:
+      - gnome/custom-dash-to-panel.sh
+  
+  - type: bling
+    install:
+      - dconf-update-service

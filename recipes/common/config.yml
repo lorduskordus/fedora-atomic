@@ -51,6 +51,12 @@ modules:
     validate: true
     include:
       - common
+  
+  - type: hide-app-launchers
+    source: ghcr.io/lorduskordus/bluebuild-modules
+    hide:
+      - nvtop
+      - htop
 
   - type: systemd # Copy services from systemd folder
 
