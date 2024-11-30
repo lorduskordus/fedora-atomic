@@ -37,20 +37,8 @@ enabled=false
 center-new-windows=true
 experimental-features=['scale-monitor-framebuffer', 'variable-refresh-rate', 'xwayland-native-scaling']
 
-[org/gnome/nautilus/preferences]
-show-create-link=true
-
 [org/gnome/shell]
 favorite-apps=['org.gnome.Nautilus.desktop', 'org.mozilla.firefox.desktop', 'org.mozilla.Thunderbird', 'org.gnome.Calendar.desktop', 'org.gnome.Lollypop', 'org.gnome.Software.desktop']
-
-[org/gnome/software]
-allow-updates=false
-download-updates=false
-download-updates-notify=false
-packaging-format-preference=['flatpak:flathub-user']
-
-[org/gnome/nautilus/list-view]
-use-tree-view=true
 
 [org/gnome/settings-daemon/plugins/color]
 night-light-enabled=true
@@ -62,8 +50,3 @@ power-button-action='nothing'
 sleep-inactive-ac-timeout=7200
 sleep-inactive-battery-timeout=3600
 sleep-inactive-ac-type='nothing'
-
-[org/gnome/TextEditor]
-highlight-current-line=true
-restore-session=false
-show-line-numbers=true
