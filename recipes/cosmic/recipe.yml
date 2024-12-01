@@ -7,7 +7,6 @@ image-version: 41
 modules:
 
   # Common
-  - from-file: common/kernel-coreos.yml
   - from-file: common/config.yml
   
   # COSMIC

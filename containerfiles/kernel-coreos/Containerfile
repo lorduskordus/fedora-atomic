@@ -7,3 +7,7 @@ RUN --mount=type=cache,dst=/var/cache/rpm-ostree \
     /tmp/coreos-rpms/kernel-[0-9]*.rpm \
     /tmp/coreos-rpms/kernel-core-*.rpm \
     /tmp/coreos-rpms/kernel-modules-*.rpm
+
+# Get NVIDIA akmods
+COPY --from=ghcr.io/ublue-os/akmods-nvidia:coreos-stable-41 /rpms /tmp/akmods-rpms
+# Script 'common/kernel-coreos.sh' handles the rest.

@@ -1,5 +1,7 @@
 modules:
 
+  - from-file: common/kernel-coreos.yml
+
   - type: rpm-ostree
     repos:
       # COPR for bibata-cursor-themes
