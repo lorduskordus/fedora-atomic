@@ -11,3 +11,4 @@ modules:
   
   # GNOME
   - from-file: gnome/config.yml
+  - from-file: gnome/nvidia-kms-modifiers.yml
