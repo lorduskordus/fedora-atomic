@@ -186,24 +186,41 @@ switch-to-image ACTION="prompt":
         exit 0
     fi
 
-# Set GRUB to auto-hide even with a Windows dual boot
-set-grub-auto-hide-windows:
+# GRUB stuff
+grub ACTION="prompt":
     #!/usr/bin/env bash
-    if pkexec grub2-editenv list | grep -q 'menu_auto_hide=2'; then
-        echo "Already set."
-        exit 0
-    else
-        if pkexec grub2-editenv - set menu_auto_hide=2; then
-            echo "Done."
+    source /usr/lib/ujust/ujust.sh
+
+    auto-hide-with-windows () {
+        if /usr/bin/pkexec grub2-editenv list | grep -q 'menu_auto_hide=2'; then
+            echo "Already set."
             exit 0
         else
-            echo "There was some error. Do you have privileges ?"
-            exit 1
+            if /usr/bin/pkexec grub2-editenv - set menu_auto_hide=2; then
+                echo "Done."
+                exit 0
+            else
+                echo "There was some error. Do you have privileges ?"
+                exit 1
+            fi
         fi
+    }
+
+    use-blscfg () {
+        /usr/bin/pkexec grub2-switch-to-blscfg
+        /usr/bin/pkexec grub2-mkconfig -o /etc/grub2.cfg
+    }
+
+    OPTION={{ ACTION }}
+    if [ "${OPTION}" == "prompt" ]; then
+        OPTION=$(ugum choose "use-blscfg" "auto-hide-with-windows")
     fi
 
-# Set GRUB to use blscfg, removing duplicate images in boot menu
-set-grub-use-blscfg:
-    #!/usr/bin/env bash
-    pkexec grub2-switch-to-blscfg
-    pkexec grub2-mkconfig -o /etc/grub2.cfg
+    if [ "${OPTION}" == "use-blscfg" ]; then
+        use-blscfg
+    elif [ "${OPTION}" == "auto-hide-with-windows" ]; then
+        auto-hide-with-windows
+    else
+        echo "No changes applied."
+        exit 0
+    fi
