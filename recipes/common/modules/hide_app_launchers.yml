@@ -1,0 +1,5 @@
+type: hide-app-launchers
+source: ghcr.io/lorduskordus/bluebuild-modules
+hide:
+  - nvtop
+  - htop

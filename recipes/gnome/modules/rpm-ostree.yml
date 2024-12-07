@@ -1,0 +1,16 @@
+type: rpm-ostree
+repos:
+  # COPR for nautilus-admin, enables shortcut 'Open as Admin' in Nautilus
+  - https://copr.fedorainfracloud.org/coprs/tomaszgasior/mushrooms/repo/fedora-%OS_VERSION%/tomaszgasior-mushrooms-fedora-%OS_VERSION%.repo
+  # COPR for morewaita-icon-theme
+  - https://copr.fedorainfracloud.org/coprs/dusansimic/themes/repo/fedora-%OS_VERSION%/dusansimic-themes-fedora-%OS_VERSION%.repo
+install:
+  - morewaita-icon-theme
+  - firewall-config
+  - dconf-editor
+  - nautilus-admin
+  - gnome-text-editor
+remove:
+  - gnome-classic-session
+  - gnome-tour
+  - gnome-system-monitor

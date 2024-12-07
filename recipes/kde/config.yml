@@ -1,37 +1,5 @@
 modules:
 
-  - type: rpm-ostree
-    repos:
-      # COPR for Koi, switch between light & dark themes
-      - https://copr.fedorainfracloud.org/coprs/birkch/Koi/repo/fedora-%OS_VERSION%/birkch-Koi-fedora-%OS_VERSION%.repo
-    install:
-      - Koi
-      - merkuro # KDE Calendar
-      - kdepim-addons # KDE Calendar system integration
-      - kdepim-runtime # Needed for adding accounts in the KDE Calendar
-    remove:
-      - kate
-      - kate-plugins
-      - kate-krunner-plugin
-      - kfind
-      - kcharselect
-      #- filelight
-      #- kwrite
-
-  - type: default-flatpaks
-    system:
-      install:
-        - org.kde.kclock
-        - org.kde.kweather
-        - org.kde.okular
-        #- org.kde.filelight
-        #- org.kde.kwrite
-        #- org.kde.krdc
-        #- org.kde.ark
-        #- org.kde.kalk
-        #- org.kde.elisa
-
-  - type: files
-    files:
-      - source: system/kde
-        destination: /
+  - from-file: kde/modules/rpm-ostree.yml
+  - from-file: kde/modules/default_flatpaks.yml
+  - from-file: kde/modules/files.yml

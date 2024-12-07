@@ -1,0 +1,17 @@
+type: rpm-ostree
+repos:
+  # COPR for Koi, switch between light & dark themes
+  - https://copr.fedorainfracloud.org/coprs/birkch/Koi/repo/fedora-%OS_VERSION%/birkch-Koi-fedora-%OS_VERSION%.repo
+install:
+  - Koi
+  - merkuro # KDE Calendar
+  - kdepim-addons # KDE Calendar system integration
+  - kdepim-runtime # Needed for adding accounts in the KDE Calendar
+remove:
+  - kate
+  - kate-plugins
+  - kate-krunner-plugin
+  - kfind
+  - kcharselect
+  #- filelight
+  #- kwrite

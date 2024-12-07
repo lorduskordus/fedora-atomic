@@ -1,84 +1,9 @@
 modules:
 
-  - type: rpm-ostree
-    repos:
-      # COPR for nautilus-admin, enables shortcut 'Open as Admin' in Nautilus
-      - https://copr.fedorainfracloud.org/coprs/tomaszgasior/mushrooms/repo/fedora-%OS_VERSION%/tomaszgasior-mushrooms-fedora-%OS_VERSION%.repo
-      # COPR for morewaita-icon-theme
-      - https://copr.fedorainfracloud.org/coprs/dusansimic/themes/repo/fedora-%OS_VERSION%/dusansimic-themes-fedora-%OS_VERSION%.repo
-    install:
-      - gnome-shell-extension-appindicator
-      - gnome-shell-extension-dash-to-panel
-      - gnome-shell-extension-dash-to-dock
-      - gnome-shell-extension-gsconnect
-      - gnome-shell-extension-blur-my-shell
-      - gnome-shell-extension-user-theme
-      - gnome-shell-extension-caffeine
-      - morewaita-icon-theme
-      - firewall-config
-      - dconf-editor
-      - nautilus-admin
-      - gnome-text-editor
-      # Needed for Pano clipboard
-      - libgda
-      - libgda-sqlite
-    remove:
-      - gnome-shell-extension-apps-menu
-      - gnome-shell-extension-background-logo
-      - gnome-shell-extension-launch-new-instance
-      - gnome-shell-extension-window-list
-      - gnome-classic-session
-      - gnome-tour
-      - gnome-system-monitor
-    # Apply the triple buffer patch.
-    replace:
-      - from-repo: https://copr.fedorainfracloud.org/coprs/trixieua/mutter-patched/repo/fedora-%OS_VERSION%/trixieua-mutter-patched-fedora-%OS_VERSION%.repo
-        packages:
-          - gnome-shell
-          - mutter
-          - mutter-common
-          - xorg-x11-server-Xwayland
-          - gdm
-
-  - type: default-flatpaks
-    system:
-      install:
-        - com.github.tchx84.Flatseal
-        - com.mattjakeman.ExtensionManager
-        - org.gnome.Calendar
-        - org.gnome.FileRoller
-        - org.gnome.Weather
-        - org.gnome.baobab
-        - org.gnome.clocks
-
-  - type: files
-    files:
-      - source: system/gnome
-        destination: /
-
-  - type: justfiles
-    validate: true
-    include:
-      - gnome
-  
-  - type: hide-app-launchers
-    source: ghcr.io/lorduskordus/bluebuild-modules
-    hide:
-      - org.gnome.Extensions
-
-  - type: gnome-extensions
-    install:
-      - ArcMenu
-      - Legacy (GTK3) Theme Scheme Auto Switcher
-      - Night Theme Switcher
-      - Tiling Assistant
-      - Just Perfection
-      #- Pano - Clipboard Manager # Enable when pushed to EGO
-
-  - type: script
-    scripts:
-      - gnome/custom-dash-to-panel.sh
-  
-  - type: bling
-    install:
-      - dconf-update-service
+  - from-file: gnome/modules/triple_buffering_patch.yml
+  - from-file: gnome/modules/rpm-ostree.yml
+  - from-file: gnome/modules/default_flatpaks.yml
+  - from-file: gnome/modules/files.yml
+  - from-file: gnome/modules/justfiles.yml
+  - from-file: gnome/modules/gnome_extensions.yml
+  - from-file: gnome/modules/add_dconf_update_service.yml

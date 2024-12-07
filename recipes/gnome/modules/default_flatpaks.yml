@@ -1,0 +1,9 @@
+type: default-flatpaks
+system:
+  install:
+    - com.github.tchx84.Flatseal
+    - org.gnome.Calendar
+    - org.gnome.FileRoller
+    - org.gnome.Weather
+    - org.gnome.baobab
+    - org.gnome.clocks

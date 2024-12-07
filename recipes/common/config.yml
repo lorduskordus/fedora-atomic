@@ -1,65 +1,10 @@
 modules:
 
-  - from-file: common/kernel-coreos.yml
-
-  - type: rpm-ostree
-    repos:
-      # COPR for bibata-cursor-themes
-      - https://copr.fedorainfracloud.org/coprs/peterwu/rendezvous/repo/fedora-%OS_VERSION%/peterwu-rendezvous-fedora-%OS_VERSION%.repo
-    install:
-      - adw-gtk3-theme
-      - nm-connection-editor-desktop
-      - rsms-inter-fonts
-      - bibata-cursor-themes
-      - micro
-    remove:
-      - firefox
-      - firefox-langpacks
-
-  - type: default-flatpaks
-    notify: true
-    system:
-      repo-url: https://dl.flathub.org/repo/flathub.flatpakrepo
-      repo-name: flathub-system
-      repo-title: "Flathub (system)"
-      install:
-        - org.mozilla.firefox
-        - org.libreoffice.LibreOffice
-        - org.videolan.VLC
-        - io.mpv.Mpv
-        - org.gnome.Lollypop
-        - org.gnome.Loupe
-        - org.gnome.Snapshot
-        - org.gnome.SoundRecorder
-        - io.github.dvlv.boxbuddyrs
-        - io.github.flattool.Warehouse
-        - org.gnome.Calculator
-        - org.gnome.Papers
-        - net.nokyan.Resources
-        - com.tomjwatson.Emote
-        - org.mozilla.Thunderbird
-        - org.localsend.localsend_app
-    user:
-      repo-url: https://dl.flathub.org/repo/flathub.flatpakrepo
-      repo-name: flathub-user
-      repo-title: "Flathub"
-
-  - type: files
-    files:
-      - source: system/common
-        destination: /
-
-  - type: justfiles
-    validate: true
-    include:
-      - common
-  
-  - type: hide-app-launchers
-    source: ghcr.io/lorduskordus/bluebuild-modules
-    hide:
-      - nvtop
-      - htop
-
-  - type: systemd # Copy services from systemd folder
-
-  - type: signing
+  - from-file: common/modules/kernel-coreos.yml
+  - from-file: common/modules/rpm-ostree.yml
+  - from-file: common/modules/default_flatpaks.yml
+  - from-file: common/modules/files.yml
+  - from-file: common/modules/justfiles.yml
+  - from-file: common/modules/hide_app_launchers.yml
+  - from-file: common/modules/systemd.yml
+  - from-file: common/modules/signing.yml
