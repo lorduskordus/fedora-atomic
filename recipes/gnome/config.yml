@@ -1,9 +1,9 @@
 modules:
 
-  - from-file: gnome/modules/triple_buffering_patch.yml
-  - from-file: gnome/modules/rpm-ostree.yml
-  - from-file: gnome/modules/default_flatpaks.yml
-  - from-file: gnome/modules/files.yml
-  - from-file: gnome/modules/justfiles.yml
-  - from-file: gnome/modules/gnome_extensions.yml
-  - from-file: gnome/modules/add_dconf_update_service.yml
+  - from-file: gnome/config/triple-buffering-patch.yml
+  - from-file: gnome/config/rpms.yml
+  - from-file: gnome/config/flatpaks.yml
+  - from-file: gnome/config/files.yml
+  - from-file: gnome/config/justfiles.yml
+  - from-file: gnome/config/gnome-extensions.yml
+  - from-file: gnome/config/dconf-update.yml

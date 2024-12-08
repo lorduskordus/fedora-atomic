@@ -1,5 +1,5 @@
 modules:
 
-  - from-file: kde/modules/rpm-ostree.yml
-  - from-file: kde/modules/default_flatpaks.yml
-  - from-file: kde/modules/files.yml
+  - from-file: kde/config/rpms.yml
+  - from-file: kde/config/flatpaks.yml
+  - from-file: kde/config/files.yml

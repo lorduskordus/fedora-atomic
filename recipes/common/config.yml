@@ -1,10 +1,10 @@
 modules:
 
-  - from-file: common/modules/kernel-coreos.yml
-  - from-file: common/modules/rpm-ostree.yml
-  - from-file: common/modules/default_flatpaks.yml
-  - from-file: common/modules/files.yml
-  - from-file: common/modules/justfiles.yml
-  - from-file: common/modules/hide_app_launchers.yml
-  - from-file: common/modules/systemd.yml
-  - from-file: common/modules/signing.yml
+  - from-file: common/config/kernel-coreos.yml
+  - from-file: common/config/rpms.yml
+  - from-file: common/config/flatpaks.yml
+  - from-file: common/config/files.yml
+  - from-file: common/config/justfiles.yml
+  - from-file: common/config/hide-app-launchers.yml
+  - from-file: common/config/systemd.yml
+  - from-file: common/config/signing.yml
