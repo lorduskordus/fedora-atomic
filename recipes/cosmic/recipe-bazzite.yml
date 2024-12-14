@@ -3,11 +3,13 @@ description: Custom Fedora COSMIC image based on uBlue, built with BlueBuild. (B
 
 base-image: ghcr.io/ublue-os/cosmic
 image-version: 41
+alt-tags:
+  - bazzite
 
 modules:
 
   # Common
-  - from-file: common/addons/kernel-coreos.yml
+  - from-file: common/addons/kernel-bazzite.yml
   - from-file: common/config.yml
   
   # COSMIC

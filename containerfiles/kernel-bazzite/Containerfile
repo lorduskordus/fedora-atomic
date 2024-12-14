@@ -1,0 +1,13 @@
+# Install Bazzite kernel
+COPY --from=ghcr.io/ublue-os/bazzite-kernel:41 /tmp/rpms /tmp/bazzite-rpms
+RUN --mount=type=cache,dst=/var/cache/rpm-ostree \
+    echo "Installing Bazzite kernel" && \
+    rpm-ostree cliwrap install-to-root / && \
+    rpm-ostree override replace --experimental \
+    /tmp/bazzite-rpms/kernel-[0-9]*.rpm \
+    /tmp/bazzite-rpms/kernel-core-*.rpm \
+    /tmp/bazzite-rpms/kernel-modules-*.rpm
+
+# Get NVIDIA akmods
+COPY --from=ghcr.io/ublue-os/akmods-nvidia:bazzite-41 /rpms /tmp/akmods-rpms
+# Script 'common/kernel-bazzite.sh' handles the rest.

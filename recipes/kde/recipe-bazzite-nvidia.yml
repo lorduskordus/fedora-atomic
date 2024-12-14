@@ -3,11 +3,13 @@ description: Custom Fedora KDE image based on uBlue, built with BlueBuild. (Base
 
 base-image: ghcr.io/ublue-os/kinoite-main
 image-version: 41
+alt-tags:
+  - bazzite
 
 modules:
 
   # Common
-  - from-file: common/addons/kernel-coreos.yml
+  - from-file: common/addons/kernel-bazzite.yml
   - from-file: common/config.yml
 
   # KDE

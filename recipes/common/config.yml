@@ -1,6 +1,5 @@
 modules:
 
-  - from-file: common/config/kernel-coreos.yml
   - from-file: common/config/rpms.yml
   - from-file: common/config/flatpaks.yml
   - from-file: common/config/files.yml
