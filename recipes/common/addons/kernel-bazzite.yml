@@ -6,4 +6,4 @@ modules:
 
   - type: script
     scripts:
-      - common/kernel-bazzite.sh
+      - common/kernel.sh

@@ -6,4 +6,4 @@ modules:
 
   - type: script
     scripts:
-      - common/kernel-coreos.sh
+      - common/kernel.sh
