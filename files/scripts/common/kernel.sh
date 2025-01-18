@@ -13,7 +13,5 @@ else
 fi
 
 export IMAGE_NAME=$(awk -F'/' '{print $3}' <<< "${BASE_IMAGE}" | cut -d'-' -f1)
-export KERNEL_FLAVOR="main"
 
 curl -s https://raw.githubusercontent.com/ublue-os/hwe/refs/heads/main/nvidia-install.sh | bash
-curl -s https://raw.githubusercontent.com/ublue-os/hwe/refs/heads/main/build-initramfs.sh | bash
