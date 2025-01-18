@@ -31,7 +31,7 @@ remove-old-temp-files=true
 remove-old-trash-files=true
 
 [org/gnome/system/location]
-enabled=false
+enabled=true
 
 [org/gnome/mutter]
 center-new-windows=true
