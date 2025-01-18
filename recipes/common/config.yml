@@ -7,3 +7,4 @@ modules:
   - from-file: common/config/hide-app-launchers.yml
   - from-file: common/config/systemd.yml
   - from-file: common/config/signing.yml
+  - from-file: common/config/initramfs.yml
