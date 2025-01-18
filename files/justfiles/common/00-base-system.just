@@ -224,3 +224,30 @@ grub ACTION="prompt":
         echo "No changes applied."
         exit 0
     fi
+
+# Kernel stuff
+kernel ACTION="prompt":
+    #!/usr/bin/env bash
+    source /usr/lib/ujust/ujust.sh
+
+    enable-trim-with-luks () {
+        TRIM_TIMER="fstrim.timer"
+
+        rpm-ostree kargs --append-if-missing=rd.luks.options=discard
+
+        if ! systemctl is-enabled ${TRIM_TIMER} &> /dev/null; then
+            systemctl enable ${TRIM_TIMER}
+        fi
+    }
+
+    OPTION={{ ACTION }}
+    if [ "${OPTION}" == "prompt" ]; then
+        OPTION=$(ugum choose "enable-trim-with-luks")
+    fi
+
+    if [ "${OPTION}" == "enable-trim-with-luks" ]; then
+        enable-trim-with-luks
+    else
+        echo "No changes applied."
+        exit 0
+    fi
