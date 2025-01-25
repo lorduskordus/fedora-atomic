@@ -1,42 +1,8 @@
-modules:
-
-  - type: rpm-ostree
-    install:
-      - gnome-shell-extension-appindicator
-      - gnome-shell-extension-dash-to-panel
-      - gnome-shell-extension-dash-to-dock
-      - gnome-shell-extension-gsconnect
-      - gnome-shell-extension-blur-my-shell
-      - gnome-shell-extension-user-theme
-      - gnome-shell-extension-caffeine
-      # Needed for Pano clipboard
-      - libgda
-      - libgda-sqlite
-    remove:
-      - gnome-shell-extension-apps-menu
-      - gnome-shell-extension-background-logo
-      - gnome-shell-extension-launch-new-instance
-      - gnome-shell-extension-window-list
-  
-  - type: default-flatpaks
-    system:
-      install:
-        - com.mattjakeman.ExtensionManager
-  
-  - type: hide-app-launchers
-    source: ghcr.io/lorduskordus/bluebuild-modules
-    hide:
-      - org.gnome.Extensions
-
-  - type: gnome-extensions
-    install:
-      - ArcMenu
-      - Legacy (GTK3) Theme Scheme Auto Switcher
-      - Night Theme Switcher
-      - Tiling Assistant
-      - Just Perfection
-      #- Pano - Clipboard Manager # Enable when pushed to EGO
-
-  - type: script
-    scripts:
-      - gnome/custom-dash-to-panel.sh
+type: gnome-extensions
+install:
+  - ArcMenu
+  - Legacy (GTK3) Theme Scheme Auto Switcher
+  - Night Theme Switcher
+  - Tiling Assistant
+  - Just Perfection
+  #- Pano - Clipboard Manager

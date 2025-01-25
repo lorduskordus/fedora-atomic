@@ -1,9 +1,10 @@
 modules:
 
-  - from-file: gnome/config/triple-buffering-patch.yml
-  - from-file: gnome/config/rpms.yml
-  - from-file: gnome/config/flatpaks.yml
+  - from-file: gnome/config/rpm-ostree.yml
+  - from-file: gnome/config/default-flatpaks.yml
   - from-file: gnome/config/files.yml
   - from-file: gnome/config/justfiles.yml
+  - from-file: gnome/config/hide-app-launchers.yml
   - from-file: gnome/config/gnome-extensions.yml
-  - from-file: gnome/config/dconf-update.yml
+  - from-file: gnome/config/scripts.yml
+  - from-file: gnome/config/bling.yml

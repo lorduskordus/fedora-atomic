@@ -1,6 +1,7 @@
 type: default-flatpaks
 system:
   install:
+    - com.mattjakeman.ExtensionManager
     - com.github.tchx84.Flatseal
     - org.gnome.Calendar
     - org.gnome.FileRoller

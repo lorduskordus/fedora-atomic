@@ -14,4 +14,3 @@ modules:
   
   # GNOME
   - from-file: gnome/config.yml
-  - from-file: gnome/addons/kms-modifiers.yml
