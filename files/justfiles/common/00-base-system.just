@@ -231,10 +231,9 @@ kernel ACTION="prompt":
     source /usr/lib/ujust/ujust.sh
 
     enable-trim-with-luks () {
-        TRIM_TIMER="fstrim.timer"
-
         rpm-ostree kargs --append-if-missing=rd.luks.options=discard
 
+        TRIM_TIMER="fstrim.timer"
         if ! systemctl is-enabled ${TRIM_TIMER} &> /dev/null; then
             systemctl enable ${TRIM_TIMER}
         fi
