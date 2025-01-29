@@ -9,4 +9,5 @@ RUN --mount=type=cache,dst=/var/cache/rpm-ostree \
     rpm-ostree override replace --experimental \
     /tmp/bazzite-rpms/kernel-[0-9]*.rpm \
     /tmp/bazzite-rpms/kernel-core-*.rpm \
-    /tmp/bazzite-rpms/kernel-modules-*.rpm
+    /tmp/bazzite-rpms/kernel-modules-*.rpm \
+    /tmp/bazzite-rpms/kernel-uki-virt-*.rpm

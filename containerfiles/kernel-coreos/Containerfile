@@ -9,4 +9,5 @@ RUN --mount=type=cache,dst=/var/cache/rpm-ostree \
     rpm-ostree override replace --experimental \
     /tmp/coreos-rpms/kernel-[0-9]*.rpm \
     /tmp/coreos-rpms/kernel-core-*.rpm \
-    /tmp/coreos-rpms/kernel-modules-*.rpm
+    /tmp/coreos-rpms/kernel-modules-*.rpm \
+    /tmp/coreos-rpms/kernel-uki-virt-*.rpm
