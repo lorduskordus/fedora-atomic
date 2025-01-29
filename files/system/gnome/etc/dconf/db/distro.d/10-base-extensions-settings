@@ -40,13 +40,6 @@ send-notification-on-copy=false
 play-audio-on-copy=false
 keep-search-entry=false
 
-[org/gnome/shell/extensions/pano/file-item]
-body-bg-color='rgb(192,191,188)'
-
-[org/gnome/shell/extensions/pano/text-item]
-body-bg-color='rgb(192,191,188)'
-header-bg-color='rgb(46,108,52)'
-
 [org/gnome/shell/extensions/arcmenu]
 arcmenu-hotkey=['Super_L']
 arc-menu-icon=71

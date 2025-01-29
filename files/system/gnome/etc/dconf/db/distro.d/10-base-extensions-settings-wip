@@ -1,3 +1,17 @@
+[org/gnome/shell/extensions/pano]
+window-position=uint32 4
+
+[org/gnome/shell/extensions/pano/file-item]
+body-bg-color='rgb(61,56,70)'
+title-color='rgb(0,0,0)'
+
+[org/gnome/shell/extensions/pano/text-item]
+body-bg-color='rgb(61,56,70)'
+body-color='rgb(255,255,255)'
+char-length=550
+header-bg-color='rgb(46,108,52)'
+header-color='rgb(255,255,255)'
+
 [org/gnome/shell/extensions/blur-my-shell/appfolder]
 blur=true
 style-dialogs=1
