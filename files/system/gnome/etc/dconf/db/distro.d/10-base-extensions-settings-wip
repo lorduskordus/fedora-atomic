@@ -114,3 +114,6 @@ tray-padding=6
 tray-size=0
 window-preview-title-font-weight='bold'
 window-preview-title-position='TOP'
+appicon-margin-toscreenborder=4
+appicon-margin-todesktop=4
+highlight-appicon-hover-border-radius=8

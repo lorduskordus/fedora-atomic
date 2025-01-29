@@ -6,5 +6,4 @@ modules:
   - from-file: gnome/config/justfiles.yml
   - from-file: gnome/config/hide-app-launchers.yml
   - from-file: gnome/config/gnome-extensions.yml
-  - from-file: gnome/config/scripts.yml
   - from-file: gnome/config/bling.yml
