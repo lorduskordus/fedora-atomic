@@ -15,8 +15,6 @@ replace:
       - gnome-shell
       - mutter
       - mutter-common
-      - xorg-x11-server-Xwayland
-      - gdm
 repos:
   # Includes nautilus-admin
   - https://copr.fedorainfracloud.org/coprs/tomaszgasior/mushrooms/repo/fedora-%OS_VERSION%/tomaszgasior-mushrooms-fedora-%OS_VERSION%.repo
