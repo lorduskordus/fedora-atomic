@@ -3,7 +3,7 @@ window-position=uint32 4
 
 [org/gnome/shell/extensions/pano/file-item]
 body-bg-color='rgb(61,56,70)'
-title-color='rgb(0,0,0)'
+title-color='rgb(255,255,255)'
 
 [org/gnome/shell/extensions/pano/text-item]
 body-bg-color='rgb(61,56,70)'
