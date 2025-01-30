@@ -1,5 +1,6 @@
 [org/gnome/shell/extensions/pano]
 window-position=uint32 4
+compact-mode=true
 
 [org/gnome/shell/extensions/pano/file-item]
 body-bg-color='rgb(61,56,70)'
