@@ -1,13 +1,12 @@
 name: fedora-base-gnome
 description: Custom Fedora GNOME image based on uBlue, built with BlueBuild. (Base)
 
-base-image: ghcr.io/ublue-os/silverblue-main
-image-version: 41
+base-image: ghcr.io/lorduskordus/fedora-core-gnome
+image-version: coreos
 
 modules:
 
   # Common
-  - from-file: common/addons/kernel-coreos.yml
   - from-file: common/config.yml
   
   # GNOME

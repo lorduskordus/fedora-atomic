@@ -2,8 +2,8 @@ name: bluebuild
 
 on:
   schedule:
-    - cron: "55 04 * * *" # build at 04:55 UTC every day 
-                          # (20 minutes after ublue-os/hwe images start building)
+    - cron: "15 05 * * *" # build at 05:15 UTC every day 
+                          # (20 minutes after lorduskordus/fedora-core images start building)
   push:
     paths-ignore: # don't rebuild if only documentation has changed
       - "**.md"

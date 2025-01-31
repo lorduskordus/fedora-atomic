@@ -1,9 +1,0 @@
-modules:
-
-  - type: containerfile
-    containerfiles:
-      - kernel-bazzite
-
-  - type: script
-    scripts:
-      - common/kernel-post-install.sh
