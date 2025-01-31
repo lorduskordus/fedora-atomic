@@ -8,20 +8,32 @@ switch-to-image ACTION="prompt":
         echo "  ● ${bold}Image${normal}:    ${IMAGE}"
         echo "  ● ${bold}Tag${normal}:      ${TAG}"
         echo "  ● ${bold}Signed${normal}:   ${SIGNED}"
+
+        INFO_SCOPE="$1"
+        if [ "${INFO_SCOPE}" == "include_reboot" ]; then
+            echo "  ● ${bold}Reboot${normal}:   ${REBOOT}"
+        fi
     }
 
     switch_to () {
-        clear
-        echo -e "\n${bold}Switching to another image..${normal}"
-
         IMAGE="$1"
 
-        echo -e "\nChosen image:"
+        clear
+        echo "Chosen image:"
         show_info
 
-        echo
+        echo -e "\nChoose, whether to ${bold}reboot automatically${normal} after a ${bold}successful switch${normal}.\n"
+        if ugum confirm "Reboot automatically ?"; then
+            REBOOT="yes"
+        fi
+
+        clear
+        echo "Chosen image:"
+        show_info "include_reboot"
+
+        echo -e "\nConfirm your ${bold}IMAGE choice${normal}.\n"
         if ! ugum confirm; then
-            echo -e "\nNo changes applied."
+            echo "No changes applied."
             exit 0
         fi
 
@@ -31,12 +43,17 @@ switch-to-image ACTION="prompt":
             PREFIX="${PREFIX_SIGNED}"
         fi
 
+        if [ "${REBOOT}" == "yes" ]; then
+            REBOOT_ARG="-r "
+        fi
+
         if [ "${CUR_IMAGE}" == "${PREFIX}/${OWNER}/${IMAGE}:${TAG}" ]; then
-            echo -e "\nAlready on the same image."
+            echo "Already on the same image."
             exit 0
         else
-            echo
-            if rpm-ostree rebase ${PREFIX}/${OWNER}/${IMAGE}:${TAG}; then
+            clear
+            echo -e "${bold}Switching to new IMAGE${normal}.\n"
+            if rpm-ostree rebase ${REBOOT_ARG}${PREFIX}/${OWNER}/${IMAGE}:${TAG}; then
                 echo -e "\nDone. Please reboot."
                 notify-send --app-name "Image Switcher" \
                             -i software-update-available-symbolic \
@@ -127,6 +144,8 @@ switch-to-image ACTION="prompt":
     IMAGE=$(echo ${CUR_IMAGE_NO_PREFIX} | cut -d'/' -f2 | cut -d':' -f1)
     TAG=$(cut -d':' -f2 <<< ${CUR_IMAGE_NO_PREFIX})
 
+    REBOOT="no"
+
     IMAGE_TYPE=$(cut -d'-' -f1-2 <<< ${IMAGE})
     for desktop in ${AVAILABLE_DESKTOPS}; do
         AVAILABLE_IMAGES+="${IMAGE_TYPE}-${desktop} "
@@ -135,7 +154,7 @@ switch-to-image ACTION="prompt":
     OPTION={{ ACTION }}
     if [ "${OPTION}" == "prompt" ]; then
         clear
-        echo -e "\nCurrent image:"
+        echo "Current image:"
         show_info
         echo -e "\nChoose your new ${bold}IMAGE${normal}.\n"
 
@@ -156,7 +175,7 @@ switch-to-image ACTION="prompt":
         exit 0
     elif [ "${OPTION}" == "..something else" ]; then
         clear
-        echo -e "\nCurrent image:"
+        echo "Current image:"
         show_info
         something_else
     elif [ -n "${OPTION}" ]; then
