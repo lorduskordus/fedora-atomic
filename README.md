@@ -6,7 +6,11 @@
 
 > The [BlueBuild](https://blue-build.org/) project makes image building easy by allowing you to declare your modifications in yaml files using modules with an easy to understand syntax, serving as an abstraction to a classic containerfile. The images are built daily by default using a GitHub Action.
 
-These images have additional 'minimal' QoL changes applied on top and serve as a 'base' for building more personalised images, like:
+These images have additional QoL changes applied on top. They are supposed to be 'generic'.
+
+All the images have Bazzite & CoreOS kernel variants available. To minimize build failures related to the custom kernels & the included NVIDIA drivers, images with kernels other than Main are built on top of [Fedora Core](https://github.com/lorduskordus/fedora-core), which serves as a 'cache' of successfully built images that are then used here.
+
+All my experimenting, potentially breaking changes and heavy personalization is done on top of these images in:
 
 * [Fedora LK](https://github.com/lorduskordus/fedora-lk)
 
