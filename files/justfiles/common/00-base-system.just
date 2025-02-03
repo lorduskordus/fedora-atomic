@@ -4,34 +4,52 @@ switch-to-image ACTION="prompt":
     source /usr/lib/ujust/ujust.sh
 
     show_info () {
-        echo "  ● ${bold}From${normal}:     ${OWNER}"
-        echo "  ● ${bold}Image${normal}:    ${IMAGE}"
-        echo "  ● ${bold}Tag${normal}:      ${TAG}"
-        echo "  ● ${bold}Signed${normal}:   ${SIGNED}"
+        local TITLE="$1"
+        local TITLE_ACTION="$2"
+        local INFO_SCOPE="$3"
 
-        INFO_SCOPE="$1"
+        if [ "${INFO_SCOPE}" == "new" ]; then
+            local SHOW_OWNER="${NEW_OWNER}"
+            local SHOW_IMAGE="${NEW_IMAGE}"
+            local SHOW_TAG="${NEW_TAG}"
+            local SHOW_SIGNED="${NEW_SIGNED}"
+        else
+            local SHOW_OWNER="${OWNER}"
+            local SHOW_IMAGE="${IMAGE}"
+            local SHOW_TAG="${TAG}"
+            local SHOW_SIGNED="${SIGNED}"
+        fi
+
+        clear
+
+        if [ -n "${TITLE}" ]; then
+            echo -e "${bold}${green}${TITLE}${normal}\n"
+        fi
+
+        echo "  ● ${bold}From${normal}:     ${SHOW_OWNER}"
+        echo "  ● ${bold}Image${normal}:    ${SHOW_IMAGE}"
+        echo "  ● ${bold}Tag${normal}:      ${SHOW_TAG}"
+        echo "  ● ${bold}Signed${normal}:   ${SHOW_SIGNED}"
+
         if [ "${INFO_SCOPE}" == "include_reboot" ]; then
             echo "  ● ${bold}Reboot${normal}:   ${REBOOT}"
+        fi
+
+        if [ -n "${TITLE_ACTION}" ]; then
+            echo -e "\n${TITLE_ACTION}\n"
         fi
     }
 
     switch_to () {
-        IMAGE="$1"
+        local IMAGE="$1"
+        local TITLE="Chosen image:"
 
-        clear
-        echo "Chosen image:"
-        show_info
-
-        echo -e "\nChoose, whether to ${bold}reboot automatically${normal} after a ${bold}successful switch${normal}.\n"
+        show_info "${TITLE}" "Choose, whether to ${bold}reboot automatically${normal} after a ${bold}successful switch${normal}."
         if ugum confirm "Reboot automatically ?"; then
             REBOOT="yes"
         fi
 
-        clear
-        echo "Chosen image:"
-        show_info "include_reboot"
-
-        echo -e "\nConfirm your ${bold}IMAGE choice${normal}.\n"
+        show_info "${TITLE}" "Confirm your ${bold}IMAGE choice${normal}." "include_reboot"
         if ! ugum confirm; then
             echo "No changes applied."
             exit 0
@@ -47,13 +65,15 @@ switch-to-image ACTION="prompt":
             REBOOT_ARG="-r "
         fi
 
+        local REBASE_COMMAND="rpm-ostree rebase ${REBOOT_ARG}${PREFIX}/${OWNER}/${IMAGE}:${TAG}"
+
         if [ "${CUR_IMAGE}" == "${PREFIX}/${OWNER}/${IMAGE}:${TAG}" ]; then
             echo "Already on the same image."
             exit 0
         else
             clear
             echo -e "${bold}Switching to new IMAGE${normal}.\n"
-            if rpm-ostree rebase ${REBOOT_ARG}${PREFIX}/${OWNER}/${IMAGE}:${TAG}; then
+            if ${REBASE_COMMAND}; then
                 echo -e "\nDone. Please reboot."
                 notify-send --app-name "Image Switcher" \
                             -i software-update-available-symbolic \
@@ -72,46 +92,53 @@ switch-to-image ACTION="prompt":
     }
 
     something_else () {
-        echo -e "\n- ${lightblue}Note${normal}: If the values are empty, current values are taken.\n"
-        while [[ -z "${NEW_OWNER}" || -z "${NEW_IMAGE}" || -z "${NEW_TAG}" || -z "${NEW_SIGNED}" ]]; do
-            echo "[Current: ${OWNER}]"
-            read -p "  ● ${bold}From${normal}: " NEW_OWNER
-            echo "[Current: ${IMAGE}]"
-            read -p "  ● ${bold}Image${normal}: " NEW_IMAGE
-            echo "[Current: ${TAG}]"
-            read -p "  ● ${bold}Tag${normal}: " NEW_TAG
+        local TITLE="New image values:"
+        local TITLE_ACTION="- ${bold}${blue}Note${normal}: If the values are left empty, values from current image are taken."
+        local INFO_SCOPE="new"
 
-            while true; do
-                echo "[Current: ${SIGNED}]"
-                read -p "  ● ${bold}Signed${normal}(yes/no): " NEW_SIGNED
+        show_info "${TITLE}" "${TITLE_ACTION}" "${INFO_SCOPE}"
+        echo "[Current image: ${OWNER}]"
+        read -p "  ● ${bold}From${normal}: " NEW_OWNER
 
-                if [[ "${NEW_SIGNED}" == "yes" || "${NEW_SIGNED}" == "no" ]]; then
-                    SIGNED=${NEW_SIGNED}
-                    break
-                elif [ "${NEW_SIGNED}" == "" ]; then
-                    NEW_SIGNED=${SIGNED}
-                    break
-                else
-                    echo -e "\nType yes/no or leave it empty.\n"
-                fi
-            done
+        if [ -n "${NEW_OWNER}" ]; then
+            OWNER=${NEW_OWNER}
+        else
+            NEW_OWNER=${OWNER}
+        fi
 
-            if [ -n "${NEW_OWNER}" ]; then
-                OWNER=${NEW_OWNER}
+        show_info "${TITLE}" "${TITLE_ACTION}" "${INFO_SCOPE}"
+        echo "[Current image: ${IMAGE}]"
+        read -p "  ● ${bold}Image${normal}: " NEW_IMAGE
+
+        if [ -n "${NEW_IMAGE}" ]; then
+            IMAGE=${NEW_IMAGE}
+        else
+            NEW_IMAGE=${IMAGE}
+        fi
+
+        show_info "${TITLE}" "${TITLE_ACTION}" "${INFO_SCOPE}"
+        echo "[Current image: ${TAG}]"
+        read -p "  ● ${bold}Tag${normal}: " NEW_TAG
+
+        if [ -n "${NEW_TAG}" ]; then
+            TAG=${NEW_TAG}
+        else
+            NEW_TAG=${TAG}
+        fi
+
+        while true; do
+            show_info "${TITLE}" "${TITLE_ACTION}" "${INFO_SCOPE}"
+            echo "[Current image: ${SIGNED}]"
+            read -p "  ● ${bold}Signed${normal}(yes/no): " NEW_SIGNED
+
+            if [[ "${NEW_SIGNED}" == "yes" || "${NEW_SIGNED}" == "no" ]]; then
+                SIGNED=${NEW_SIGNED}
+                break
+            elif [ "${NEW_SIGNED}" == "" ]; then
+                NEW_SIGNED=${SIGNED}
+                break
             else
-                NEW_OWNER=${OWNER}
-            fi
-
-            if [ -n "${NEW_IMAGE}" ]; then
-                IMAGE=${NEW_IMAGE}
-            else
-                NEW_IMAGE=${IMAGE}
-            fi
-
-            if [ -n "${NEW_TAG}" ]; then
-                TAG=${NEW_TAG}
-            else
-                NEW_TAG=${TAG}
+                NEW_SIGNED="Wrong input (type yes/no)"
             fi
         done
 
@@ -153,10 +180,7 @@ switch-to-image ACTION="prompt":
 
     OPTION={{ ACTION }}
     if [ "${OPTION}" == "prompt" ]; then
-        clear
-        echo "Current image:"
-        show_info
-        echo -e "\nChoose your new ${bold}IMAGE${normal}.\n"
+        show_info "Current image:" "Choose your new ${bold}IMAGE${normal}."
 
         MENU_IMAGES=$(sed -E "s/${IMAGE}//;s/[[:space:]]\{2,\}/[[:space:]]/" <<< ${AVAILABLE_IMAGES})
 
@@ -174,9 +198,7 @@ switch-to-image ACTION="prompt":
         echo "Already on the same image."
         exit 0
     elif [ "${OPTION}" == "..something else" ]; then
-        clear
-        echo "Current image:"
-        show_info
+        show_info "Current image:"
         something_else
     elif [ -n "${OPTION}" ]; then
         for available_image in ${AVAILABLE_IMAGES}; do
