@@ -86,7 +86,7 @@ switch-to-image WITH="bootc":
 
         # if bootc
         if [ "${IMAGE_TOOL}" = "bootc" ]; then
-            if [ "${CUR_IMAGE_NO_PREFIX}" == "${SOURCE}/${OWNER}/${IMAGE}:${TAG}" ]; then
+            if [ "${CUR_IMAGE_NO_PREFIX}" == "${SOURCE}/${OWNER}/${IMAGE}:${TAG}" ] && [ "${CUR_SIGNED}" == "${SIGNED}" ]; then
                 echo "Already on the same image."
                 exit 0
             fi
@@ -104,17 +104,9 @@ switch-to-image WITH="bootc":
 
         if ${REBASE_COMMAND}; then
             echo -e "\n${green}- Done. Please reboot.${normal}"
-            notify-send --app-name "Image Switcher" \
-                        -i software-update-available-symbolic \
-                        "Image switched successfully" \
-                        "Please reboot to finish the process."
             exit 0
         else
             echo -e "\n${red}- There was an error while switching to the new image.${normal}"
-            notify-send --app-name "Image Switcher" \
-                        -i software-update-available-symbolic \
-                        "Image switch failed" \
-                        "There was an error while switching to the new image."
             exit 1
         fi
     }
@@ -185,8 +177,17 @@ switch-to-image WITH="bootc":
 
     # if bootc
     if [ "${IMAGE_TOOL}" = "bootc" ]; then
-        CUR_IMAGE_NO_PREFIX=$(bootc status --format=json | jq -r '.status.booted.image.image.image')
-        SIGNED="yes"
+        CUR_IMAGE=$(bootc status --format=json | jq -r '.status.booted.image.image')
+
+        CUR_IMAGE_NO_PREFIX=$(jq -r '.image' <<< ${CUR_IMAGE})
+
+        if [ "$(jq -r '.signature' <<< ${CUR_IMAGE})" = "null" ]; then
+            CUR_SIGNED="no"
+            SIGNED="no"
+        else
+            CUR_SIGNED="yes"
+            SIGNED="yes"
+        fi
     # else rpm-ostree
     else
         CUR_IMAGE=$(rpm-ostree status -b 2> /dev/null | grep '●' | cut -d' ' -f2)
