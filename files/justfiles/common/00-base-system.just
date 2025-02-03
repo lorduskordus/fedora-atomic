@@ -1,6 +1,6 @@
 # Switch to another image
-switch-to-image ACTION="prompt":
-    #!/usr/bin/env bash
+switch-to-image WITH="bootc":
+    #!/usr/bin/pkexec /usr/bin/bash
     source /usr/lib/ujust/ujust.sh
 
     show_info () {
@@ -59,35 +59,63 @@ switch-to-image ACTION="prompt":
             PREFIX="${PREFIX_UNSIGNED}"
         else
             PREFIX="${PREFIX_SIGNED}"
+
+            # if bootc
+            if [ "${IMAGE_TOOL}" = "bootc" ]; then
+                POLICY_ARG="--enforce-container-sigpolicy "
+            fi
         fi
 
         if [ "${REBOOT}" == "yes" ]; then
-            REBOOT_ARG="-r "
+            # if bootc
+            if [ "${IMAGE_TOOL}" = "bootc" ]; then
+                REBOOT_ARG="--apply "
+            # else rpm-ostree
+            else
+                REBOOT_ARG="-r "
+            fi
         fi
 
-        local REBASE_COMMAND="rpm-ostree rebase ${REBOOT_ARG}${PREFIX}/${OWNER}/${IMAGE}:${TAG}"
+        # if bootc
+        if [ "${IMAGE_TOOL}" = "bootc" ]; then
+            local REBASE_COMMAND="bootc switch ${REBOOT_ARG}${POLICY_ARG}${SOURCE}/${OWNER}/${IMAGE}:${TAG}"
+        # else rpm-ostree
+        else
+            local REBASE_COMMAND="rpm-ostree rebase ${REBOOT_ARG}${PREFIX}${SOURCE}/${OWNER}/${IMAGE}:${TAG}"
+        fi
 
-        if [ "${CUR_IMAGE}" == "${PREFIX}/${OWNER}/${IMAGE}:${TAG}" ]; then
-            echo "Already on the same image."
+        # if bootc
+        if [ "${IMAGE_TOOL}" = "bootc" ]; then
+            if [ "${CUR_IMAGE_NO_PREFIX}" == "${SOURCE}/${OWNER}/${IMAGE}:${TAG}" ]; then
+                echo "Already on the same image."
+                exit 0
+            fi
+        # else rpm-ostree
+        else
+            if [ "${CUR_IMAGE}" == "${PREFIX}${SOURCE}/${OWNER}/${IMAGE}:${TAG}" ]; then
+                echo "Already on the same image."
+                exit 0
+            fi
+        fi
+
+        clear
+        echo -e "${bold}${green}Switching to new IMAGE${normal}."
+        echo -e "${blue}- Running command: '${REBASE_COMMAND}'${normal}\n"
+
+        if ${REBASE_COMMAND}; then
+            echo -e "\n${green}- Done. Please reboot.${normal}"
+            notify-send --app-name "Image Switcher" \
+                        -i software-update-available-symbolic \
+                        "Image switched successfully" \
+                        "Please reboot to finish the process."
             exit 0
         else
-            clear
-            echo -e "${bold}Switching to new IMAGE${normal}.\n"
-            if ${REBASE_COMMAND}; then
-                echo -e "\nDone. Please reboot."
-                notify-send --app-name "Image Switcher" \
-                            -i software-update-available-symbolic \
-                            "Image switched successfully" \
-                            "Please reboot to finish the process."
-                exit 0
-            else
-                echo -e "\nThere was an error while switching to the new image."
-                notify-send --app-name "Image Switcher" \
-                            -i software-update-available-symbolic \
-                            "Image switch failed" \
-                            "There was an error while switching to the new image."
-                exit 1
-            fi
+            echo -e "\n${red}- There was an error while switching to the new image.${normal}"
+            notify-send --app-name "Image Switcher" \
+                        -i software-update-available-symbolic \
+                        "Image switch failed" \
+                        "There was an error while switching to the new image."
+            exit 1
         fi
     }
 
@@ -149,26 +177,40 @@ switch-to-image ACTION="prompt":
                         gnome \
                         kde"
 
-    CUR_IMAGE=$(rpm-ostree status -b 2> /dev/null | grep '●' | cut -d' ' -f2)
-
-    PREFIX_SIGNED="ostree-image-signed:docker://ghcr.io"
-    PREFIX_UNSIGNED="ostree-unverified-registry:ghcr.io"
-
-    if grep -qw "${PREFIX_SIGNED}" <<< ${CUR_IMAGE}; then
-        PREFIX=${PREFIX_SIGNED}
-        SIGNED="yes"
-    elif grep -qw "${PREFIX_UNSIGNED}" <<< ${CUR_IMAGE}; then
-        PREFIX=${PREFIX_UNSIGNED}
-        SIGNED="no"
-    else
-        echo "Couldn't get the prefix of current image."
-        exit 1
+    IMAGE_TOOL={{ WITH }}
+    if [ "${IMAGE_TOOL}" != "bootc" ] && [ "${IMAGE_TOOL}" != "rpm-ostree" ]; then
+        echo "Wrong input."
+        exit 0
     fi
 
-    CUR_IMAGE_NO_PREFIX=$(sed "s|${PREFIX}/||" <<< ${CUR_IMAGE})
+    # if bootc
+    if [ "${IMAGE_TOOL}" = "bootc" ]; then
+        CUR_IMAGE_NO_PREFIX=$(bootc status --format=json | jq -r '.status.booted.image.image.image')
+        SIGNED="yes"
+    # else rpm-ostree
+    else
+        CUR_IMAGE=$(rpm-ostree status -b 2> /dev/null | grep '●' | cut -d' ' -f2)
 
-    OWNER=$(cut -d'/' -f1 <<< ${CUR_IMAGE_NO_PREFIX})
-    IMAGE=$(echo ${CUR_IMAGE_NO_PREFIX} | cut -d'/' -f2 | cut -d':' -f1)
+        PREFIX_SIGNED="ostree-image-signed:docker://"
+        PREFIX_UNSIGNED="ostree-unverified-registry:"
+
+        if grep -q "${PREFIX_SIGNED}" <<< ${CUR_IMAGE}; then
+            PREFIX=${PREFIX_SIGNED}
+            SIGNED="yes"
+        elif grep -q "${PREFIX_UNSIGNED}" <<< ${CUR_IMAGE}; then
+            PREFIX=${PREFIX_UNSIGNED}
+            SIGNED="no"
+        else
+            echo "Couldn't get the prefix of current image."
+            exit 1
+        fi
+
+        CUR_IMAGE_NO_PREFIX=$(sed "s|${PREFIX}||" <<< ${CUR_IMAGE})
+    fi
+
+    SOURCE=$(cut -d'/' -f1 <<< ${CUR_IMAGE_NO_PREFIX})
+    OWNER=$(cut -d'/' -f2 <<< ${CUR_IMAGE_NO_PREFIX})
+    IMAGE=$(echo ${CUR_IMAGE_NO_PREFIX} | cut -d'/' -f3 | cut -d':' -f1)
     TAG=$(cut -d':' -f2 <<< ${CUR_IMAGE_NO_PREFIX})
 
     REBOOT="no"
@@ -178,17 +220,14 @@ switch-to-image ACTION="prompt":
         AVAILABLE_IMAGES+="${IMAGE_TYPE}-${desktop} "
     done
 
-    OPTION={{ ACTION }}
-    if [ "${OPTION}" == "prompt" ]; then
-        show_info "Current image:" "Choose your new ${bold}IMAGE${normal}."
+    show_info "Current image:" "Choose your new ${bold}IMAGE${normal}."
 
-        MENU_IMAGES=$(sed -E "s/${IMAGE}//;s/[[:space:]]\{2,\}/[[:space:]]/" <<< ${AVAILABLE_IMAGES})
+    MENU_IMAGES=$(sed -E "s/${IMAGE}//;s/[[:space:]]\{2,\}/[[:space:]]/" <<< ${AVAILABLE_IMAGES})
 
-        if [ "${SIGNED}" == "no" ]; then
-            OPTION=$(ugum choose "current image, but signed" ${MENU_IMAGES} "..something else")
-        else
-            OPTION=$(ugum choose ${MENU_IMAGES} "..something else")
-        fi
+    if [ "${SIGNED}" == "no" ]; then
+        OPTION=$(ugum choose "current image, but signed" ${MENU_IMAGES} "..something else")
+    else
+        OPTION=$(ugum choose ${MENU_IMAGES} "..something else")
     fi
 
     if [ "${OPTION}" == "current image, but signed" ]; then
