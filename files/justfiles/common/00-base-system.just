@@ -9,11 +9,13 @@ switch-to-image WITH="bootc":
         local INFO_SCOPE="$3"
 
         if [ "${INFO_SCOPE}" == "new" ]; then
+            local SHOW_SOURCE="${NEW_SOURCE}"
             local SHOW_OWNER="${NEW_OWNER}"
             local SHOW_IMAGE="${NEW_IMAGE}"
             local SHOW_TAG="${NEW_TAG}"
             local SHOW_SIGNED="${NEW_SIGNED}"
         else
+            local SHOW_SOURCE="${SOURCE}"
             local SHOW_OWNER="${OWNER}"
             local SHOW_IMAGE="${IMAGE}"
             local SHOW_TAG="${TAG}"
@@ -26,6 +28,7 @@ switch-to-image WITH="bootc":
             echo -e "${bold}${green}${TITLE}${normal}\n"
         fi
 
+        echo "  ● ${bold}Source${normal}:   ${SHOW_SOURCE}"
         echo "  ● ${bold}From${normal}:     ${SHOW_OWNER}"
         echo "  ● ${bold}Image${normal}:    ${SHOW_IMAGE}"
         echo "  ● ${bold}Tag${normal}:      ${SHOW_TAG}"
@@ -45,12 +48,15 @@ switch-to-image WITH="bootc":
         local TITLE="Chosen image:"
 
         show_info "${TITLE}" "Choose, whether to ${bold}reboot automatically${normal} after a ${bold}successful switch${normal}."
-        if ugum confirm "Reboot automatically ?"; then
-            REBOOT="yes"
-        fi
+        while [ "${REBOOT}" != "yes" ] && [ "${REBOOT}" != "no" ]; do
+            REBOOT=$(ugum choose "yes" "no")
+        done
 
         show_info "${TITLE}" "Confirm your ${bold}IMAGE choice${normal}." "include_reboot"
-        if ! ugum confirm; then
+        while [ "${CONFIRM_VAR}" != "yes" ] && [ "${CONFIRM_VAR}" != "no" ]; do
+            local CONFIRM_VAR=$(ugum choose "yes" "no")
+        done
+        if [ "${CONFIRM_VAR}" != "yes" ]; then
             echo "No changes applied."
             exit 0
         fi
@@ -100,7 +106,7 @@ switch-to-image WITH="bootc":
 
         clear
         echo -e "${bold}${green}Switching to new IMAGE${normal}."
-        echo -e "${blue}- Running command: '${REBASE_COMMAND}'${normal}\n"
+        echo -e "${yellow}- Running command: '${REBASE_COMMAND}'${normal}\n"
 
         if ${REBASE_COMMAND}; then
             echo -e "\n${green}- Done. Please reboot.${normal}"
@@ -115,6 +121,16 @@ switch-to-image WITH="bootc":
         local TITLE="New image values:"
         local TITLE_ACTION="- ${bold}${blue}Note${normal}: If the values are left empty, values from current image are taken."
         local INFO_SCOPE="new"
+
+        show_info "${TITLE}" "${TITLE_ACTION}" "${INFO_SCOPE}"
+        echo "[Current image: ${SOURCE}]"
+        read -p "  ● ${bold}Source${normal}: " NEW_SOURCE
+
+        if [ -n "${NEW_SOURCE}" ]; then
+            SOURCE=${NEW_SOURCE}
+        else
+            NEW_SOURCE=${SOURCE}
+        fi
 
         show_info "${TITLE}" "${TITLE_ACTION}" "${INFO_SCOPE}"
         echo "[Current image: ${OWNER}]"
@@ -213,8 +229,6 @@ switch-to-image WITH="bootc":
     OWNER=$(cut -d'/' -f2 <<< ${CUR_IMAGE_NO_PREFIX})
     IMAGE=$(echo ${CUR_IMAGE_NO_PREFIX} | cut -d'/' -f3 | cut -d':' -f1)
     TAG=$(cut -d':' -f2 <<< ${CUR_IMAGE_NO_PREFIX})
-
-    REBOOT="no"
 
     IMAGE_TYPE=$(cut -d'-' -f1-2 <<< ${IMAGE})
     for desktop in ${AVAILABLE_DESKTOPS}; do
