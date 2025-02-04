@@ -34,10 +34,6 @@ switch-to-image WITH="bootc":
         echo "  ● ${bold}Tag${normal}:      ${SHOW_TAG}"
         echo "  ● ${bold}Signed${normal}:   ${SHOW_SIGNED}"
 
-        if [ "${INFO_SCOPE}" == "include_reboot" ]; then
-            echo "  ● ${bold}Reboot${normal}:   ${REBOOT}"
-        fi
-
         if [ -n "${TITLE_ACTION}" ]; then
             echo -e "\n${TITLE_ACTION}\n"
         fi
@@ -47,18 +43,22 @@ switch-to-image WITH="bootc":
         local IMAGE="$1"
         local TITLE="Chosen image:"
 
-        show_info "${TITLE}" "Choose, whether to ${bold}reboot automatically${normal} after a ${bold}successful switch${normal}."
-        while [ "${REBOOT}" != "yes" ] && [ "${REBOOT}" != "no" ]; do
-            REBOOT=$(ugum choose "yes" "no")
+        show_info "${TITLE}" "Confirm your ${bold}IMAGE choice${normal}."
+        while [ "${CONFIRM_VAR}" != "yes" ] && [ "${CONFIRM_VAR}" != "yes, reboot automatically" ] && [ "${CONFIRM_VAR}" != "no" ]; do
+            local CONFIRM_VAR=$(ugum choose "yes" "yes, reboot automatically" "no")
         done
 
-        show_info "${TITLE}" "Confirm your ${bold}IMAGE choice${normal}." "include_reboot"
-        while [ "${CONFIRM_VAR}" != "yes" ] && [ "${CONFIRM_VAR}" != "no" ]; do
-            local CONFIRM_VAR=$(ugum choose "yes" "no")
-        done
-        if [ "${CONFIRM_VAR}" != "yes" ]; then
+        if [ "${CONFIRM_VAR}" == "no" ]; then
             echo "No changes applied."
             exit 0
+        elif [ "${CONFIRM_VAR}" == "yes, reboot automatically" ]; then
+            # if bootc
+            if [ "${IMAGE_TOOL}" = "bootc" ]; then
+                REBOOT_ARG="--apply "
+            # else rpm-ostree
+            else
+                REBOOT_ARG="-r "
+            fi
         fi
 
         if [ "${SIGNED}" == "no" ]; then
@@ -69,16 +69,6 @@ switch-to-image WITH="bootc":
             # if bootc
             if [ "${IMAGE_TOOL}" = "bootc" ]; then
                 POLICY_ARG="--enforce-container-sigpolicy "
-            fi
-        fi
-
-        if [ "${REBOOT}" == "yes" ]; then
-            # if bootc
-            if [ "${IMAGE_TOOL}" = "bootc" ]; then
-                REBOOT_ARG="--apply "
-            # else rpm-ostree
-            else
-                REBOOT_ARG="-r "
             fi
         fi
 
