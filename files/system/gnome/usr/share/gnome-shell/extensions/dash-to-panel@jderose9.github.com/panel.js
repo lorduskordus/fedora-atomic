@@ -38,6 +38,7 @@ import * as PanelSettings from './panelSettings.js'
 import * as PanelStyle from './panelStyle.js'
 import * as Main from 'resource:///org/gnome/shell/ui/main.js'
 import * as Dash from 'resource:///org/gnome/shell/ui/dash.js'
+import * as DND from 'resource:///org/gnome/shell/ui/dnd.js'
 import * as CtrlAltTab from 'resource:///org/gnome/shell/ui/ctrlAltTab.js'
 import * as PanelMenu from 'resource:///org/gnome/shell/ui/panelMenu.js'
 import St from 'gi://St'
@@ -451,6 +452,16 @@ export const Panel = GObject.registerClass(
       Main.ctrlAltTabManager.removeGroup(this)
     }
 
+    handleDragOver(source) {
+      if (
+        source == Main.xdndHandler &&
+        Main.overview.shouldToggleByCornerOrButton()
+      )
+        Main.overview.show()
+
+      return DND.DragMotionResult.CONTINUE
+    }
+
     getPosition() {
       let position = PanelSettings.getPanelPosition(
         SETTINGS,
@@ -479,9 +490,10 @@ export const Panel = GObject.registerClass(
     }
 
     updateElementPositions() {
-      let panelPositions =
-        this.panelManager.panelsElementPositions[this.monitor.index] ||
-        Pos.defaults
+      let panelPositions = PanelSettings.getPanelElementPositions(
+        SETTINGS,
+        this.monitor.index,
+      )
 
       this._updateGroupedElements(panelPositions)
 
@@ -566,7 +578,10 @@ export const Panel = GObject.registerClass(
             'changed::appicon-margin-toscreenborder',
             'changed::group-apps',
           ],
-          () => this._resetGeometry(),
+          (settings, settingChanged) => {
+            PanelSettings.clearCache(settingChanged)
+            this._resetGeometry()
+          },
         ],
         [
           SETTINGS,

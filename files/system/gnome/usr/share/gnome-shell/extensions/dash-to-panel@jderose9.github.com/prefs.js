@@ -244,20 +244,31 @@ const Preferences = class {
     this._statusicon_padding_timeout = 0
     this._leftbox_padding_timeout = 0
     this._addFormatValueCallbacks()
-    this._bindSettings()
 
-    let maybeGoToPage = () => {
-      let targetPageName = settings.get_string('target-prefs-page')
+    PanelSettings.setMonitorsInfo(settings).then(() => {
+      this._bindSettings()
 
-      if (targetPageName) {
-        window.set_visible_page_name(targetPageName)
-        settings.set_string('target-prefs-page', '')
+      PanelSettings.displayConfigProxy.connectSignal(
+        'MonitorsChanged',
+        async () => {
+          await PanelSettings.setMonitorsInfo(settings)
+          this._setMonitorsInfo()
+        },
+      )
+  
+      let maybeGoToPage = () => {
+        let targetPageName = settings.get_string('target-prefs-page')
+  
+        if (targetPageName) {
+          window.set_visible_page_name(targetPageName)
+          settings.set_string('target-prefs-page', '')
+        }
       }
-    }
-
-    settings.connect('changed::target-prefs-page', maybeGoToPage)
-
-    maybeGoToPage()
+  
+      settings.connect('changed::target-prefs-page', maybeGoToPage)
+  
+      maybeGoToPage()
+    })
   }
 
   /**
@@ -290,7 +301,7 @@ const Preferences = class {
     )
     let topAvailable =
       !keepTopPanel ||
-      (!monitorSync && this._currentMonitorIndex != this.monitors[0])
+      (!monitorSync && !this.monitors[this._currentMonitorIndex].primary)
     let topRadio = this._builder.get_object('position_top_button')
 
     topRadio.set_sensitive(topAvailable)
@@ -310,7 +321,7 @@ const Preferences = class {
       'panel-element-positions-monitors-sync',
     )
     const monitorsToSetFor = monitorSync
-      ? this.monitors
+      ? Object.keys(this.monitors)
       : [this._currentMonitorIndex]
     monitorsToSetFor.forEach((monitorIndex) => {
       PanelSettings.setPanelPosition(this._settings, monitorIndex, position)
@@ -348,7 +359,9 @@ const Preferences = class {
     const monitorSync = this._settings.get_boolean(
       'panel-element-positions-monitors-sync',
     )
-    const monitorsToSetFor = monitorSync ? this.monitors : [currentMonitorIndex]
+    const monitorsToSetFor = monitorSync
+      ? Object.keys(this.monitors)
+      : [currentMonitorIndex]
     const allVertical = monitorsToSetFor.every((i) => {
       const position = PanelSettings.getPanelPosition(this._settings, i)
       return position === Pos.LEFT || position === Pos.RIGHT
@@ -447,18 +460,16 @@ const Preferences = class {
     let labels = {}
     let panelPosition = this._getPanelPosition(monitorIndex)
     let isVertical = panelPosition == Pos.LEFT || panelPosition == Pos.RIGHT
-    let panelElementPositionsSettings = PanelSettings.getSettingsJson(
+    let panelElementPositions = PanelSettings.getPanelElementPositions(
       this._settings,
-      'panel-element-positions',
+      monitorIndex,
     )
-    let panelElementPositions =
-      panelElementPositionsSettings[monitorIndex] || Pos.defaults
     let updateElementsSettings = () => {
       let newPanelElementPositions = []
       let monitorSync = this._settings.get_boolean(
         'panel-element-positions-monitors-sync',
       )
-      let monitors = monitorSync ? this.monitors : [monitorIndex]
+      let monitors = monitorSync ? Object.keys(this.monitors) : [monitorIndex]
 
       let child = taskbarListBox.get_first_child()
       while (child != null) {
@@ -470,12 +481,12 @@ const Preferences = class {
         child = child.get_next_sibling()
       }
 
-      monitors.forEach(
-        (m) => (panelElementPositionsSettings[m] = newPanelElementPositions),
-      )
-      this._settings.set_string(
-        'panel-element-positions',
-        JSON.stringify(panelElementPositionsSettings),
+      monitors.forEach((m) =>
+        PanelSettings.setPanelElementPositions(
+          this._settings,
+          m,
+          newPanelElementPositions,
+        ),
       )
     }
 
@@ -782,6 +793,12 @@ const Preferences = class {
         return value + ' px'
       })
 
+    this._builder
+      .get_object('panel_length_scale')
+      .set_format_value_func((scale, value) => {
+        return value + ' %'
+      })
+
     // style
     this._builder
       .get_object('appicon_margin_scale')
@@ -880,6 +897,40 @@ const Preferences = class {
       .set_format_value_func((scale, value) => {
         return value + ' px'
       })
+  }
+
+  _setMonitorsInfo() {
+    this.monitors = PanelSettings.availableMonitors
+
+    let primaryCombo = this._builder.get_object('multimon_primary_combo')
+    let panelOptionsMonitorCombo = this._builder.get_object(
+      'taskbar_position_monitor_combo',
+    )
+    let dtpPrimaryMonitorId = this._settings.get_string('primary-monitor')
+    let dtpPrimaryMonitorIndex =
+      PanelSettings.getPrimaryIndex(dtpPrimaryMonitorId)
+
+    this._currentMonitorIndex = dtpPrimaryMonitorIndex
+
+    this._updateVerticalRelatedOptions()
+
+    primaryCombo.remove_all()
+    panelOptionsMonitorCombo.remove_all()
+
+    for (let i = 0; i < this.monitors.length; ++i) {
+      let monitor = this.monitors[i]
+      let label = monitor.primary
+        ? _('Primary monitor')
+        : _('Monitor ') + (i + 1)
+
+      label += monitor.product ? ` (${monitor.product})` : ''
+
+      primaryCombo.append_text(label)
+      panelOptionsMonitorCombo.append_text(label)
+    }
+
+    primaryCombo.set_active(dtpPrimaryMonitorIndex)
+    panelOptionsMonitorCombo.set_active(dtpPrimaryMonitorIndex)
   }
 
   _bindSettings() {
@@ -1234,39 +1285,11 @@ const Preferences = class {
       })
 
     //multi-monitor
-    this.monitors = this._settings.get_value('available-monitors').deep_unpack()
-
-    let dtpPrimaryMonitorIndex = this.monitors.indexOf(
-      this._settings.get_int('primary-monitor'),
-    )
-
-    if (dtpPrimaryMonitorIndex < 0) {
-      dtpPrimaryMonitorIndex = 0
-    }
-
-    this._currentMonitorIndex = this.monitors[dtpPrimaryMonitorIndex]
+    this._setMonitorsInfo()
 
     this._settings.connect('changed::panel-positions', () =>
       this._updateVerticalRelatedOptions(),
     )
-    this._updateVerticalRelatedOptions()
-
-    for (let i = 0; i < this.monitors.length; ++i) {
-      //the gnome-shell primary index is the first one in the "available-monitors" setting
-      let label = !i ? _('Primary monitor') : _('Monitor ') + (i + 1)
-
-      this._builder.get_object('multimon_primary_combo').append_text(label)
-      this._builder
-        .get_object('taskbar_position_monitor_combo')
-        .append_text(label)
-    }
-
-    this._builder
-      .get_object('multimon_primary_combo')
-      .set_active(dtpPrimaryMonitorIndex)
-    this._builder
-      .get_object('taskbar_position_monitor_combo')
-      .set_active(dtpPrimaryMonitorIndex)
 
     this._settings.bind(
       'panel-element-positions-monitors-sync',
@@ -1294,16 +1317,17 @@ const Preferences = class {
     this._builder
       .get_object('multimon_primary_combo')
       .connect('changed', (widget) => {
-        this._settings.set_int(
-          'primary-monitor',
-          this.monitors[widget.get_active()],
-        )
+        if (this.monitors[widget.get_active()])
+          this._settings.set_string(
+            'primary-monitor',
+            this.monitors[widget.get_active()].id,
+          )
       })
 
     this._builder
       .get_object('taskbar_position_monitor_combo')
       .connect('changed', (widget) => {
-        this._currentMonitorIndex = this.monitors[widget.get_active()]
+        this._currentMonitorIndex = widget.get_active()
         this._updateWidgetSettingsForMonitor(this._currentMonitorIndex)
       })
 
@@ -1325,7 +1349,7 @@ const Preferences = class {
         'panel-element-positions-monitors-sync',
       )
       const monitorsToSetFor = monitorSync
-        ? this.monitors
+        ? Object.keys(this.monitors)
         : [this._currentMonitorIndex]
       monitorsToSetFor.forEach((monitorIndex) => {
         PanelSettings.setPanelLength(this._settings, monitorIndex, value)
@@ -1344,7 +1368,7 @@ const Preferences = class {
             'panel-element-positions-monitors-sync',
           )
           const monitorsToSetFor = monitorSync
-            ? this.monitors
+            ? Object.keys(this.monitors)
             : [this._currentMonitorIndex]
           monitorsToSetFor.forEach((monitorIndex) => {
             PanelSettings.setPanelAnchor(this._settings, monitorIndex, value)
@@ -3495,6 +3519,7 @@ const Preferences = class {
     let revealDonateTimeout = 0
     let donationIconSwitch = this._builder.get_object('donation_icon_switch')
     let donationRevealer = this._builder.get_object('donation_revealer')
+    let donationSpinner = this._builder.get_object('donation_spinner')
     let hiddenDonateIcon = !!this._settings.get_string(
       'hide-donate-icon-unixtime',
     )
@@ -3514,6 +3539,7 @@ const Preferences = class {
 
     donationIconSwitch.set_active(hiddenDonateIcon)
     donationRevealer.set_reveal_child(hiddenDonateIcon)
+    donationSpinner.set_spinning(!hiddenDonateIcon)
 
     donationIconSwitch.connect('notify::active', (widget) =>
       this._settings.set_string(
@@ -3529,10 +3555,10 @@ const Preferences = class {
         this.notebook.visible_page_name == 'donation' &&
         !donationRevealer.get_reveal_child()
       )
-        revealDonateTimeout = setTimeout(
-          () => donationRevealer.set_reveal_child(true),
-          10000,
-        )
+        revealDonateTimeout = setTimeout(() => {
+          donationRevealer.set_reveal_child(true)
+          donationSpinner.set_spinning(false)
+        }, 15000)
     })
   }
 
@@ -3667,7 +3693,7 @@ const BuilderScope = GObject.registerClass(
             'panel-element-positions-monitors-sync',
           )
           const monitorsToSetFor = monitorSync
-            ? this._preferences.monitors
+            ? Object.keys(this._preferences.monitors)
             : [this._preferences._currentMonitorIndex]
           monitorsToSetFor.forEach((monitorIndex) => {
             PanelSettings.setPanelSize(
@@ -3848,12 +3874,20 @@ const BuilderScope = GObject.registerClass(
 
 export default class DashToPanelPreferences extends ExtensionPreferences {
   fillPreferencesWindow(window) {
+    let closeRequestId = null
+
     window._settings = this.getSettings(
       'org.gnome.shell.extensions.dash-to-panel',
     )
 
     // use default width or window
     window.set_default_size(0, 740)
+
+    window._settings.set_boolean('prefs-opened', true)
+    closeRequestId = window.connect('close-request', () => {
+      window._settings.set_boolean('prefs-opened', false)
+      window.disconnect(closeRequestId)
+    })
 
     new Preferences(window, window._settings, this.path)
   }

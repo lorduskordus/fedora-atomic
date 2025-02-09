@@ -56,14 +56,13 @@ import {
 export const PanelManager = class {
   constructor() {
     this.overview = new Overview.Overview()
-    this.panelsElementPositions = {}
     this._injectionManager = new InjectionManager()
-
-    this._saveMonitors()
   }
 
   enable(reset) {
-    let dtpPrimaryIndex = SETTINGS.get_int('primary-monitor')
+    let dtpPrimaryIndex = PanelSettings.getPrimaryIndex(
+      SETTINGS.get_string('primary-monitor'),
+    )
 
     this.allPanels = []
     this.dtpPrimaryMonitor =
@@ -210,12 +209,18 @@ export const PanelManager = class {
           'changed::panel-anchors',
           'changed::stockgs-keep-top-panel',
         ],
-        () => this._reset(),
+        (settings, settingChanged) => {
+          PanelSettings.clearCache(settingChanged)
+          this._reset()
+        },
       ],
       [
         SETTINGS,
         'changed::panel-element-positions',
-        () => this._updatePanelElementPositions(),
+        () => {
+          PanelSettings.clearCache('panel-element-positions')
+          this._updatePanelElementPositions()
+        },
       ],
       [
         SETTINGS,
@@ -235,9 +240,9 @@ export const PanelManager = class {
       [
         Utils.DisplayWrapper.getMonitorManager(),
         'monitors-changed',
-        () => {
+        async () => {
           if (Main.layoutManager.primaryMonitor) {
-            this._saveMonitors()
+            await PanelSettings.setMonitorsInfo(SETTINGS)
             this._reset()
           }
         },
@@ -486,37 +491,6 @@ export const PanelManager = class {
     }
   }
 
-  _saveMonitors() {
-    //Mutter meta_monitor_manager_get_primary_monitor (global.display.get_primary_monitor()) doesn't return the same
-    //monitor as GDK gdk_screen_get_primary_monitor (imports.gi.Gdk.Screen.get_default().get_primary_monitor()).
-    //Since the Mutter function is what's used in gnome-shell and we can't access it from the settings dialog, store
-    //the monitors information in a setting so we can use the same monitor indexes as the ones in gnome-shell
-    let keyMonitors = 'available-monitors'
-    let keyPrimary = 'primary-monitor'
-    let primaryIndex = Main.layoutManager.primaryIndex
-    let newMonitors = [primaryIndex]
-    let savedMonitors = SETTINGS.get_value(keyMonitors).deep_unpack()
-    let dtpPrimaryIndex = SETTINGS.get_int(keyPrimary)
-    let newDtpPrimaryIndex = primaryIndex
-
-    Main.layoutManager.monitors
-      .filter((m) => m.index != primaryIndex)
-      .forEach((m) => newMonitors.push(m.index))
-
-    if (savedMonitors[0] != dtpPrimaryIndex) {
-      // dash to panel primary wasn't the gnome-shell primary (first index of available-monitors)
-      let savedIndex = savedMonitors.indexOf(dtpPrimaryIndex)
-
-      // default to primary if it was set to a monitor that is no longer available
-      newDtpPrimaryIndex = newMonitors[savedIndex]
-      newDtpPrimaryIndex =
-        newDtpPrimaryIndex == null ? primaryIndex : newDtpPrimaryIndex
-    }
-
-    SETTINGS.set_int(keyPrimary, newDtpPrimaryIndex)
-    SETTINGS.set_value(keyMonitors, new GLib.Variant('ai', newMonitors))
-  }
-
   checkIfFocusedMonitor(monitor) {
     return (
       Main.overview._overview._controls._workspacesDisplay._primaryIndex ==
@@ -563,10 +537,6 @@ export const PanelManager = class {
   }
 
   _updatePanelElementPositions() {
-    this.panelsElementPositions = PanelSettings.getSettingsJson(
-      SETTINGS,
-      'panel-element-positions',
-    )
     this.allPanels.forEach((p) => p.updateElementPositions())
   }
 

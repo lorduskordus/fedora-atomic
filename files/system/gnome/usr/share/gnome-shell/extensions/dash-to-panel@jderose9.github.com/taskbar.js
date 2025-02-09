@@ -90,10 +90,10 @@ let donateDummyApp = {
   },
   activate: function () {
     SETTINGS.set_string('target-prefs-page', 'donation')
+    DTP_EXTENSION.openPreferences()
 
     if (this.isActive()) return
 
-    DTP_EXTENSION.openPreferences()
     this._taskbar._timeoutsHandler.add([T4, 5000, this.forceRefresh.bind(this)])
     this.forceRefresh()
   },
@@ -1732,10 +1732,10 @@ export const TaskbarItemContainer = GObject.registerClass(
       else return
 
       let panelPosition = this._dtpPanel.getPosition()
-      let panelElementPositions =
-        this._dtpPanel.panelManager.panelsElementPositions[
-          this._dtpPanel.monitor.index
-        ] || Pos.defaults
+      let panelElementPositions = PanelSettings.getPanelElementPositions(
+        SETTINGS,
+        this._dtpPanel.monitor.index,
+      )
       let taskbarPosition = panelElementPositions.filter(
         (pos) => pos.element == 'taskbar',
       )[0].position
