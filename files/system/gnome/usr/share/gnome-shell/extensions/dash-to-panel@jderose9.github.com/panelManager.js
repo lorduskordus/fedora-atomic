@@ -45,17 +45,21 @@ import * as BoxPointer from 'resource:///org/gnome/shell/ui/boxpointer.js'
 import * as LookingGlass from 'resource:///org/gnome/shell/ui/lookingGlass.js'
 import * as Main from 'resource:///org/gnome/shell/ui/main.js'
 import * as PanelMenu from 'resource:///org/gnome/shell/ui/panelMenu.js'
+import { NotificationsMonitor } from './notificationsMonitor.js'
+import { Workspace } from 'resource:///org/gnome/shell/ui/workspace.js'
 import * as Layout from 'resource:///org/gnome/shell/ui/layout.js'
 import { InjectionManager } from 'resource:///org/gnome/shell/extensions/extension.js'
-import { SETTINGS } from './extension.js'
+import { DTP_EXTENSION, SETTINGS } from './extension.js'
 import {
   SecondaryMonitorDisplay,
   WorkspacesView,
 } from 'resource:///org/gnome/shell/ui/workspacesView.js'
 
+let tracker = Shell.WindowTracker.get_default()
+
 export const PanelManager = class {
   constructor() {
-    this.overview = new Overview.Overview()
+    this.overview = new Overview.Overview(this)
     this._injectionManager = new InjectionManager()
   }
 
@@ -92,23 +96,6 @@ export const PanelManager = class {
     global.dashToPanel.panels = this.allPanels
     global.dashToPanel.emit('panels-created')
 
-    this.allPanels.forEach((p) => {
-      let panelPosition = p.getPosition()
-      let leftOrRight =
-        panelPosition == St.Side.LEFT || panelPosition == St.Side.RIGHT
-
-      p.panelBox.set_size(
-        leftOrRight ? -1 : p.geom.w + p.geom.lrPadding,
-        leftOrRight ? p.geom.h + p.geom.tbPadding : -1,
-      )
-
-      this._findPanelMenuButtons(p.panelBox).forEach((pmb) =>
-        this._adjustPanelMenuButton(pmb, p.monitor, panelPosition),
-      )
-
-      p.taskbar.iconAnimator.start()
-    })
-
     this._setDesktopIconsMargins()
     //in 3.32, BoxPointer now inherits St.Widget
     if (BoxPointer.BoxPointer.prototype.vfunc_get_preferred_height) {
@@ -132,6 +119,8 @@ export const PanelManager = class {
     this._updatePanelElementPositions()
 
     if (reset) return
+
+    this.notificationsMonitor = new NotificationsMonitor()
 
     this._desktopIconsUsableArea =
       new DesktopIconsIntegration.DesktopIconsUsableAreaClass()
@@ -198,6 +187,11 @@ export const PanelManager = class {
 
     //listen settings
     this._signalsHandler.add(
+      [
+        SETTINGS,
+        'changed::global-border-radius',
+        () => DTP_EXTENSION.resetGlobalStyles(),
+      ],
       [
         SETTINGS,
         [
@@ -337,6 +331,8 @@ export const PanelManager = class {
 
     this._setKeyBindings(false)
 
+    this.notificationsMonitor.destroy()
+
     this._signalsHandler.destroy()
 
     Main.layoutManager._updateHotCorners = this._oldUpdateHotCorners
@@ -378,7 +374,7 @@ export const PanelManager = class {
         case St.Side.TOP:
           this._desktopIconsUsableArea?.setMargins(
             p.monitor.index,
-            p.geom.h,
+            p.geom.outerSize,
             0,
             0,
             0,
@@ -388,7 +384,7 @@ export const PanelManager = class {
           this._desktopIconsUsableArea?.setMargins(
             p.monitor.index,
             0,
-            p.geom.h,
+            p.geom.outerSize,
             0,
             0,
           )
@@ -398,7 +394,7 @@ export const PanelManager = class {
             p.monitor.index,
             0,
             0,
-            p.geom.w,
+            p.geom.outerSize,
             0,
           )
           break
@@ -408,7 +404,7 @@ export const PanelManager = class {
             0,
             0,
             0,
-            p.geom.w,
+            p.geom.outerSize,
           )
           break
       }
@@ -436,6 +432,113 @@ export const PanelManager = class {
       Main.layoutManager.primaryMonitor =
         Main.layoutManager.monitors[Main.layoutManager.primaryIndex]
     }
+  }
+
+  showFocusedAppInOverview(app, keepOverviewOpen) {
+    if (app == this.focusedApp) {
+      if (!keepOverviewOpen && Main.overview._shown) Main.overview.hide()
+
+      return
+    }
+
+    let isolateWorkspaces = SETTINGS.get_boolean('isolate-workspaces')
+    let isolateMonitors = SETTINGS.get_boolean('isolate-monitors')
+
+    this.focusedApp = app
+
+    if (!this._signalsHandler.hasLabel('overview-spread')) {
+      let hasWorkspaces = Main.sessionMode.hasWorkspaces
+      let maybeDisableWorkspacesClick = () => {
+        if (!isolateWorkspaces)
+          Utils.getOverviewWorkspaces().forEach(
+            (w) => (w._container.get_actions()[0].enabled = false),
+          )
+      }
+      let isIncludedWindow = (metaWindow) =>
+        !this.focusedApp ||
+        tracker.get_window_app(metaWindow) == this.focusedApp
+
+      Main.sessionMode.hasWorkspaces = isolateWorkspaces
+      maybeDisableWorkspacesClick()
+
+      Workspace.prototype._oldIsMyWindow = Workspace.prototype._isMyWindow
+      Workspace.prototype._isMyWindow = function (metaWindow) {
+        if (!metaWindow) return false
+
+        return (
+          isIncludedWindow(metaWindow) &&
+          (this.metaWorkspace === null ||
+            (!isolateWorkspaces && this.metaWorkspace.active) ||
+            (isolateWorkspaces &&
+              metaWindow.located_on_workspace(this.metaWorkspace))) &&
+          (!isolateMonitors || metaWindow.get_monitor() === this.monitorIndex)
+        )
+      }
+
+      this.focusedWorkspace = !isolateWorkspaces
+        ? Utils.getCurrentWorkspace()
+        : null
+
+      this._signalsHandler.addWithLabel(
+        'overview-spread',
+        [Main.overview, 'showing', maybeDisableWorkspacesClick],
+        [
+          Main.overview,
+          'hidden',
+          () => {
+            Utils.getCurrentWorkspace()
+              .list_windows()
+              .forEach((w) => {
+                if (
+                  !w.minimized &&
+                  !w.customJS_ding &&
+                  global.display.focus_window != w &&
+                  tracker.get_window_app(w) != this.focusedApp
+                ) {
+                  let window = w.get_compositor_private()
+
+                  ;(window.get_first_child() || window).opacity = 0
+
+                  Utils.animateWindowOpacity(window, {
+                    opacity: 255,
+                    time: 0.25,
+                    transition: 'easeOutQuad',
+                  })
+                }
+              })
+
+            this.focusedApp = null
+            this.focusedWorkspace = null
+            this._signalsHandler.removeWithLabel('overview-spread')
+
+            Main.sessionMode.hasWorkspaces = hasWorkspaces
+
+            Workspace.prototype._isMyWindow = Workspace.prototype._oldIsMyWindow
+            delete Workspace.prototype._oldIsMyWindow
+          },
+        ],
+      )
+    }
+
+    if (Main.overview._shown) {
+      Utils.getOverviewWorkspaces().forEach((w) => {
+        let metaWindows = []
+        let metaWorkspace =
+          w.metaWorkspace ||
+          Utils.DisplayWrapper.getWorkspaceManager().get_active_workspace()
+
+        w._container.layout_manager._windows.forEach((info, preview) =>
+          preview.destroy(),
+        )
+
+        if (this.focusedWorkspace && this.focusedWorkspace == metaWorkspace)
+          metaWindows = Utils.getAllMetaWindows()
+        else if (!this.focusedWorkspace)
+          metaWindows = metaWorkspace.list_windows()
+
+        metaWindows.forEach((mw) => w._doAddWindow(mw))
+      })
+    } else Main.overview.show()
   }
 
   _newSetPrimaryWorkspaceVisible(visible) {
@@ -527,6 +630,14 @@ export const PanelManager = class {
     panelBox._dtpIndex = monitor.index
     panelBox.set_position(0, 0)
 
+    if (panel.checkIfVertical) panelBox.set_width(-1)
+
+    this._findPanelMenuButtons(panelBox).forEach((pmb) =>
+      this._adjustPanelMenuButton(pmb, monitor, panel.getPosition()),
+    )
+
+    panel.taskbar.iconAnimator.start()
+
     return panel
   }
 
@@ -577,7 +688,7 @@ export const PanelManager = class {
         global.dashToPanel.panels,
         (p) => p.monitor == monitor,
       )
-      let excess = alloc.natural_size + panel.dtpSize + 10 - monitor.height // 10 is arbitrary
+      let excess = alloc.natural_size + panel.outerSize + 10 - monitor.height // 10 is arbitrary
 
       if (excess > 0) {
         alloc.natural_size -= excess
@@ -716,6 +827,9 @@ export const IconAnimator = class {
         if (this._started && this._count === 0) {
           this._timeline.stop()
         }
+
+        if (name == 'dance') target.rotation_angle_z = 0
+
         return
       }
     }
@@ -803,7 +917,7 @@ function newUpdateHotCorners() {
           corner,
           Math.min(size, 32),
         )
-      corner.setBarrierSize(panel ? panel.dtpSize : 32)
+      corner.setBarrierSize(panel ? panel.geom.innerSize : 32)
       this.hotCorners.push(corner)
     } else {
       this.hotCorners.push(null)
@@ -908,7 +1022,7 @@ function _newLookingGlassResize() {
   )
   let topOffset =
     primaryMonitorPanel.getPosition() == St.Side.TOP
-      ? primaryMonitorPanel.dtpSize + 8
+      ? primaryMonitorPanel.geom.outerSize + 8
       : 32
 
   this._oldResize()

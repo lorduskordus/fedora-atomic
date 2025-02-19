@@ -79,6 +79,10 @@ export const BasicHandler = class {
     }
   }
 
+  hasLabel(label) {
+    return !!this._storage[label]
+  }
+
   /* Virtual methods to be implemented by subclass */
   // create single element to be stored in the storage structure
   _create() {
@@ -238,6 +242,24 @@ export const getSystemMenuInfo = function () {
   }
 }
 
+export function getOverviewWorkspaces() {
+  let workspaces = []
+
+  Main.overview._overview._controls._workspacesDisplay._workspacesViews.forEach(
+    (wv) =>
+      (workspaces = [
+        ...workspaces,
+        ...(wv._workspaces || []), // WorkspacesDisplay --> WorkspacesView (primary monitor)
+        ...(wv._workspacesView?._workspaces || []), // WorkspacesDisplay --> SecondaryMonitorDisplay --> WorkspacesView
+        ...(wv._workspacesView?._workspace // WorkspacesDisplay --> SecondaryMonitorDisplay --> ExtraWorkspaceView
+          ? [wv._workspacesView?._workspace]
+          : []),
+      ]),
+  )
+
+  return workspaces
+}
+
 export const getCurrentWorkspace = function () {
   return DisplayWrapper.getWorkspaceManager().get_active_workspace()
 }
@@ -389,6 +411,10 @@ export const getMouseScrollDirection = function (event) {
   }
 
   return direction
+}
+
+export function getAllMetaWindows() {
+  return global.get_window_actors().map((w) => w.meta_window)
 }
 
 export const checkIfWindowHasTransient = function (window) {

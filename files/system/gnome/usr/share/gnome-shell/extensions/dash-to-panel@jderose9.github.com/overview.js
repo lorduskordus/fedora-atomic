@@ -46,9 +46,10 @@ const T1 = 'swipeEndTimeout'
 const T2 = 'numberOverlayTimeout'
 
 export const Overview = class {
-  constructor() {
+  constructor(panelManager) {
     this._injectionManager = new InjectionManager()
     this._numHotkeys = 10
+    this._panelManager = panelManager
   }
 
   enable(primaryPanel) {
@@ -373,7 +374,7 @@ export const Overview = class {
     this._hotKeysEnabled = true
 
     if (SETTINGS.get_string('hotkeys-overlay-combo') === 'ALWAYS')
-      this.taskbar.toggleNumberOverlay(true)
+      this._toggleHotkeysNumberOverlay(true)
   }
 
   _disableHotKeys() {
@@ -418,7 +419,7 @@ export const Overview = class {
 
     this._hotKeysEnabled = false
 
-    this.taskbar.toggleNumberOverlay(false)
+    this._toggleHotkeysNumberOverlay(false)
   }
 
   _optionalNumberOverlay() {
@@ -429,14 +430,17 @@ export const Overview = class {
       [SETTINGS, 'changed::hot-keys', this._checkHotkeysOptions.bind(this)],
       [
         SETTINGS,
-        'changed::hotkeys-overlay-combo',
+        [
+          'changed::hotkeys-overlay-combo',
+          'changed::shortcut-overlay-on-secondary',
+        ],
         () => {
           if (
             SETTINGS.get_boolean('hot-keys') &&
             SETTINGS.get_string('hotkeys-overlay-combo') === 'ALWAYS'
           )
-            this.taskbar.toggleNumberOverlay(true)
-          else this.taskbar.toggleNumberOverlay(false)
+            this._toggleHotkeysNumberOverlay(true)
+          else this._toggleHotkeysNumberOverlay(false, true)
         },
       ],
       [SETTINGS, 'changed::shortcut-num-keys', () => this._resetHotkeys()],
@@ -468,7 +472,7 @@ export const Overview = class {
     if (hotkey_option === 'NEVER') return
 
     if (hotkey_option === 'TEMPORARILY' || overlayFromShortcut)
-      this.taskbar.toggleNumberOverlay(true)
+      this._toggleHotkeysNumberOverlay(true)
 
     this._panel.intellihide.revealAndHold(Intellihide.Hold.TEMPORARY)
 
@@ -484,12 +488,27 @@ export const Overview = class {
       timeout,
       () => {
         if (hotkey_option != 'ALWAYS') {
-          this.taskbar.toggleNumberOverlay(false)
+          this._toggleHotkeysNumberOverlay(false)
         }
 
         this._panel.intellihide.release(Intellihide.Hold.TEMPORARY)
       },
     ])
+  }
+
+  _toggleHotkeysNumberOverlay(show, reset) {
+    // this.taskbar is the primary taskbar
+    this.taskbar.toggleHotkeysNumberOverlay(show)
+
+    if (reset || SETTINGS.get_boolean('shortcut-overlay-on-secondary')) {
+      // on secondary panels, show the overlay on icons matching the ones
+      // found on the primary panel (see Taksbar.hotkeyAppNumbers)
+      this._panelManager.allPanels.forEach((p) => {
+        if (p.isPrimary) return
+
+        p.taskbar.toggleHotkeysNumberOverlay(show)
+      })
+    }
   }
 
   _optionalClickToExit() {
@@ -523,14 +542,10 @@ export const Overview = class {
         )
 
         if (pickedActor) {
-          let parent = pickedActor.get_parent()
-
           if (
             (pickedActor.has_style_class_name &&
               pickedActor.has_style_class_name('apps-scroll-view') &&
               !pickedActor.has_style_pseudo_class('first-child')) ||
-            (parent?.has_style_class_name &&
-              parent.has_style_class_name('window-picker')) ||
             Main.overview._overview._controls._searchEntryBin.contains(
               pickedActor,
             ) ||

@@ -38,12 +38,12 @@ import {
 } from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js'
 
 const SCALE_UPDATE_TIMEOUT = 500
-const DEFAULT_PANEL_SIZES = [128, 96, 64, 48, 32, 24, 16]
+const DEFAULT_PANEL_SIZES = [128, 96, 64, 48, 32, 22]
 const DEFAULT_FONT_SIZES = [96, 64, 48, 32, 24, 16, 0]
 const DEFAULT_MARGIN_SIZES = [32, 24, 16, 12, 8, 4, 0]
 const DEFAULT_PADDING_SIZES = [32, 24, 16, 12, 8, 4, 0, -1]
 // Minimum length could be 0, but a higher value may help prevent confusion about where the panel went.
-const LENGTH_MARKS = [100, 90, 80, 70, 60, 50, 40, 30, 20, 10]
+const LENGTH_MARKS = [100, 90, 80, 70, 60, 50, 40, 30, 20]
 const MAX_WINDOW_INDICATOR = 4
 
 const SCHEMA_PATH = '/org/gnome/shell/extensions/dash-to-panel/'
@@ -230,21 +230,6 @@ const Preferences = class {
     // set the window as notebook, it is being used as parent for dialogs
     this.notebook = window
 
-    // Timeout to delay the update of the settings
-    this._panel_size_timeout = 0
-    this._dot_height_timeout = 0
-    this._tray_size_timeout = 0
-    this._leftbox_size_timeout = 0
-    this._appicon_margin_timeout = 0
-    this._appicon_margin_todesktop_timeout = 0
-    this._appicon_margin_toscreenborder_timeout = 0
-    this._appicon_padding_timeout = 0
-    this._opacity_timeout = 0
-    this._tray_padding_timeout = 0
-    this._statusicon_padding_timeout = 0
-    this._leftbox_padding_timeout = 0
-    this._addFormatValueCallbacks()
-
     PanelSettings.setMonitorsInfo(settings).then(() => {
       this._bindSettings()
 
@@ -255,18 +240,18 @@ const Preferences = class {
           this._setMonitorsInfo()
         },
       )
-  
+
       let maybeGoToPage = () => {
         let targetPageName = settings.get_string('target-prefs-page')
-  
+
         if (targetPageName) {
           window.set_visible_page_name(targetPageName)
           settings.set_string('target-prefs-page', '')
         }
       }
-  
+
       settings.connect('changed::target-prefs-page', maybeGoToPage)
-  
+
       maybeGoToPage()
     })
   }
@@ -426,28 +411,50 @@ const Preferences = class {
     panel_size_scale.set_value(size)
 
     const panel_length_scale = this._builder.get_object('panel_length_scale')
+    const dynamicLengthButton = this._builder.get_object(
+      'panel_length_dynamic_button',
+    )
     const length = PanelSettings.getPanelLength(this._settings, monitorIndex)
-    panel_length_scale.set_value(length)
-    this._setAnchorWidgetSensitivity(length)
+    const isDynamicLength = length == -1
+
+    dynamicLengthButton.set_active(isDynamicLength)
+    panel_length_scale.set_value(isDynamicLength ? 100 : length)
 
     this._setAnchorLabels(monitorIndex)
 
     // Update display of panel content settings
     this._displayPanelPositionsForMonitor(monitorIndex)
+
+    this._setPanelLenghtWidgetSensitivity(length)
   }
 
   /**
    * Anchor is only relevant if panel length is less than 100%. Enable or disable
    * anchor widget sensitivity accordingly.
    */
-  _setAnchorWidgetSensitivity(panelLength) {
+  _setPanelLenghtWidgetSensitivity(panelLength) {
+    const taskbarListBox = this._builder.get_object('taskbar_display_listbox')
+    let i = 0
+    let row
+    const isDynamicLength = panelLength == -1
     const isPartialLength = panelLength < 100
+
+    this._builder
+      .get_object('panel_length_scale')
+      .set_sensitive(!isDynamicLength)
     this._builder
       .get_object('panel_anchor_label')
       .set_sensitive(isPartialLength)
     this._builder
       .get_object('panel_anchor_combo')
       .set_sensitive(isPartialLength)
+
+    while ((row = taskbarListBox.get_row_at_index(i++)) != null) {
+      let grid = row.get_child()
+      let positionCombo = grid.get_child_at(4, 0)
+
+      positionCombo.set_sensitive(!isDynamicLength)
+    }
   }
 
   _displayPanelPositionsForMonitor(monitorIndex) {
@@ -785,120 +792,6 @@ const Preferences = class {
     dialog.set_default_size(1, 1)
   }
 
-  _addFormatValueCallbacks() {
-    // position
-    this._builder
-      .get_object('panel_size_scale')
-      .set_format_value_func((scale, value) => {
-        return value + ' px'
-      })
-
-    this._builder
-      .get_object('panel_length_scale')
-      .set_format_value_func((scale, value) => {
-        return value + ' %'
-      })
-
-    // style
-    this._builder
-      .get_object('appicon_margin_scale')
-      .set_format_value_func((scale, value) => {
-        return value + ' px'
-      })
-    this._builder
-      .get_object('appicon_margin_todesktop_scale')
-      .set_format_value_func((scale, value) => {
-        return value + ' px'
-      })
-    this._builder
-      .get_object('appicon_margin_toscreenborder_scale')
-      .set_format_value_func((scale, value) => {
-        return value + ' px'
-      })
-
-    this._builder
-      .get_object('appicon_padding_scale')
-      .set_format_value_func((scale, value) => {
-        return value + ' px'
-      })
-
-    // fine-tune box1
-    this._builder
-      .get_object('tray_size_scale')
-      .set_format_value_func((scale, value) => {
-        return value + ' px'
-      })
-
-    this._builder
-      .get_object('leftbox_size_scale')
-      .set_format_value_func((scale, value) => {
-        return value + ' px'
-      })
-
-    // fine-tune box2
-    this._builder
-      .get_object('tray_padding_scale')
-      .set_format_value_func((scale, value) => {
-        return value + ' px'
-      })
-
-    this._builder
-      .get_object('statusicon_padding_scale')
-      .set_format_value_func((scale, value) => {
-        return value + ' px'
-      })
-
-    this._builder
-      .get_object('leftbox_padding_scale')
-      .set_format_value_func((scale, value) => {
-        return value + ' px'
-      })
-
-    // animate hovering app icons dialog
-    this._builder
-      .get_object('animate_appicon_hover_options_duration_scale')
-      .set_format_value_func((scale, value) => {
-        return _('%d ms').format(value)
-      })
-
-    this._builder
-      .get_object('animate_appicon_hover_options_rotation_scale')
-      .set_format_value_func((scale, value) => {
-        return _('%d °').format(value)
-      })
-
-    this._builder
-      .get_object('animate_appicon_hover_options_travel_scale')
-      .set_format_value_func((scale, value) => {
-        return _('%d %%').format(value)
-      })
-
-    this._builder
-      .get_object('animate_appicon_hover_options_zoom_scale')
-      .set_format_value_func((scale, value) => {
-        return _('%d %%').format(value)
-      })
-
-    this._builder
-      .get_object('animate_appicon_hover_options_convexity_scale')
-      .set_format_value_func((scale, value) => {
-        return _('%.1f').format(value)
-      })
-
-    this._builder
-      .get_object('animate_appicon_hover_options_extent_scale')
-      .set_format_value_func((scale, value) => {
-        return ngettext('%d icon', '%d icons', value).format(value)
-      })
-
-    // highlight appicon on hover dialog
-    this._builder
-      .get_object('highlight_appicon_borderradius')
-      .set_format_value_func((scale, value) => {
-        return value + ' px'
-      })
-  }
-
   _setMonitorsInfo() {
     this.monitors = PanelSettings.availableMonitors
 
@@ -934,27 +827,6 @@ const Preferences = class {
   }
 
   _bindSettings() {
-    // size options
-    let panel_size_scale = this._builder.get_object('panel_size_scale')
-    panel_size_scale.set_range(
-      DEFAULT_PANEL_SIZES[DEFAULT_PANEL_SIZES.length - 1],
-      DEFAULT_PANEL_SIZES[0],
-    )
-    DEFAULT_PANEL_SIZES.slice(1, -1).forEach(function (val) {
-      panel_size_scale.add_mark(val, Gtk.PositionType.TOP, val.toString())
-    })
-
-    // Correct for rtl languages
-    if (this._rtl) {
-      // Flip value position: this is not done automatically
-      panel_size_scale.set_value_pos(Gtk.PositionType.LEFT)
-      // I suppose due to a bug, having a more than one mark and one above a value of 100
-      // makes the rendering of the marks wrong in rtl. This doesn't happen setting the scale as not flippable
-      // and then manually inverting it
-      panel_size_scale.set_flippable(false)
-      panel_size_scale.set_inverted(true)
-    }
-
     // App icon style option
     this._builder
       .get_object('appicon_style_combo')
@@ -1342,9 +1214,18 @@ const Preferences = class {
       this._builder.get_object('multimon_multi_switch').set_sensitive(false)
     }
 
-    const panel_length_scale = this._builder.get_object('panel_length_scale')
-    panel_length_scale.connect('value-changed', (widget) => {
-      const value = widget.get_value()
+    let panelLengthScale = {
+      objectName: 'panel_length_scale',
+      valueName: '',
+      range: LENGTH_MARKS,
+      unit: '%',
+      getValue: () =>
+        PanelSettings.getPanelLength(this._settings, this._currentMonitorIndex),
+      setValue: (value) => setPanelLength(value),
+      manualConnect: true,
+    }
+
+    let setPanelLength = (value) => {
       const monitorSync = this._settings.get_boolean(
         'panel-element-positions-monitors-sync',
       )
@@ -1355,7 +1236,27 @@ const Preferences = class {
         PanelSettings.setPanelLength(this._settings, monitorIndex, value)
       })
 
-      this._setAnchorWidgetSensitivity(value)
+      maybeSetPanelLengthScaleValueChange(value)
+      this._setPanelLenghtWidgetSensitivity(value)
+    }
+
+    let maybeSetPanelLengthScaleValueChange = (value) => {
+      const panel_length_scale = this._builder.get_object('panel_length_scale')
+
+      if (panelLengthScale.valueChangedId) {
+        panel_length_scale.disconnect(panelLengthScale.valueChangedId)
+        panelLengthScale.valueChangedId = 0
+      }
+
+      if (value != -1) connectValueChanged(panel_length_scale, panelLengthScale)
+      else panel_length_scale.set_value(100)
+    }
+
+    const dynamicLengthButton = this._builder.get_object(
+      'panel_length_dynamic_button',
+    )
+    dynamicLengthButton.connect('notify::active', () => {
+      setPanelLength(dynamicLengthButton.get_active() ? -1 : 100)
     })
 
     this._builder
@@ -1758,6 +1659,30 @@ const Preferences = class {
       setShortcut(this._settings, 'intellihide-key-toggle'),
     )
 
+    let intellihidePersistStateSwitch = this._builder.get_object(
+      'intellihide_persist_state_switch',
+    )
+    let intellihideStartDelayButton = this._builder.get_object(
+      'intellihide_enable_start_delay_spinbutton',
+    )
+
+    intellihidePersistStateSwitch.set_active(
+      this._settings.get_int('intellihide-persisted-state') > -1,
+    )
+
+    intellihideStartDelayButton.set_sensitive(
+      this._settings.get_int('intellihide-persisted-state') == -1,
+    )
+
+    intellihidePersistStateSwitch.connect('notify::active', (widget) => {
+      intellihideStartDelayButton.set_sensitive(!widget.get_active())
+
+      this._settings.set_int(
+        'intellihide-persisted-state',
+        widget.get_active() ? 0 : -1,
+      )
+    })
+
     this._builder
       .get_object('intellihide_animation_time_spinbutton')
       .set_value(this._settings.get_int('intellihide-animation-time'))
@@ -1776,17 +1701,15 @@ const Preferences = class {
         this._settings.set_int('intellihide-close-delay', widget.get_value())
       })
 
-    this._builder
-      .get_object('intellihide_enable_start_delay_spinbutton')
-      .set_value(this._settings.get_int('intellihide-enable-start-delay'))
-    this._builder
-      .get_object('intellihide_enable_start_delay_spinbutton')
-      .connect('value-changed', (widget) => {
-        this._settings.set_int(
-          'intellihide-enable-start-delay',
-          widget.get_value(),
-        )
-      })
+    intellihideStartDelayButton.set_value(
+      this._settings.get_int('intellihide-enable-start-delay'),
+    )
+    intellihideStartDelayButton.connect('value-changed', (widget) => {
+      this._settings.set_int(
+        'intellihide-enable-start-delay',
+        widget.get_value(),
+      )
+    })
 
     this._builder
       .get_object('intellihide_options_button')
@@ -1846,6 +1769,8 @@ const Preferences = class {
               this._settings.get_default_value('intellihide-key-toggle-text'),
             )
 
+            intellihidePersistStateSwitch.set_active(false)
+
             this._settings.set_value(
               'intellihide-animation-time',
               this._settings.get_default_value('intellihide-animation-time'),
@@ -1868,11 +1793,9 @@ const Preferences = class {
                 'intellihide-enable-start-delay',
               ),
             )
-            this._builder
-              .get_object('intellihide_enable_start_delay_spinbutton')
-              .set_value(
-                this._settings.get_int('intellihide-enable-start-delay'),
-              )
+            intellihideStartDelayButton.set_value(
+              this._settings.get_int('intellihide-enable-start-delay'),
+            )
           },
         )
 
@@ -2888,6 +2811,13 @@ const Preferences = class {
     })
 
     this._settings.bind(
+      'shortcut-overlay-on-secondary',
+      this._builder.get_object('overlay_on_secondary_switch'),
+      'active',
+      Gio.SettingsBindFlags.DEFAULT,
+    )
+
+    this._settings.bind(
       'shortcut-previews',
       this._builder.get_object('shortcut_preview_switch'),
       'active',
@@ -3040,7 +2970,26 @@ const Preferences = class {
 
     // Fine-tune panel
 
-    let sizeScales = [
+    let scaleInfos = [
+      {
+        objectName: 'panel_size_scale',
+        valueName: 'tray-size',
+        range: DEFAULT_PANEL_SIZES,
+        getValue: () =>
+          PanelSettings.getPanelSize(this._settings, this._currentMonitorIndex),
+        setValue: (value) => {
+          const monitorSync = this._settings.get_boolean(
+            'panel-element-positions-monitors-sync',
+          )
+          const monitorsToSetFor = monitorSync
+            ? Object.keys(this.monitors)
+            : [this._currentMonitorIndex]
+          monitorsToSetFor.forEach((monitorIndex) => {
+            PanelSettings.setPanelSize(this._settings, monitorIndex, value)
+          })
+        },
+      },
+      panelLengthScale,
       {
         objectName: 'tray_size_scale',
         valueName: 'tray-size',
@@ -3052,18 +3001,34 @@ const Preferences = class {
         range: DEFAULT_FONT_SIZES,
       },
       {
+        objectName: 'global_border_radius_scale',
+        valueName: 'global-border-radius',
+        range: [5, 4, 3, 2, 1, 0],
+        rangeFactor: 4,
+      },
+      {
         objectName: 'appicon_margin_scale',
         valueName: 'appicon-margin',
         range: DEFAULT_MARGIN_SIZES,
       },
       {
-        objectName: 'appicon_margin_todesktop_scale',
-        valueName: 'appicon-margin-todesktop',
+        objectName: 'panel_top_bottom_margins_scale',
+        valueName: 'panel-top-bottom-margins',
         range: DEFAULT_MARGIN_SIZES,
       },
       {
-        objectName: 'appicon_margin_toscreenborder_scale',
-        valueName: 'appicon-margin-toscreenborder',
+        objectName: 'panel_side_margins_scale',
+        valueName: 'panel-side-margins',
+        range: DEFAULT_MARGIN_SIZES,
+      },
+      {
+        objectName: 'panel_top_bottom_padding_scale',
+        valueName: 'panel-top-bottom-padding',
+        range: DEFAULT_MARGIN_SIZES,
+      },
+      {
+        objectName: 'panel_side_padding_scale',
+        valueName: 'panel-side-padding',
         range: DEFAULT_MARGIN_SIZES,
       },
       {
@@ -3086,7 +3051,6 @@ const Preferences = class {
         valueName: 'status-icon-padding',
         range: DEFAULT_PADDING_SIZES,
       },
-      { objectName: 'panel_length_scale', valueName: '', range: LENGTH_MARKS },
       {
         objectName: 'highlight_appicon_borderradius',
         valueName: 'highlight-appicon-hover-border-radius',
@@ -3094,36 +3058,110 @@ const Preferences = class {
       },
     ]
 
-    for (const idx in sizeScales) {
-      let size_scale = this._builder.get_object(sizeScales[idx].objectName)
-      let range = sizeScales[idx].range
-      size_scale.set_range(range[range.length - 1], range[0])
-      let value
-      if (sizeScales[idx].objectName === 'panel_length_scale') {
-        value = PanelSettings.getPanelLength(
-          this._settings,
-          this._currentMonitorIndex,
+    let connectValueChanged = (scaleObj, scaleInfo) => {
+      let timeoutId = 0
+
+      scaleObj = scaleObj || this._builder.get_object(scaleInfo.objectName)
+
+      scaleInfo.valueChangedId = scaleObj.connect('value-changed', () => {
+        // Avoid settings the size consinuosly
+        if (timeoutId > 0) GLib.Source.remove(timeoutId)
+
+        timeoutId = GLib.timeout_add(
+          GLib.PRIORITY_DEFAULT,
+          SCALE_UPDATE_TIMEOUT,
+          () => {
+            let value = scaleObj.get_value()
+
+            scaleInfo.setValue
+              ? scaleInfo.setValue(value)
+              : this._settings.set_int(scaleInfo.valueName, value)
+            timeoutId = 0
+
+            return GLib.SOURCE_REMOVE
+          },
         )
-      } else {
-        value = this._settings.get_int(sizeScales[idx].valueName)
-      }
-      size_scale.set_value(value)
+      })
+    }
+
+    for (const idx in scaleInfos) {
+      let scaleInfo = scaleInfos[idx]
+      let scaleObj = this._builder.get_object(scaleInfo.objectName)
+      let range = scaleInfo.range
+      let factor = scaleInfo.rangeFactor
+      let value = scaleInfo.getValue
+        ? scaleInfo.getValue()
+        : this._settings.get_int(scaleInfo.valueName)
+
+      scaleObj.set_range(range[range.length - 1], range[0])
+      scaleObj.set_value(value)
       // Add marks from range arrays, omitting the first and last values.
       range.slice(1, -1).forEach(function (val) {
-        size_scale.add_mark(val, Gtk.PositionType.TOP, val.toString())
+        scaleObj.add_mark(
+          val,
+          Gtk.PositionType.TOP,
+          (val * (factor || 1)).toString(),
+        )
+      })
+
+      if (!scaleInfo.manualConnect) connectValueChanged(scaleObj, scaleInfo)
+
+      scaleObj.set_format_value_func((scale, value) => {
+        return `${value * (factor || 1)} ${scaleInfo.unit || 'px'}`
       })
 
       // Corrent for rtl languages
       if (this._rtl) {
         // Flip value position: this is not done automatically
-        size_scale.set_value_pos(Gtk.PositionType.LEFT)
+        scaleObj.set_value_pos(Gtk.PositionType.LEFT)
         // I suppose due to a bug, having a more than one mark and one above a value of 100
         // makes the rendering of the marks wrong in rtl. This doesn't happen setting the scale as not flippable
         // and then manually inverting it
-        size_scale.set_flippable(false)
-        size_scale.set_inverted(true)
+        scaleObj.set_flippable(false)
+        scaleObj.set_inverted(true)
       }
     }
+
+    maybeSetPanelLengthScaleValueChange(
+      PanelSettings.getPanelLength(this._settings, this._currentMonitorIndex),
+    )
+
+    // animate hovering app icons dialog
+    this._builder
+      .get_object('animate_appicon_hover_options_duration_scale')
+      .set_format_value_func((scale, value) => {
+        return _('%d ms').format(value)
+      })
+
+    this._builder
+      .get_object('animate_appicon_hover_options_rotation_scale')
+      .set_format_value_func((scale, value) => {
+        return _('%d °').format(value)
+      })
+
+    this._builder
+      .get_object('animate_appicon_hover_options_travel_scale')
+      .set_format_value_func((scale, value) => {
+        return _('%d %%').format(value)
+      })
+
+    this._builder
+      .get_object('animate_appicon_hover_options_zoom_scale')
+      .set_format_value_func((scale, value) => {
+        return _('%d %%').format(value)
+      })
+
+    this._builder
+      .get_object('animate_appicon_hover_options_convexity_scale')
+      .set_format_value_func((scale, value) => {
+        return _('%.1f').format(value)
+      })
+
+    this._builder
+      .get_object('animate_appicon_hover_options_extent_scale')
+      .set_format_value_func((scale, value) => {
+        return ngettext('%d icon', '%d icons', value).format(value)
+      })
 
     this._settings.bind(
       'animate-app-switch',
@@ -3677,197 +3715,6 @@ const BuilderScope = GObject.registerClass(
           'window-preview-title-position',
           'TOP',
         )
-    }
-
-    panel_size_scale_value_changed_cb(scale) {
-      // Avoid settings the size continuously
-      if (this._preferences._panel_size_timeout > 0)
-        GLib.Source.remove(this._preferences._panel_size_timeout)
-
-      this._preferences._panel_size_timeout = GLib.timeout_add(
-        GLib.PRIORITY_DEFAULT,
-        SCALE_UPDATE_TIMEOUT,
-        () => {
-          const value = scale.get_value()
-          const monitorSync = this._preferences._settings.get_boolean(
-            'panel-element-positions-monitors-sync',
-          )
-          const monitorsToSetFor = monitorSync
-            ? Object.keys(this._preferences.monitors)
-            : [this._preferences._currentMonitorIndex]
-          monitorsToSetFor.forEach((monitorIndex) => {
-            PanelSettings.setPanelSize(
-              this._preferences._settings,
-              monitorIndex,
-              value,
-            )
-          })
-
-          this._preferences._panel_size_timeout = 0
-          return GLib.SOURCE_REMOVE
-        },
-      )
-    }
-
-    tray_size_scale_value_changed_cb(scale) {
-      // Avoid settings the size consinuosly
-      if (this._preferences._tray_size_timeout > 0)
-        GLib.Source.remove(this._preferences._tray_size_timeout)
-
-      this._preferences._tray_size_timeout = GLib.timeout_add(
-        GLib.PRIORITY_DEFAULT,
-        SCALE_UPDATE_TIMEOUT,
-        () => {
-          this._preferences._settings.set_int('tray-size', scale.get_value())
-          this._preferences._tray_size_timeout = 0
-          return GLib.SOURCE_REMOVE
-        },
-      )
-    }
-
-    leftbox_size_scale_value_changed_cb(scale) {
-      // Avoid settings the size consinuosly
-      if (this._preferences._leftbox_size_timeout > 0)
-        GLib.Source.remove(this._preferences._leftbox_size_timeout)
-
-      this._preferences._leftbox_size_timeout = GLib.timeout_add(
-        GLib.PRIORITY_DEFAULT,
-        SCALE_UPDATE_TIMEOUT,
-        () => {
-          this._preferences._settings.set_int('leftbox-size', scale.get_value())
-          this._preferences._leftbox_size_timeout = 0
-          return GLib.SOURCE_REMOVE
-        },
-      )
-    }
-
-    appicon_margin_scale_value_changed_cb(scale) {
-      // Avoid settings the size consinuosly
-      if (this._preferences._appicon_margin_timeout > 0)
-        GLib.Source.remove(this._preferences._appicon_margin_timeout)
-
-      this._preferences._appicon_margin_timeout = GLib.timeout_add(
-        GLib.PRIORITY_DEFAULT,
-        SCALE_UPDATE_TIMEOUT,
-        () => {
-          this._preferences._settings.set_int(
-            'appicon-margin',
-            scale.get_value(),
-          )
-          this._preferences._appicon_margin_timeout = 0
-          return GLib.SOURCE_REMOVE
-        },
-      )
-    }
-
-    appicon_margin_todesktop_scale_value_changed_cb(scale) {
-      // Avoid settings the size consinuosly
-      if (this._preferences._appicon_margin_todesktop_timeout > 0)
-        GLib.Source.remove(this._preferences._appicon_margin_todesktop_timeout)
-
-      this._preferences._appicon_margin_todesktop_timeout = GLib.timeout_add(
-        GLib.PRIORITY_DEFAULT,
-        SCALE_UPDATE_TIMEOUT,
-        () => {
-          this._preferences._settings.set_int(
-            'appicon-margin-todesktop',
-            scale.get_value(),
-          )
-          this._preferences._appicon_margin_todesktop_timeout = 0
-          return GLib.SOURCE_REMOVE
-        },
-      )
-    }
-
-    appicon_margin_toscreenborder_scale_value_changed_cb(scale) {
-      // Avoid settings the size consinuosly
-      if (this._preferences._appicon_margin_toscreenborder_timeout > 0)
-        GLib.Source.remove(
-          this._preferences._appicon_margin_toscreenborder_timeout,
-        )
-
-      this._preferences._appicon_margin_toscreenborder_timeout =
-        GLib.timeout_add(GLib.PRIORITY_DEFAULT, SCALE_UPDATE_TIMEOUT, () => {
-          this._preferences._settings.set_int(
-            'appicon-margin-toscreenborder',
-            scale.get_value(),
-          )
-          this._preferences._appicon_margin_toscreenborder_timeout = 0
-          return GLib.SOURCE_REMOVE
-        })
-    }
-
-    appicon_padding_scale_value_changed_cb(scale) {
-      // Avoid settings the size consinuosly
-      if (this._preferences._appicon_padding_timeout > 0)
-        GLib.Source.remove(this._preferences._appicon_padding_timeout)
-
-      this._preferences._appicon_padding_timeout = GLib.timeout_add(
-        GLib.PRIORITY_DEFAULT,
-        SCALE_UPDATE_TIMEOUT,
-        () => {
-          this._preferences._settings.set_int(
-            'appicon-padding',
-            scale.get_value(),
-          )
-          this._preferences._appicon_padding_timeout = 0
-          return GLib.SOURCE_REMOVE
-        },
-      )
-    }
-
-    tray_padding_scale_value_changed_cb(scale) {
-      // Avoid settings the size consinuosly
-      if (this._preferences._tray_padding_timeout > 0)
-        GLib.Source.remove(this._preferences._tray_padding_timeout)
-
-      this._preferences._tray_padding_timeout = GLib.timeout_add(
-        GLib.PRIORITY_DEFAULT,
-        SCALE_UPDATE_TIMEOUT,
-        () => {
-          this._preferences._settings.set_int('tray-padding', scale.get_value())
-          this._preferences._tray_padding_timeout = 0
-          return GLib.SOURCE_REMOVE
-        },
-      )
-    }
-
-    statusicon_padding_scale_value_changed_cb(scale) {
-      // Avoid settings the size consinuosly
-      if (this._preferences._statusicon_padding_timeout > 0)
-        GLib.Source.remove(this._preferences._statusicon_padding_timeout)
-
-      this._preferences._statusicon_padding_timeout = GLib.timeout_add(
-        GLib.PRIORITY_DEFAULT,
-        SCALE_UPDATE_TIMEOUT,
-        () => {
-          this._preferences._settings.set_int(
-            'status-icon-padding',
-            scale.get_value(),
-          )
-          this._preferences._statusicon_padding_timeout = 0
-          return GLib.SOURCE_REMOVE
-        },
-      )
-    }
-
-    leftbox_padding_scale_value_changed_cb(scale) {
-      // Avoid settings the size consinuosly
-      if (this._preferences._leftbox_padding_timeout > 0)
-        GLib.Source.remove(this._preferences._leftbox_padding_timeout)
-
-      this._preferences._leftbox_padding_timeout = GLib.timeout_add(
-        GLib.PRIORITY_DEFAULT,
-        SCALE_UPDATE_TIMEOUT,
-        () => {
-          this._preferences._settings.set_int(
-            'leftbox-padding',
-            scale.get_value(),
-          )
-          this._preferences._leftbox_padding_timeout = 0
-          return GLib.SOURCE_REMOVE
-        },
-      )
     }
   },
 )

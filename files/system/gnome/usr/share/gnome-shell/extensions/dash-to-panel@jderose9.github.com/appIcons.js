@@ -41,9 +41,7 @@ import * as BoxPointer from 'resource:///org/gnome/shell/ui/boxpointer.js'
 import { EventEmitter } from 'resource:///org/gnome/shell/misc/signals.js'
 
 import * as Utils from './utils.js'
-import * as PanelSettings from './panelSettings.js'
 import * as Taskbar from './taskbar.js'
-import * as Progress from './progress.js'
 import {
   DTP_EXTENSION,
   SETTINGS,
@@ -132,6 +130,7 @@ export const TaskbarAppIcon = GObject.registerClass(
 
       super._init(appInfo.app, iconParams)
 
+      this._signalsHandler = new Utils.GlobalSignalsHandler()
       this._timeoutsHandler = new Utils.TimeoutsHandler()
 
       // Fix touchscreen issues before the listener is added by the parent constructor.
@@ -176,6 +175,7 @@ export const TaskbarAppIcon = GObject.registerClass(
       })
 
       this.remove_child(this._iconContainer)
+      this.icon._iconBin.set_pivot_point(0.5, 0.5)
 
       this._dtpIconContainer.add_child(this._iconContainer)
 
@@ -191,11 +191,6 @@ export const TaskbarAppIcon = GObject.registerClass(
         this._updateWindowTitle()
         this._updateWindowTitleStyle()
 
-        this._scaleFactorChangedId = Utils.getStageTheme().connect(
-          'changed',
-          () => this._updateWindowTitleStyle(),
-        )
-
         box.add_child(this._dtpIconContainer)
         box.add_child(this._windowTitle)
 
@@ -208,7 +203,7 @@ export const TaskbarAppIcon = GObject.registerClass(
       this.set_child(this._container)
 
       if (panel.checkIfVertical()) {
-        this.set_width(panel.geom.w)
+        this.set_width(panel.geom.innerSize)
       }
 
       // Monitor windows-changes instead of app state.
@@ -223,35 +218,38 @@ export const TaskbarAppIcon = GObject.registerClass(
       this._setAppIconPadding()
       this._setAppIconStyle()
       this._showDots()
+      this._numberOverlay()
 
-      this._focusWindowChangedId = global.display.connect(
-        'notify::focus-window',
-        this._onFocusAppChanged.bind(this),
-      )
-
-      this._windowEnteredMonitorId = this._windowLeftMonitorId = 0
-      this._stateChangedId = this.app.connect(
-        'windows-changed',
-        this.onWindowsChanged.bind(this),
+      this._signalsHandler.add(
+        [
+          this,
+          'notify::mapped',
+          () => (this.mapped ? this._handleNotifications() : null),
+        ],
+        [
+          Utils.getStageTheme(),
+          'changed',
+          this._updateWindowTitleStyle.bind(this),
+        ],
+        [
+          global.display,
+          'notify::focus-window',
+          this._onFocusAppChanged.bind(this),
+        ],
+        [this.app, 'windows-changed', this.onWindowsChanged.bind(this)],
       )
 
       if (!this.window) {
         if (SETTINGS.get_boolean('isolate-monitors')) {
-          this._windowEnteredMonitorId =
-            Utils.DisplayWrapper.getScreen().connect(
-              'window-entered-monitor',
-              this.onWindowEnteredOrLeft.bind(this),
-            )
-          this._windowLeftMonitorId = Utils.DisplayWrapper.getScreen().connect(
-            'window-left-monitor',
+          this._signalsHandler.add([
+            Utils.DisplayWrapper.getScreen(),
+            ['window-entered-monitor', 'window-left-monitor'],
             this.onWindowEnteredOrLeft.bind(this),
-          )
+          ])
         }
 
-        this._titleWindowChangeId = 0
-        this._minimizedWindowChangeId = 0
-
-        this._fullscreenId = Utils.DisplayWrapper.getScreen().connect(
+        this._signalsHandler.add([
+          Utils.DisplayWrapper.getScreen(),
           'in-fullscreen-changed',
           () => {
             if (
@@ -263,188 +261,115 @@ export const TaskbarAppIcon = GObject.registerClass(
               this._displayProperIndicator()
             }
           },
-        )
+        ])
       } else {
-        this._titleWindowChangeId = this.window.connect(
-          'notify::title',
-          this._updateWindowTitle.bind(this),
-        )
-
-        this._minimizedWindowChangeId = this.window.connect(
-          'notify::minimized',
-          this._updateWindowTitleStyle.bind(this),
+        this._signalsHandler.add(
+          [this.window, 'notify::title', this._updateWindowTitle.bind(this)],
+          [
+            this.window,
+            'notify::minimized',
+            this._updateWindowTitleStyle.bind(this),
+          ],
         )
       }
 
-      this._scrollEventId = this.connect(
-        'scroll-event',
-        this._onMouseScroll.bind(this),
-      )
-
-      this._overviewWindowDragEndId = Main.overview.connect(
-        'window-drag-end',
-        this._onOverviewWindowDragEnd.bind(this),
-      )
-
-      this._switchWorkspaceId = global.window_manager.connect(
-        'switch-workspace',
-        this._onSwitchWorkspace.bind(this),
-      )
-
-      this._hoverChangeId = this.connect('notify::hover', () =>
-        this._onAppIconHoverChanged(),
-      )
-
-      this._hoverChangeId2 = this.connect('notify::hover', () =>
-        this._onAppIconHoverChanged_GtkWorkaround(),
-      )
-      this._pressedChangedId = this.connect('notify::pressed', () =>
-        this._onAppIconPressedChanged_GtkWorkaround(),
-      )
-
-      this._dtpSettingsSignalIds = [
-        SETTINGS.connect(
+      this._signalsHandler.add(
+        [this, 'scroll-event', this._onMouseScroll.bind(this)],
+        [
+          Main.overview,
+          'window-drag-end',
+          this._onOverviewWindowDragEnd.bind(this),
+        ],
+        [
+          global.window_manager,
+          'switch-workspace',
+          this._onSwitchWorkspace.bind(this),
+        ],
+        [
+          this,
+          'notify::hover',
+          () => {
+            this._onAppIconHoverChanged()
+            this._onAppIconHoverChanged_GtkWorkaround()
+          },
+        ],
+        [
+          this,
+          'notify::pressed',
+          this._onAppIconPressedChanged_GtkWorkaround.bind(this),
+        ],
+        [
+          this.dtpPanel.panelManager.notificationsMonitor,
+          `update-${this.app.id}`,
+          this._handleNotifications.bind(this),
+        ],
+        [
+          SETTINGS,
+          'changed::progress-show-count',
+          this._handleNotifications.bind(this),
+        ],
+        [
+          SETTINGS,
           'changed::animate-appicon-hover',
-          this._onAnimateAppiconHoverChanged.bind(this),
-        ),
-        SETTINGS.connect(
-          'changed::animate-appicon-hover',
+          () => {
+            this._onAnimateAppiconHoverChanged()
+            this._onAppIconHoverHighlightChanged()
+          },
+        ],
+        [
+          SETTINGS,
+          [
+            'changed::highlight-appicon-hover',
+            'changed::highlight-appicon-hover-background-color',
+            'changed::highlight-appicon-pressed-background-color',
+            'changed::highlight-appicon-hover-border-radius',
+          ],
           this._onAppIconHoverHighlightChanged.bind(this),
-        ),
-        SETTINGS.connect(
-          'changed::highlight-appicon-hover',
-          this._onAppIconHoverHighlightChanged.bind(this),
-        ),
-        SETTINGS.connect(
-          'changed::highlight-appicon-hover-background-color',
-          this._onAppIconHoverHighlightChanged.bind(this),
-        ),
-        SETTINGS.connect(
-          'changed::highlight-appicon-pressed-background-color',
-          this._onAppIconHoverHighlightChanged.bind(this),
-        ),
-        SETTINGS.connect(
+        ],
+        [
+          SETTINGS,
+          [
+            'changed::dot-position',
+            'changed::dot-size',
+            'changed::dot-style-focused',
+            'changed::dot-style-unfocused',
+            'changed::dot-color-dominant',
+            'changed::dot-color-override',
+            'changed::dot-color-1',
+            'changed::dot-color-2',
+            'changed::dot-color-3',
+            'changed::dot-color-4',
+            'changed::dot-color-unfocused-different',
+            'changed::dot-color-unfocused-1',
+            'changed::dot-color-unfocused-2',
+            'changed::dot-color-unfocused-3',
+            'changed::dot-color-unfocused-4',
+            'changed::focus-highlight',
+            'changed::focus-highlight-dominant',
+            'changed::focus-highlight-color',
+            'changed::focus-highlight-opacity',
+            'changed::group-apps-underline-unfocused',
+          ],
+          this._settingsChangeRefresh.bind(this),
+        ],
+        [
+          SETTINGS,
+          [
+            'changed::group-apps-label-font-size',
+            'changed::group-apps-label-font-weight',
+            'changed::group-apps-label-font-color',
+            'changed::group-apps-label-font-color-minimized',
+            'changed::group-apps-label-max-width',
+            'changed::group-apps-use-fixed-width',
+          ],
+          this._updateWindowTitleStyle.bind(this),
+        ],
+        [
+          SETTINGS,
           'changed::highlight-appicon-hover-border-radius',
-          this._onAppIconHoverHighlightChanged.bind(this),
-        ),
-        SETTINGS.connect(
-          'changed::dot-position',
-          this._settingsChangeRefresh.bind(this),
-        ),
-        SETTINGS.connect(
-          'changed::dot-size',
-          this._settingsChangeRefresh.bind(this),
-        ),
-        SETTINGS.connect(
-          'changed::dot-style-focused',
-          this._settingsChangeRefresh.bind(this),
-        ),
-        SETTINGS.connect(
-          'changed::dot-style-unfocused',
-          this._settingsChangeRefresh.bind(this),
-        ),
-        SETTINGS.connect(
-          'changed::dot-color-dominant',
-          this._settingsChangeRefresh.bind(this),
-        ),
-        SETTINGS.connect(
-          'changed::dot-color-override',
-          this._settingsChangeRefresh.bind(this),
-        ),
-        SETTINGS.connect(
-          'changed::dot-color-1',
-          this._settingsChangeRefresh.bind(this),
-        ),
-        SETTINGS.connect(
-          'changed::dot-color-2',
-          this._settingsChangeRefresh.bind(this),
-        ),
-        SETTINGS.connect(
-          'changed::dot-color-3',
-          this._settingsChangeRefresh.bind(this),
-        ),
-        SETTINGS.connect(
-          'changed::dot-color-4',
-          this._settingsChangeRefresh.bind(this),
-        ),
-        SETTINGS.connect(
-          'changed::dot-color-unfocused-different',
-          this._settingsChangeRefresh.bind(this),
-        ),
-        SETTINGS.connect(
-          'changed::dot-color-unfocused-1',
-          this._settingsChangeRefresh.bind(this),
-        ),
-        SETTINGS.connect(
-          'changed::dot-color-unfocused-2',
-          this._settingsChangeRefresh.bind(this),
-        ),
-        SETTINGS.connect(
-          'changed::dot-color-unfocused-3',
-          this._settingsChangeRefresh.bind(this),
-        ),
-        SETTINGS.connect(
-          'changed::dot-color-unfocused-4',
-          this._settingsChangeRefresh.bind(this),
-        ),
-        SETTINGS.connect(
-          'changed::focus-highlight',
-          this._settingsChangeRefresh.bind(this),
-        ),
-        SETTINGS.connect(
-          'changed::focus-highlight-dominant',
-          this._settingsChangeRefresh.bind(this),
-        ),
-        SETTINGS.connect(
-          'changed::focus-highlight-color',
-          this._settingsChangeRefresh.bind(this),
-        ),
-        SETTINGS.connect(
-          'changed::focus-highlight-opacity',
-          this._settingsChangeRefresh.bind(this),
-        ),
-        SETTINGS.connect(
-          'changed::group-apps-label-font-size',
-          this._updateWindowTitleStyle.bind(this),
-        ),
-        SETTINGS.connect(
-          'changed::group-apps-label-font-weight',
-          this._updateWindowTitleStyle.bind(this),
-        ),
-        SETTINGS.connect(
-          'changed::group-apps-label-font-color',
-          this._updateWindowTitleStyle.bind(this),
-        ),
-        SETTINGS.connect(
-          'changed::group-apps-label-font-color-minimized',
-          this._updateWindowTitleStyle.bind(this),
-        ),
-        SETTINGS.connect(
-          'changed::group-apps-label-max-width',
-          this._updateWindowTitleStyle.bind(this),
-        ),
-        SETTINGS.connect(
-          'changed::group-apps-use-fixed-width',
-          this._updateWindowTitleStyle.bind(this),
-        ),
-        SETTINGS.connect(
-          'changed::group-apps-underline-unfocused',
-          this._settingsChangeRefresh.bind(this),
-        ),
-      ]
-
-      this._dtpSettingsSignalIds = this._dtpSettingsSignalIds.concat([
-        SETTINGS.connect('changed::highlight-appicon-hover-border-radius', () =>
-          this._setIconStyle(this._isFocusedWindow()),
-        ),
-      ])
-
-      this._progressIndicator = new Progress.ProgressIndicator(
-        this,
-        panel.progressManager,
+          () => this._setIconStyle(this._isFocusedWindow()),
+        ],
       )
-
-      this._numberOverlay()
     }
 
     getDragActor() {
@@ -520,60 +445,9 @@ export const TaskbarAppIcon = GObject.registerClass(
       super._onDestroy()
 
       this._timeoutsHandler.destroy()
+      this._signalsHandler.destroy()
 
       this._previewMenu.close(true)
-
-      // Disconect global signals
-      if (this._stateChangedId > 0) {
-        this.app.disconnect(this._stateChangedId)
-        this._stateChangedId = 0
-      }
-
-      if (this._overviewWindowDragEndId)
-        Main.overview.disconnect(this._overviewWindowDragEndId)
-
-      if (this._focusWindowChangedId)
-        global.display.disconnect(this._focusWindowChangedId)
-
-      if (this._fullscreenId)
-        Utils.DisplayWrapper.getScreen().disconnect(this._fullscreenId)
-
-      if (this._titleWindowChangeId)
-        this.window.disconnect(this._titleWindowChangeId)
-
-      if (this._minimizedWindowChangeId)
-        this.window.disconnect(this._minimizedWindowChangeId)
-
-      if (this._windowEnteredMonitorId) {
-        Utils.DisplayWrapper.getScreen().disconnect(
-          this._windowEnteredMonitorId,
-        )
-        Utils.DisplayWrapper.getScreen().disconnect(this._windowLeftMonitorId)
-      }
-
-      if (this._switchWorkspaceId)
-        global.window_manager.disconnect(this._switchWorkspaceId)
-
-      if (this._scaleFactorChangedId)
-        Utils.getStageTheme().disconnect(this._scaleFactorChangedId)
-
-      if (this._hoverChangeId) {
-        this.disconnect(this._hoverChangeId)
-      }
-      if (this._hoverChangeId2) {
-        this.disconnect(this._hoverChangeId2)
-      }
-      if (this._pressedChangedId) {
-        this.disconnect(this._pressedChangedId)
-      }
-
-      if (this._scrollEventId) {
-        this.disconnect(this._scrollEventId)
-      }
-
-      for (let i = 0; i < this._dtpSettingsSignalIds.length; ++i) {
-        SETTINGS.disconnect(this._dtpSettingsSignalIds[i])
-      }
     }
 
     onWindowsChanged() {
@@ -666,7 +540,7 @@ export const TaskbarAppIcon = GObject.registerClass(
       )
 
       // Some trickery needed to get the effect
-      const br = `border-radius: ${border_radius}px;`
+      const br = border_radius ? `border-radius: ${border_radius}px;` : ''
       this._appicon_normalstyle = br
       this._container.set_style(this._appicon_normalstyle)
       this._appicon_hoverstyle = `background-color: ${background_color}; ${br}`
@@ -967,25 +841,13 @@ export const TaskbarAppIcon = GObject.registerClass(
     }
 
     _setAppIconPadding() {
-      const padding = getIconPadding(this.dtpPanel.monitor.index)
+      const padding = getIconPadding(this.dtpPanel)
       const margin = SETTINGS.get_int('appicon-margin')
-      const margin_todesktop = SETTINGS.get_int('appicon-margin-todesktop')
-      const margin_toscreenborder = SETTINGS.get_int(
-        'appicon-margin-toscreenborder',
-      )
+      let vertical = this.dtpPanel.checkIfVertical()
 
-      let margin_style = ''
-      const panelPosition = this.dtpPanel.getPosition()
-      if (panelPosition == St.Side.TOP) {
-        margin_style = `${margin_toscreenborder}px ${margin}px ${margin_todesktop}px ${margin}px`
-      } else if (panelPosition == St.Side.RIGHT) {
-        margin_style = `${margin}px ${margin_toscreenborder}px ${margin}px ${margin_todesktop}px`
-      } else if (panelPosition == St.Side.LEFT) {
-        margin_style = `${margin}px ${margin_todesktop}px ${margin}px ${margin_toscreenborder}px`
-      } else {
-        margin_style = `${margin_todesktop}px ${margin}px ${margin_toscreenborder}px ${margin}px`
-      }
-      this.set_style(`padding: ${margin_style};`)
+      this.set_style(
+        `padding: ${vertical ? margin : 0}px ${vertical ? 0 : margin}px;`,
+      )
       this._iconContainer.set_style('padding: ' + padding + 'px;')
     }
 
@@ -1009,16 +871,18 @@ export const TaskbarAppIcon = GObject.registerClass(
       if (!this._menu) {
         this._menu = new TaskbarSecondaryMenu(this, this.dtpPanel.geom.position)
         this._menu.setApp(this.app)
-        this._menu.connect('open-state-changed', (menu, isPoppedUp) => {
-          if (!isPoppedUp) this._onMenuPoppedDown()
-          else this._previewMenu.close(true)
-        })
-        let id = Main.overview.connect('hiding', () => {
-          this._menu.close()
-        })
-        this.connect('destroy', () => {
-          Main.overview.disconnect(id)
-        })
+
+        this._signalsHandler.add(
+          [
+            this._menu,
+            'open-state-changed',
+            (menu, isPoppedUp) => {
+              if (!isPoppedUp) this._onMenuPoppedDown()
+              else this._previewMenu.close(true)
+            },
+          ],
+          [Main.overview, 'hiding', () => this._menu.close()],
+        )
 
         // We want to keep the item hovered while the menu is up
         this._menu.blockSourceEvents = true
@@ -1279,17 +1143,21 @@ export const TaskbarAppIcon = GObject.registerClass(
         if (this.window && !handleAsGrouped) {
           //ungrouped applications behaviors
           switch (buttonAction) {
-            case 'RAISE':
-            case 'CYCLE':
-            case 'CYCLE-MIN':
-            case 'MINIMIZE':
-            case 'TOGGLE-SHOWPREVIEW':
-            case 'TOGGLE-CYCLE':
+            case 'LAUNCH':
+              this._launchNewInstance()
+              break
+
+            case 'QUIT':
+              this.window.delete(global.get_current_time())
+              break
+
+            default:
               if (
                 !Main.overview._shown &&
                 (buttonAction == 'MINIMIZE' ||
                   buttonAction == 'TOGGLE-SHOWPREVIEW' ||
                   buttonAction == 'TOGGLE-CYCLE' ||
+                  buttonAction == 'TOGGLE-SPREAD' ||
                   buttonAction == 'CYCLE-MIN') &&
                 (this._isFocusedWindow() ||
                   (buttonAction == 'MINIMIZE' &&
@@ -1300,16 +1168,6 @@ export const TaskbarAppIcon = GObject.registerClass(
               } else {
                 Main.activateWindow(this.window)
               }
-
-              break
-
-            case 'LAUNCH':
-              this._launchNewInstance()
-              break
-
-            case 'QUIT':
-              this.window.delete(global.get_current_time())
-              break
           }
         } else {
           //grouped application behaviors
@@ -1402,6 +1260,16 @@ export const TaskbarAppIcon = GObject.registerClass(
             case 'QUIT':
               closeAllWindows(this.app, monitor)
               break
+            case 'TOGGLE-SPREAD':
+              if (appCount == 1) {
+                if (appHasFocus && !Main.overview._shown)
+                  minimizeWindow(this.app, false, monitor)
+                else activateFirstWindow(this.app, monitor)
+              } else
+                // return so the overview stays open if it already is
+                return this.dtpPanel.panelManager.showFocusedAppInOverview(
+                  this.app,
+                )
           }
         }
       } else {
@@ -1731,66 +1599,99 @@ export const TaskbarAppIcon = GObject.registerClass(
       cr.$dispose()
     }
 
+    _handleNotifications() {
+      if (!this._nWindows && !this.window) return
+
+      let monitor = this.dtpPanel.panelManager.notificationsMonitor
+      let state = monitor.getState(this.app)
+      let count = 0
+
+      if (!state) return
+
+      if (SETTINGS.get_boolean('progress-show-count')) {
+        this.iconAnimator[`${state.urgent ? 'add' : 'remove'}Animation`](
+          this.icon._iconBin,
+          'dance',
+        )
+
+        if (state.total) count = state.total > 9 ? '9+' : state.total
+      }
+
+      this._notificationsCount = count
+
+      this._maybeUpdateNumberOverlay()
+    }
+
+    _maybeUpdateNumberOverlay() {
+      let visible = this._numberOverlayBin.visible
+      let shouldBeVisible =
+        (this._hotkeysOverlayActiveMode &&
+          this._numberHotkeysOverlayLabel > -1) ||
+        this._notificationsCount
+
+      let showNotifications =
+        this._notificationsCount &&
+        this._hotkeysOverlayActiveMode !== 'TEMPORARILY'
+      let label = showNotifications
+        ? this._notificationsCount
+        : this._numberHotkeysOverlayLabel
+
+      this._numberOverlayLabel[
+        `${showNotifications ? 'add' : 'remove'}_style_class_name`
+      ]('notification-badge')
+
+      if (shouldBeVisible && label !== this._numberOverlayLabel.get_text()) {
+        this._numberOverlayLabel.set_text(label.toString())
+        this._updateNumberOverlay()
+      }
+
+      if (visible && !shouldBeVisible) this._numberOverlayBin.hide()
+      else if (!visible && shouldBeVisible) this._numberOverlayBin.show()
+    }
+
     _numberOverlay() {
-      // Add label for a Hot-Key visual aid
+      // Add label for a numeric visual aid (hotkeys or notification)
       this._numberOverlayLabel = new St.Label({ style_class: 'badge' })
       this._numberOverlayBin = new St.Bin({
         child: this._numberOverlayLabel,
         y: 2,
       })
       this._numberOverlayLabel.add_style_class_name('number-overlay')
-      this._numberOverlayOrder = -1
+      this._numberHotkeysOverlayLabel = -1
       this._numberOverlayBin.hide()
 
       this._dtpIconContainer.add_child(this._numberOverlayBin)
     }
 
-    updateHotkeyNumberOverlay() {
-      this.updateNumberOverlay(this._numberOverlayBin, true)
-    }
-
-    updateNumberOverlay(bin, fixedSize) {
+    _updateNumberOverlay() {
       // We apply an overall scale factor that might come from a HiDPI monitor.
       // Clutter dimensions are in physical pixels, but CSS measures are in logical
       // pixels, so make sure to consider the scale.
       // Set the font size to something smaller than the whole icon so it is
       // still visible. The border radius is large to make the shape circular
-      let [, natWidth] = this._dtpIconContainer.get_preferred_width(-1)
-      let font_size = Math.round(
-        Math.max(12, 0.3 * natWidth) / Utils.getScaleFactor(),
+      let panelSize =
+        this.dtpPanel.geom[this.dtpPanel.checkIfVertical() ? 'w' : 'h']
+      let minFontSize = panelSize >= 32 ? 12 : 10
+      let fontSize = Math.round(
+        Math.max(minFontSize, 0.3 * panelSize) / Utils.getScaleFactor(),
       )
-      let size = Math.round(font_size * 1.3)
-      let label = bin.child
-      let style =
-        'font-size: ' +
-        font_size +
-        'px;' +
-        'border-radius: ' +
-        this.icon.iconSize +
-        'px;' +
-        'height: ' +
-        size +
-        'px;'
-
-      if (fixedSize || label.get_text().length == 1) {
-        style += 'width: ' + size + 'px;'
-      } else {
-        style += 'padding: 0 2px;'
-      }
-
-      bin.x = 2
-      label.set_style(style)
+      let size = Math.round(fontSize * 1.3)
+      let style = `
+        font-size: ${fontSize}px;
+        height: ${size}px;
+      `
+      this._numberOverlayLabel.set_style(style)
     }
 
-    setNumberOverlay(number) {
-      this._numberOverlayOrder = number
-      this._numberOverlayLabel.set_text(number.toString())
+    setHotkeysNumberOverlayLabel(number) {
+      this._numberHotkeysOverlayLabel = number
     }
 
-    toggleNumberOverlay(activate) {
-      if (activate && this._numberOverlayOrder > -1)
-        this._numberOverlayBin.show()
-      else this._numberOverlayBin.hide()
+    toggleHotkeysNumberOverlay(activateMode) {
+      this._hotkeysOverlayActiveMode =
+        this._numberHotkeysOverlayLabel > -1 && activateMode
+
+      this._maybeUpdateNumberOverlay()
     }
 
     handleDragOver(source) {
@@ -1804,9 +1705,10 @@ export const TaskbarAppIcon = GObject.registerClass(
           this.window
             ? Main.activateWindow(this.window)
             : activateFirstWindow(this.app, this.monitor)
+        } else
+          this.dtpPanel.panelManager.showFocusedAppInOverview(this.app, true)
 
-          return DND.DragMotionResult.MOVE_DROP
-        }
+        return DND.DragMotionResult.MOVE_DROP
       }
 
       return DND.DragMotionResult.CONTINUE
@@ -1936,11 +1838,9 @@ export function closeAllWindows(app, monitor) {
 // Filter out unnecessary windows, for instance
 // nautilus desktop window.
 export function getInterestingWindows(app, monitor, isolateMonitors) {
-  let windows = (
-    app
-      ? app.get_windows()
-      : global.get_window_actors().map((wa) => wa.get_meta_window())
-  ).filter((w) => !w.skip_taskbar)
+  let windows = (app ? app.get_windows() : Utils.getAllMetaWindows()).filter(
+    (w) => !w.skip_taskbar,
+  )
 
   // When using workspace or monitor isolation, we filter out windows
   // that are not in the current workspace or on the same monitor as the appicon
@@ -1973,8 +1873,8 @@ export function cssHexTocssRgba(cssHex, opacity) {
   return 'rgba(' + [r, g, b].join(',') + ',' + opacity + ')'
 }
 
-export function getIconPadding(monitorIndex) {
-  let panelSize = PanelSettings.getPanelSize(SETTINGS, monitorIndex)
+export function getIconPadding(dtpPanel) {
+  let panelSize = dtpPanel.geom.innerSize
   let padding = SETTINGS.get_int('appicon-padding')
   let availSize = panelSize - Taskbar.MIN_ICON_SIZE - (panelSize % 2)
 
@@ -2247,7 +2147,7 @@ export const ShowAppsIconWrapper = class extends EventEmitter {
   }
 
   setShowAppsPadding() {
-    let padding = getIconPadding(this.realShowAppsIcon._dtpPanel.monitor.index)
+    let padding = getIconPadding(this.realShowAppsIcon._dtpPanel)
     let sidePadding = SETTINGS.get_int('show-apps-icon-side-padding')
     let isVertical = this.realShowAppsIcon._dtpPanel.checkIfVertical()
 

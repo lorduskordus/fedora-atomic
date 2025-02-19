@@ -78,7 +78,8 @@ export const PreviewMenu = GObject.registerClass(
       this._translationDirection =
         geom.position == St.Side.TOP || geom.position == St.Side.LEFT ? -1 : 1
       this._translationOffset =
-        Math.min(panel.dtpSize, MAX_TRANSLATION) * this._translationDirection
+        Math.min(panel.geom.innerSize, MAX_TRANSLATION) *
+        this._translationDirection
 
       this.menu = new St.Widget({
         name: 'preview-menu',
@@ -465,6 +466,7 @@ export const PreviewMenu = GObject.registerClass(
     _updateClip() {
       let x, y, w
       let geom = this.panel.getGeometry()
+      let panelSize = geom.outerSize - geom.fixedPadding
       let panelBoxTheme = this.panel.panelBox.get_theme_node()
       let previewSize =
         (SETTINGS.get_int('window-preview-size') +
@@ -484,26 +486,26 @@ export const PreviewMenu = GObject.registerClass(
       if (geom.position == St.Side.LEFT) {
         x =
           this.panel.monitor.x +
-          this.panel.dtpSize +
-          panelBoxTheme.get_padding(St.Side.LEFT)
+          panelSize -
+          panelBoxTheme.get_padding(St.Side.RIGHT)
       } else if (geom.position == St.Side.RIGHT) {
         x =
           this.panel.monitor.x +
           this.panel.monitor.width -
-          (this.panel.dtpSize + previewSize) -
-          panelBoxTheme.get_padding(St.Side.RIGHT)
+          (panelSize + previewSize) +
+          panelBoxTheme.get_padding(St.Side.LEFT)
       } else if (geom.position == St.Side.TOP) {
         y =
           this.panel.monitor.y +
-          this.panel.dtpSize +
-          panelBoxTheme.get_padding(St.Side.TOP)
+          panelSize -
+          panelBoxTheme.get_padding(St.Side.BOTTOM)
       } else {
         //St.Side.BOTTOM
         y =
           this.panel.monitor.y +
           this.panel.monitor.height -
-          (this.panel.dtpSize +
-            panelBoxTheme.get_padding(St.Side.BOTTOM) +
+          (panelSize -
+            panelBoxTheme.get_padding(St.Side.TOP) +
             previewSize +
             headerHeight)
       }
@@ -678,7 +680,10 @@ export const PreviewMenu = GObject.registerClass(
 
     _peek(window) {
       let currentWorkspace = Utils.getCurrentWorkspace()
-      let windowWorkspace = window.get_workspace()
+      let isAppSpread = !Main.sessionMode.hasWorkspaces
+      let windowWorkspace = isAppSpread
+        ? currentWorkspace
+        : window.get_workspace()
       let focusWindow = () =>
         this._focusMetaWindow(SETTINGS.get_int('peek-mode-opacity'), window)
 
@@ -742,31 +747,36 @@ export const PreviewMenu = GObject.registerClass(
     }
 
     _focusMetaWindow(dimOpacity, window, immediate, ignoreFocus) {
-      window
-        .get_workspace()
-        .list_windows()
-        .forEach((mw) => {
-          let wa = mw.get_compositor_private()
-          let isFocused = !ignoreFocus && mw == window
+      let isAppSpread = !Main.sessionMode.hasWorkspaces
+      let windowWorkspace = isAppSpread
+        ? Utils.getCurrentWorkspace()
+        : window.get_workspace()
+      let windows = isAppSpread
+        ? Utils.getAllMetaWindows()
+        : windowWorkspace.list_windows()
 
-          if (wa) {
-            if (isFocused) {
-              mw[PEEK_INDEX_PROP] = wa.get_parent().get_children().indexOf(wa)
-              wa.get_parent().set_child_above_sibling(wa, null)
-            }
+      windows.forEach((mw) => {
+        let wa = mw.get_compositor_private()
+        let isFocused = !ignoreFocus && mw == window
 
-            if (isFocused && mw.minimized) {
-              wa.show()
-            }
-
-            this.animateWindowOpacity(
-              mw,
-              wa,
-              isFocused ? 255 : dimOpacity,
-              immediate,
-            )
+        if (wa) {
+          if (isFocused) {
+            mw[PEEK_INDEX_PROP] = wa.get_parent().get_children().indexOf(wa)
+            wa.get_parent().set_child_above_sibling(wa, null)
           }
-        })
+
+          if (isFocused && mw.minimized) {
+            wa.show()
+          }
+
+          this.animateWindowOpacity(
+            mw,
+            wa,
+            isFocused ? 255 : dimOpacity,
+            immediate,
+          )
+        }
+      })
     }
 
     animateWindowOpacity(metaWindow, windowActor, opacity, immediate) {
