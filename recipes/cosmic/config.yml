@@ -1,0 +1,3 @@
+modules:
+
+  - from-file: common/config/rpm-ostree.yml

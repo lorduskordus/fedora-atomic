@@ -10,4 +10,4 @@ modules:
   - from-file: common/config.yml
   
   # COSMIC
-  #- from-file: cosmic/config.yml
+  - from-file: cosmic/config.yml
