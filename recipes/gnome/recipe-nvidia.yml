@@ -3,6 +3,8 @@ description: Custom Fedora GNOME image based on uBlue, built with BlueBuild. (Ba
 
 base-image: ghcr.io/ublue-os/silverblue-nvidia
 image-version: 41
+alt-tags:
+  - main
 
 modules:
 

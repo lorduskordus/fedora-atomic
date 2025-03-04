@@ -3,6 +3,8 @@ description: Custom Fedora KDE image based on uBlue, built with BlueBuild. (Base
 
 base-image: ghcr.io/ublue-os/kinoite-main
 image-version: 41
+alt-tags:
+  - main
 
 modules:
 

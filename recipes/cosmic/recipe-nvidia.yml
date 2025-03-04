@@ -3,6 +3,8 @@ description: Custom Fedora COSMIC image based on uBlue, built with BlueBuild. (B
 
 base-image: ghcr.io/ublue-os/cosmic-nvidia
 image-version: 41
+alt-tags:
+  - main
 
 modules:
 
