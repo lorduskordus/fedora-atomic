@@ -27,26 +27,26 @@ jobs:
       fail-fast: false # stop GH from cancelling all matrix builds if one fails
       matrix:
         recipe:
-          #- cosmic/recipe-bazzite.yml
-          #- cosmic/recipe-bazzite-nvidia.yml
-          #- cosmic/recipe-coreos.yml
-          #- cosmic/recipe-coreos-nvidia.yml
-          #- cosmic/recipe.yml
-          #- cosmic/recipe-nvidia.yml
+          - cosmic/recipe-bazzite.yml
+          - cosmic/recipe-bazzite-nvidia.yml
+          - cosmic/recipe-coreos.yml
+          - cosmic/recipe-coreos-nvidia.yml
+          - cosmic/recipe.yml
+          - cosmic/recipe-nvidia.yml
           
           - gnome/recipe-bazzite.yml
           - gnome/recipe-bazzite-nvidia.yml
           - gnome/recipe-coreos.yml
           - gnome/recipe-coreos-nvidia.yml
-          #- gnome/recipe.yml
-          #- gnome/recipe-nvidia.yml
+          - gnome/recipe.yml
+          - gnome/recipe-nvidia.yml
           
-          #- kde/recipe-bazzite.yml
-          #- kde/recipe-bazzite-nvidia.yml
-          #- kde/recipe-coreos.yml
-          #- kde/recipe-coreos-nvidia.yml
-          #- kde/recipe.yml
-          #- kde/recipe-nvidia.yml
+          - kde/recipe-bazzite.yml
+          - kde/recipe-bazzite-nvidia.yml
+          - kde/recipe-coreos.yml
+          - kde/recipe-coreos-nvidia.yml
+          - kde/recipe.yml
+          - kde/recipe-nvidia.yml
     steps:
       - name: Build Custom Image
         uses: blue-build/github-action@v1.8
