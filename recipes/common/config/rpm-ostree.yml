@@ -1,7 +1,4 @@
 type: rpm-ostree
-remove:
-  - firefox
-  - firefox-langpacks
 repos:
   # Includes bibata-cursor-themes
   - https://copr.fedorainfracloud.org/coprs/peterwu/rendezvous/repo/fedora-%OS_VERSION%/peterwu-rendezvous-fedora-%OS_VERSION%.repo
