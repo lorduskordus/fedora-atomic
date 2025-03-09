@@ -118,4 +118,4 @@ window-preview-title-position='TOP'
 target-prefs-page=''
 hide-donate-icon-unixtime='1738334079871'
 highlight-appicon-hover-border-radius=8
-panel-top-bottom-padding=4
+panel-top-bottom-padding=6
