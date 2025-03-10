@@ -21,7 +21,7 @@ repos:
   # Includes morewaita-icon-theme
   - https://copr.fedorainfracloud.org/coprs/dusansimic/themes/repo/fedora-%OS_VERSION%/dusansimic-themes-fedora-%OS_VERSION%.repo
 install:
-  #- gnome-shell-extension-dash-to-panel # Temporarily replace by fork (files module handles it)
+  #- gnome-shell-extension-dash-to-panel # Temporarily replace with gnome-extensions module
   - gnome-shell-extension-dash-to-dock
   - gnome-shell-extension-appindicator
   - gnome-shell-extension-gsconnect
