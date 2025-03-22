@@ -3,7 +3,6 @@ remove:
   - kate
   - kate-plugins
   - kate-krunner-plugin
-  - kfind
   - kcharselect
 repos:
   # Includes Koi
