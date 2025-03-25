@@ -2,7 +2,6 @@ import Gio from 'gi://Gio';
 import GLib from 'gi://GLib';
 import * as extension_js from 'resource:///org/gnome/shell/extensions/extension.js';
 import Shell from 'gi://Shell';
-import Meta from 'gi://Meta';
 import Clutter from 'gi://Clutter';
 import { Button } from 'resource:///org/gnome/shell/ui/panelMenu.js';
 import { PopupSwitchMenuItem, PopupDummyMenu, PopupSeparatorMenuItem, PopupMenuItem } from 'resource:///org/gnome/shell/ui/popupMenu.js';
@@ -16,7 +15,8 @@ import GdkPixbuf from 'gi://GdkPixbuf';
 import * as animationUtils from 'resource:///org/gnome/shell/misc/animationUtils.js';
 import { MonitorConstraint } from 'resource:///org/gnome/shell/ui/layout.js';
 import * as main from 'resource:///org/gnome/shell/ui/main.js';
-import { Notification, Source } from 'resource:///org/gnome/shell/ui/messageTray.js';
+import { Source, Notification } from 'resource:///org/gnome/shell/ui/messageTray.js';
+import Meta from 'gi://Meta';
 import { Lightbox } from 'resource:///org/gnome/shell/ui/lightbox.js';
 import Gda from 'gi://Gda?version>=5.0';
 import Pango from 'gi://Pango';
@@ -103,7 +103,6 @@ function registerGObjectClass(target) {
     if (Object.prototype.hasOwnProperty.call(target, 'metaInfo')) {
         // eslint-disable-next-line
         // @ts-ignore
-        // eslint-disable-next-line
         return GObject.registerClass(target.metaInfo, target);
     }
     else {
@@ -114,7 +113,7 @@ function registerGObjectClass(target) {
 }
 
 const logger = (prefix) => (content) => console.log(`[pano] [${prefix}] ${content}`);
-const debug$8 = logger('shell-utils');
+const debug$9 = logger('shell-utils');
 const deleteFile = (file) => {
     return new Promise((resolve, reject) => {
         file.delete_async(GLib.PRIORITY_DEFAULT, null, (_file, res) => {
@@ -177,7 +176,7 @@ const deleteDirectory = async (file) => {
         }
         await Promise.all(branches);
     }
-    catch (e) {
+    catch (_err) {
     }
     finally {
         return deleteFile(file);
@@ -229,8 +228,8 @@ const loadInterfaceXML = (ext, iface) => {
         const [, bytes] = file.load_contents(null);
         return new TextDecoder().decode(bytes);
     }
-    catch (e) {
-        debug$8(`Failed to load D-Bus interface ${iface}`);
+    catch (_err) {
+        debug$9(`Failed to load D-Bus interface ${iface}`);
     }
     return null;
 };
@@ -252,7 +251,7 @@ const playAudio = () => {
         }, null);
     }
     catch (err) {
-        debug$8(`failed to play audio: ${err}`);
+        debug$9(`failed to play audio: ${err}`);
     }
 };
 const removeSoundContext = () => {
@@ -280,16 +279,19 @@ const openLinkInBrowser = (url) => {
     try {
         Gio.app_info_launch_default_for_uri(url, null);
     }
-    catch (e) {
-        debug$8(`Failed to open url ${url}`);
+    catch (_err) {
+        debug$9(`Failed to open url ${url}`);
     }
 };
 function gettext(ext) {
     return ext.gettext.bind(ext);
 }
 
-const debug$7 = logger('clear-history-dialog');
+const debug$8 = logger('clear-history-dialog');
 let ClearHistoryDialog = class ClearHistoryDialog extends ModalDialog {
+    cancelButton;
+    clearButton;
+    onClear;
     constructor(ext, onClear) {
         super();
         const _ = gettext(ext);
@@ -321,7 +323,7 @@ let ClearHistoryDialog = class ClearHistoryDialog extends ModalDialog {
             await this.onClear();
         }
         catch (err) {
-            debug$7(`err: ${err}`);
+            debug$8(`err: ${err}`);
         }
         this.close();
     }
@@ -344,28 +346,13 @@ function getPanoItemTypes(ext) {
 }
 const ICON_PACKS = ['default', 'legacy'];
 
-// compatibility functions for Gda 5.0 and 6.0
-function isGda6Builder(builder) {
-    return builder.add_expr_value.length === 1;
-}
-/**
- * This is hack for libgda6 <> libgda5 compatibility.
- *
- * @param value any
- * @returns expr id
- */
-function add_expr_value(builder, value) {
-    if (isGda6Builder(builder)) {
-        return builder.add_expr_value(value);
-    }
-    return builder.add_expr_value(null, value);
-}
-// compatibility functions for gnome-shell 45 / 46
-function isGnome45Notifications() {
+// compatibility check functions for gnome-shell 45 / 46
+function hasGnome45LikeNotifications() {
     return Source.prototype.addNotification === undefined;
 }
+// actual compatibility functions
 function newNotification(source, text, banner, transient_, params) {
-    if (isGnome45Notifications()) {
+    if (hasGnome45LikeNotifications()) {
         // @ts-expect-error gnome 45 type
         const notification = new Notification(source, text, banner, {
             datetime: GLib.DateTime.new_now_local(),
@@ -384,7 +371,7 @@ function newNotification(source, text, banner, transient_, params) {
     });
 }
 function newMessageTraySource(title, iconName) {
-    if (isGnome45Notifications()) {
+    if (hasGnome45LikeNotifications()) {
         // @ts-expect-error gnome 45 type
         return new Source(title, iconName);
     }
@@ -408,22 +395,75 @@ function scrollViewAddChild(scrollView, actor) {
         scrollView.set_child(actor);
     }
 }
-function getScrollViewAdjustment(scrollView, type) {
+function getScrollViewAdjustment(scrollView, type_or_vertical) {
     if (scrollView.vadjustment !== undefined) {
-        if (type === 'v') {
+        if (type_or_vertical === 'v' || type_or_vertical == true) {
             return scrollView.vadjustment;
         }
         return scrollView.hadjustment;
     }
     else {
-        if (type === 'v') {
+        if (type_or_vertical === 'v' || type_or_vertical == true) {
             return scrollView.vscroll.adjustment;
         }
         return scrollView.hscroll.adjustment;
     }
 }
 
+// compatibility check functions for gnome-shell 48
+function stOrientationIsSupported() {
+    return St.BoxLayout.prototype.get_orientation !== undefined;
+}
+function stSetBytesNeedsContext() {
+    return St.ImageContent.prototype.set_bytes.length === 6;
+}
+function metaSupportsUnredirectForDisplay() {
+    return (Meta.enable_unredirect_for_display !==
+        undefined);
+}
+function orientationCompatibility(vertical) {
+    if (stOrientationIsSupported()) {
+        return { orientation: vertical ? Clutter.Orientation.VERTICAL : Clutter.Orientation.HORIZONTAL };
+    }
+    return { vertical: vertical };
+}
+function setOrientationCompatibility(container, vertical) {
+    if (stOrientationIsSupported()) {
+        container.vertical = vertical;
+    }
+    else {
+        container.orientation = vertical ? Clutter.Orientation.VERTICAL : Clutter.Orientation.HORIZONTAL;
+    }
+}
 const global$2 = Shell.Global.get();
+function setUnredirectForDisplay(enable) {
+    if (metaSupportsUnredirectForDisplay()) {
+        if (enable) {
+            Meta.enable_unredirect_for_display(global$2.display);
+        }
+        else {
+            Meta.disable_unredirect_for_display(global$2.display);
+        }
+        return;
+    }
+    if (enable) {
+        global$2.compositor.enable_unredirect();
+    }
+    else {
+        global$2.compositor.disable_unredirect();
+    }
+}
+function setBytesCompat(content, data, pixel_format, width, height, row_stride) {
+    if (stSetBytesNeedsContext()) {
+        const context = global$2.stage.context.get_backend().get_cogl_context();
+        content.set_bytes(context, data, pixel_format, width, height, row_stride);
+    }
+    else {
+        content.set_bytes(data, pixel_format, width, height, row_stride);
+    }
+}
+
+const global$1 = Shell.Global.get();
 const notify = (ext, text, body, iconOrPixbuf, pixelFormat) => {
     const _ = gettext(ext);
     const source = newMessageTraySource(_('Pano'), 'edit-copy-symbolic');
@@ -432,7 +472,7 @@ const notify = (ext, text, body, iconOrPixbuf, pixelFormat) => {
     if (iconOrPixbuf) {
         if (iconOrPixbuf instanceof GdkPixbuf.Pixbuf) {
             const content = St.ImageContent.new_with_preferred_size(iconOrPixbuf.width, iconOrPixbuf.height);
-            content.set_bytes(iconOrPixbuf.read_pixel_bytes(), pixelFormat || Cogl.PixelFormat.RGBA_8888, iconOrPixbuf.width, iconOrPixbuf.height, iconOrPixbuf.rowstride);
+            setBytesCompat(content, iconOrPixbuf.read_pixel_bytes(), pixelFormat || Cogl.PixelFormat.RGBA_8888, iconOrPixbuf.width, iconOrPixbuf.height, iconOrPixbuf.rowstride);
             notification = newNotification(source, text, body, true, { gicon: content });
         }
         else {
@@ -446,10 +486,10 @@ const notify = (ext, text, body, iconOrPixbuf, pixelFormat) => {
 };
 const wiggle = (actor, { offset, duration, wiggleCount }) => animationUtils.wiggle(actor, { offset, duration, wiggleCount });
 const wm = main.wm;
-const getPointer = () => global$2.get_pointer();
+const getPointer = () => global$1.get_pointer();
 const getMonitors = () => main.layoutManager.monitors;
 const getMonitorIndexForPointer = () => {
-    const [x, y] = global$2.get_pointer();
+    const [x, y] = global$1.get_pointer();
     const monitors = getMonitors();
     for (let i = 0; i <= monitors.length; i++) {
         const monitor = monitors[i];
@@ -527,8 +567,23 @@ const getHeaderHeight = (style) => {
 };
 const isVisible = (style) => style !== HEADER_STYLES.HIDDEN;
 
-const debug$6 = logger('settings-menu');
+const debug$7 = logger('settings-menu');
 let SettingsMenu = class SettingsMenu extends Button {
+    static metaInfo = {
+        GTypeName: 'SettingsButton',
+        Signals: {
+            'item-selected': {},
+            'menu-state-changed': {
+                param_types: [GObject.TYPE_BOOLEAN],
+                accumulator: 0,
+            },
+        },
+    };
+    settings;
+    incognitoChangeId;
+    icon;
+    ext;
+    onToggle;
     constructor(ext, onClear, onToggle) {
         const _ = gettext(ext);
         super(0.5, 'Pano Indicator', false);
@@ -555,7 +610,7 @@ let SettingsMenu = class SettingsMenu extends Button {
             this.icon.set_gicon(Gio.icon_new_for_string(`${this.ext.path}/icons/hicolor/scalable/actions/${ICON_PACKS[this.settings.get_uint('icon-pack')]}-indicator${isInIncognito ? '-incognito-symbolic' : '-symbolic'}.svg`));
         });
         if (this.menu instanceof PopupDummyMenu) {
-            debug$6('error: menu us PopupDummyMenu, but it should be a normal menu!');
+            debug$7('error: menu us PopupDummyMenu, but it should be a normal menu!');
         }
         else {
             this.menu.addMenuItem(switchMenuItem);
@@ -600,24 +655,17 @@ let SettingsMenu = class SettingsMenu extends Button {
         super.destroy();
     }
 };
-SettingsMenu.metaInfo = {
-    GTypeName: 'SettingsButton',
-    Signals: {
-        'item-selected': {},
-        'menu-state-changed': {
-            param_types: [GObject.TYPE_BOOLEAN],
-            accumulator: 0,
-        },
-    },
-};
 SettingsMenu = __decorate([
     registerGObjectClass
 ], SettingsMenu);
 
 class PanoIndicator {
+    indicatorChangeSignalId = null;
+    settingsMenu = null;
+    extension;
+    onClear;
+    onToggle;
     constructor(ext, onClear, onToggle) {
-        this.indicatorChangeSignalId = null;
-        this.settingsMenu = null;
         this.extension = ext;
         this.onClear = onClear;
         this.onToggle = onToggle;
@@ -661,6 +709,13 @@ class PanoIndicator {
 }
 
 let MonitorBox = class MonitorBox extends St.BoxLayout {
+    static metaInfo = {
+        GTypeName: 'MonitorBox',
+        Signals: {
+            hide_window: {},
+        },
+    };
+    _lightbox;
     constructor() {
         super({
             name: 'PanoMonitorBox',
@@ -695,7 +750,7 @@ let MonitorBox = class MonitorBox extends St.BoxLayout {
         this._lightbox.styleClass = 'pano-monitor-box';
         const _eventBlocker = new Clutter.Actor({ reactive: true });
         backgroundStack.add_child(_eventBlocker);
-        main.uiGroup.add_child(this);
+        main.layoutManager.uiGroup.add_child(this);
     }
     open() {
         this._lightbox.lightOn();
@@ -716,23 +771,65 @@ let MonitorBox = class MonitorBox extends St.BoxLayout {
         super.destroy();
     }
 };
-MonitorBox.metaInfo = {
-    GTypeName: 'MonitorBox',
-    Signals: {
-        hide_window: {},
-    },
-};
 MonitorBox = __decorate([
     registerGObjectClass
 ], MonitorBox);
 
+const debug$6 = logger('gda_compatibility');
+// compatibility functions for Gda 5.0 and 6.0
+function isGda6Builder(builder) {
+    return builder.add_expr_value.length === 1;
+}
+/**
+ * This is hack for libgda6 <> libgda5 compatibility.
+ *
+ * @param value any
+ * @returns expr id
+ */
+function add_expr_value(builder, value) {
+    if (isGda6Builder(builder)) {
+        return builder.add_expr_value(value);
+    }
+    return builder.add_expr_value(null, value);
+}
+/**
+ * a faster unescape function for gda
+ *
+ * Does not the exact reverse of gda_default_escape_string(): that transforms any "''" into "'", we don't do that,
+ * since this is incorrect in our usage, just unescape any "\\" into "\" and any "\'" into "'".
+ * @param input string to unescape
+ * @returns unescaped string or the input, if an error was be found or nothing needs to be unescaped
+ */
+function unescape_string(input) {
+    // check if we need to escape something, so we don't mutate strings unnecessary, this speeds things up
+    if (!input.includes('\\')) {
+        return input;
+    }
+    try {
+        return input.replaceAll(/\\(.)/g, (_all, captured) => {
+            if (captured === '\\' || captured === "'") {
+                return captured;
+            }
+            throw new Error(`Unexpected escape character '${captured}'`);
+        });
+    }
+    catch (error) {
+        debug$6(`Error in unescape: ${error}`);
+        // return the original string
+        return input;
+    }
+}
+
 const debug$5 = logger('database');
 class ClipboardQuery {
+    statement;
     constructor(statement) {
         this.statement = statement;
     }
 }
 class ClipboardQueryBuilder {
+    builder;
+    conditions;
     constructor() {
         this.conditions = [];
         this.builder = new Gda.SqlBuilder({
@@ -804,18 +901,16 @@ class ClipboardQueryBuilder {
     }
 }
 class Database {
-    constructor() {
-        this.connection = null;
-    }
-    init(ext) {
+    connection = null;
+    init(dbPath) {
         this.connection = new Gda.Connection({
             provider: Gda.Config.get_provider('SQLite'),
-            cncString: `DB_DIR=${getDbPath(ext)};DB_NAME=pano`,
+            cncString: `DB_DIR=${dbPath};DB_NAME=pano`,
         });
         this.connection.open();
     }
-    setup(ext) {
-        this.init(ext);
+    setup(dbPath) {
+        this.init(dbPath);
         if (!this.connection || !this.connection.is_opened()) {
             debug$5('connection is not opened');
             return;
@@ -924,27 +1019,30 @@ class Database {
             const id = iter.get_value_for_field('id');
             const itemType = iter.get_value_for_field('itemType');
             const content = iter.get_value_for_field('content');
+            const contentUnescaped = unescape_string(content) ?? content;
             const copyDate = iter.get_value_for_field('copyDate');
             const isFavorite = iter.get_value_for_field('isFavorite');
             const matchValue = iter.get_value_for_field('matchValue');
+            const matchValueUnescaped = unescape_string(matchValue) ?? matchValue;
             const searchValue = iter.get_value_for_field('searchValue');
+            const searchValueUnescaped = searchValue ? (unescape_string(searchValue) ?? searchValue) : undefined;
             const metaData = iter.get_value_for_field('metaData');
             itemList.push({
                 id,
                 itemType,
-                content,
+                content: contentUnescaped,
                 copyDate: new Date(copyDate),
                 isFavorite: !!isFavorite,
-                matchValue,
-                searchValue,
+                matchValue: matchValueUnescaped,
+                searchValue: searchValueUnescaped,
                 metaData,
             });
         }
         return itemList;
     }
-    start(ext) {
-        if (!this.connection) {
-            this.init(ext);
+    start(dbPath) {
+        if (!this.connection && dbPath) {
+            this.init(dbPath);
         }
         if (this.connection && !this.connection.is_opened()) {
             this.connection.open();
@@ -962,12 +1060,18 @@ const db = new Database();
 const langs = GLib.get_language_names_with_category('LC_MESSAGES').map((l) => l.replaceAll('_', '').replaceAll('-', '').split('.')[0]);
 const localeKey = Object.keys(dateLocale).find((key) => langs.includes(key));
 let PanoItemHeader = class PanoItemHeader extends St.BoxLayout {
+    dateUpdateIntervalId;
+    settings;
+    icon;
+    titleLabel;
+    dateLabel;
+    titleContainer;
+    hasCustomIcon = false;
     constructor(ext, itemType, date) {
         super({
             styleClass: 'pano-item-header',
-            vertical: false,
+            ...orientationCompatibility(false),
         });
-        this.hasCustomIcon = false;
         this.settings = getCurrentExtensionSettings(ext);
         this.icon = new St.Icon({
             styleClass: 'pano-item-title-icon',
@@ -980,7 +1084,7 @@ let PanoItemHeader = class PanoItemHeader extends St.BoxLayout {
         });
         this.titleContainer = new St.BoxLayout({
             styleClass: 'pano-item-title-container',
-            vertical: true,
+            ...orientationCompatibility(true),
             xExpand: true,
             xAlign: Clutter.ActorAlign.FILL,
             yAlign: Clutter.ActorAlign.CENTER,
@@ -1099,17 +1203,24 @@ function getItemBackgroundColor(settings, headerColor, bodyColor) {
 }
 
 let PanoItemOverlay = class PanoItemOverlay extends St.BoxLayout {
+    static metaInfo = {
+        GTypeName: 'PanoItemOverlay',
+        Signals: { 'on-remove': {}, 'on-favorite': {} },
+    };
+    isVisible = false;
+    isFavorite = false;
+    favoriteButton;
+    favoriteIcon;
+    actionContainer;
     constructor() {
         super({
             styleClass: 'pano-item-overlay',
-            vertical: false,
+            ...orientationCompatibility(false),
             yAlign: Clutter.ActorAlign.FILL,
             xAlign: Clutter.ActorAlign.FILL,
             xExpand: true,
             yExpand: true,
         });
-        this.isVisible = false;
-        this.isFavorite = false;
         this.actionContainer = new St.BoxLayout({
             styleClass: 'pano-item-actions',
             xExpand: true,
@@ -1117,10 +1228,7 @@ let PanoItemOverlay = class PanoItemOverlay extends St.BoxLayout {
             xAlign: Clutter.ActorAlign.END,
             yAlign: Clutter.ActorAlign.START,
         });
-        const favoriteIcon = new St.Icon({
-            styleClass: 'pano-item-action-button-icon',
-            iconName: 'view-pin-symbolic',
-        });
+        const favoriteIcon = new St.Icon({ styleClass: 'pano-item-action-button-icon', iconName: 'view-pin-symbolic' });
         this.favoriteButton = new St.Button({
             styleClass: 'pano-item-action-button pano-item-favorite-button',
             child: favoriteIcon,
@@ -1180,18 +1288,36 @@ let PanoItemOverlay = class PanoItemOverlay extends St.BoxLayout {
         }
     }
 };
-PanoItemOverlay.metaInfo = {
-    GTypeName: 'PanoItemOverlay',
-    Signals: {
-        'on-remove': {},
-        'on-favorite': {},
-    },
-};
 PanoItemOverlay = __decorate([
     registerGObjectClass
 ], PanoItemOverlay);
 
 let PanoItem = class PanoItem extends St.Widget {
+    static metaInfo = {
+        GTypeName: 'PanoItem',
+        Signals: {
+            activated: {},
+            'on-remove': {
+                param_types: [GObject.TYPE_STRING],
+                accumulator: 0,
+            },
+            'on-favorite': {
+                param_types: [GObject.TYPE_STRING],
+                accumulator: 0,
+            },
+        },
+    };
+    timeoutId;
+    container;
+    header;
+    body;
+    overlay;
+    clipboardManager;
+    dbItem;
+    settings;
+    hovered = false;
+    selected = false;
+    showControlsOnHover;
     constructor(ext, clipboardManager, dbItem) {
         super({
             name: 'pano-item',
@@ -1204,8 +1330,6 @@ let PanoItem = class PanoItem extends St.Widget {
             xExpand: false,
             yExpand: false,
         });
-        this.hovered = false;
-        this.selected = false;
         this.clipboardManager = clipboardManager;
         this.dbItem = dbItem;
         this.settings = getCurrentExtensionSettings(ext);
@@ -1236,7 +1360,7 @@ let PanoItem = class PanoItem extends St.Widget {
         this.container = new St.BoxLayout({
             styleClass: 'pano-item-container',
             clipToAllocation: true,
-            vertical: true,
+            ...orientationCompatibility(true),
             xAlign: Clutter.ActorAlign.FILL,
             yAlign: Clutter.ActorAlign.FILL,
             xExpand: true,
@@ -1246,7 +1370,7 @@ let PanoItem = class PanoItem extends St.Widget {
         this.body = new St.BoxLayout({
             styleClass: 'pano-item-body',
             clipToAllocation: true,
-            vertical: true,
+            ...orientationCompatibility(true),
             xAlign: Clutter.ActorAlign.FILL,
             yAlign: Clutter.ActorAlign.FILL,
             xExpand: true,
@@ -1400,25 +1524,11 @@ let PanoItem = class PanoItem extends St.Widget {
         super.destroy();
     }
 };
-PanoItem.metaInfo = {
-    GTypeName: 'PanoItem',
-    Signals: {
-        activated: {},
-        'on-remove': {
-            param_types: [GObject.TYPE_STRING],
-            accumulator: 0,
-        },
-        'on-favorite': {
-            param_types: [GObject.TYPE_STRING],
-            accumulator: 0,
-        },
-    },
-};
 PanoItem = __decorate([
     registerGObjectClass
 ], PanoItem);
 
-const global$1 = Shell.Global.get();
+const global = Shell.Global.get();
 const debug$4 = logger('clipboard-manager');
 const MimeType = {
     TEXT: ['text/plain', 'text/plain;charset=utf-8', 'UTF8_STRING'],
@@ -1437,13 +1547,14 @@ const FileOperation = {
     COPY: 'copy',
 };
 let ClipboardContent = class ClipboardContent extends GObject.Object {
+    static metaInfo = {
+        GTypeName: 'ClipboardContent',
+    };
+    content;
     constructor(content) {
         super();
         this.content = content;
     }
-};
-ClipboardContent.metaInfo = {
-    GTypeName: 'ClipboardContent',
 };
 ClipboardContent = __decorate([
     registerGObjectClass
@@ -1486,11 +1597,26 @@ const compareClipboardContent = (content1, content2) => {
     return false;
 };
 let ClipboardManager = class ClipboardManager extends GObject.Object {
+    static metaInfo = {
+        GTypeName: 'PanoClipboardManager',
+        Signals: {
+            changed: {
+                param_types: [ClipboardContent.$gtype],
+                accumulator: 0,
+            },
+        },
+    };
+    clipboard;
+    selection;
+    selectionChangedId;
+    isTracking;
+    settings;
+    lastCopiedContent;
     constructor(ext) {
         super();
         this.settings = getCurrentExtensionSettings(ext);
         this.clipboard = St.Clipboard.get_default();
-        this.selection = global$1.get_display().get_selection();
+        this.selection = global.get_display().get_selection();
         this.lastCopiedContent = null;
     }
     startTracking() {
@@ -1654,15 +1780,6 @@ let ClipboardManager = class ClipboardManager extends GObject.Object {
         });
     }
 };
-ClipboardManager.metaInfo = {
-    GTypeName: 'PanoClipboardManager',
-    Signals: {
-        changed: {
-            param_types: [ClipboardContent.$gtype],
-            accumulator: 0,
-        },
-    },
-};
 ClipboardManager = __decorate([
     registerGObjectClass
 ], ClipboardManager);
@@ -1726,18 +1843,16 @@ const stringify = (o, language) => {
     if (Array.isArray(o)) {
         let s = '';
         o.forEach(function (e) {
-            s += stringify(e, language);
+            s += stringify(e);
         });
         return s;
     }
     const env = {
         type: o.type,
-        content: stringify(o.content, language),
+        content: stringify(o.content),
         tag: 'span',
         classes: [o.type],
-        attributes: {},
-        language: language,
-    };
+        attributes: {}};
     let attributes = '';
     for (const name in env.attributes) {
         attributes += ` ${name}="${(env.attributes[name] || '').replace(/"/g, '&quot;')}"`;
@@ -1746,11 +1861,13 @@ const stringify = (o, language) => {
 };
 const markupCode = (text, charLength) => {
     const result = INVISIBLE_SPACE +
-        stringify(PrismJS.util.encode(PrismJS.tokenize(text.slice(0, charLength), PrismJS.languages['javascript'])), 'javascript');
+        stringify(PrismJS.util.encode(PrismJS.tokenize(text.slice(0, charLength), PrismJS.languages['javascript'])));
     return result;
 };
 
 let CodePanoItem = class CodePanoItem extends PanoItem {
+    codeItemSettings;
+    label;
     constructor(ext, clipboardManager, dbItem) {
         super(ext, clipboardManager, dbItem);
         this.codeItemSettings = this.settings.get_child('code-item');
@@ -1795,13 +1912,17 @@ CodePanoItem = __decorate([
 ], CodePanoItem);
 
 let ColorPanoItem = class ColorPanoItem extends PanoItem {
+    colorItemSettings;
+    colorContainer;
+    icon;
+    label;
     constructor(ext, clipboardManager, dbItem) {
         super(ext, clipboardManager, dbItem);
         this.colorItemSettings = this.settings.get_child('color-item');
         const color = colorString.to.rgb(colorString.get.rgb(this.dbItem.content) || [0, 0, 0]);
         this.body.set_style(`background-color: ${color};`);
         this.colorContainer = new St.BoxLayout({
-            vertical: true,
+            ...orientationCompatibility(true),
             xExpand: true,
             yExpand: true,
             yAlign: Clutter.ActorAlign.CENTER,
@@ -1822,11 +1943,7 @@ let ColorPanoItem = class ColorPanoItem extends PanoItem {
         });
         this.colorContainer.add_child(this.icon);
         this.colorContainer.add_child(this.label);
-        this.colorContainer.add_constraint(new Clutter.AlignConstraint({
-            source: this,
-            alignAxis: Clutter.AlignAxis.Y_AXIS,
-            factor: 0.005,
-        }));
+        this.colorContainer.add_constraint(new Clutter.AlignConstraint({ source: this, alignAxis: Clutter.AlignAxis.Y_AXIS, factor: 0.005 }));
         this.body.add_child(this.colorContainer);
         this.connect('activated', this.setClipboardContent.bind(this));
         this.setCompactMode();
@@ -1840,12 +1957,7 @@ let ColorPanoItem = class ColorPanoItem extends PanoItem {
         this.settings.connect('changed::header-style', this.setStyle.bind(this));
     }
     setCompactMode() {
-        if (this.settings.get_boolean('compact-mode')) {
-            this.colorContainer.vertical = false;
-        }
-        else {
-            this.colorContainer.vertical = true;
-        }
+        setOrientationCompatibility(this.colorContainer, !this.settings.get_boolean('compact-mode'));
     }
     setStyle() {
         const headerBgColor = this.colorItemSettings.get_string('header-bg-color');
@@ -1861,10 +1973,7 @@ let ColorPanoItem = class ColorPanoItem extends PanoItem {
         this.label.set_style(`color: ${textColor}; font-family: ${metadataFontFamily}; font-size: ${metadataFontSize}px;`);
     }
     setClipboardContent() {
-        this.clipboardManager.setContent(new ClipboardContent({
-            type: ContentType.TEXT,
-            value: this.dbItem.content,
-        }));
+        this.clipboardManager.setContent(new ClipboardContent({ type: ContentType.TEXT, value: this.dbItem.content }));
     }
 };
 ColorPanoItem = __decorate([
@@ -1872,6 +1981,8 @@ ColorPanoItem = __decorate([
 ], ColorPanoItem);
 
 let EmojiPanoItem = class EmojiPanoItem extends PanoItem {
+    emojiItemSettings;
+    label;
     constructor(ext, clipboardManager, dbItem) {
         super(ext, clipboardManager, dbItem);
         this.emojiItemSettings = this.settings.get_child('emoji-item');
@@ -1908,10 +2019,7 @@ let EmojiPanoItem = class EmojiPanoItem extends PanoItem {
         this.label.set_style(`font-size: ${Math.min(emojiSize, this.body.height - 24)}px;`);
     }
     setClipboardContent() {
-        this.clipboardManager.setContent(new ClipboardContent({
-            type: ContentType.TEXT,
-            value: this.dbItem.content,
-        }));
+        this.clipboardManager.setContent(new ClipboardContent({ type: ContentType.TEXT, value: this.dbItem.content }));
     }
 };
 EmojiPanoItem = __decorate([
@@ -1927,18 +2035,23 @@ let PreviewType;
     PreviewType["TEXT"] = "text";
 })(PreviewType || (PreviewType = {}));
 let FilePanoItem = FilePanoItem_1 = class FilePanoItem extends PanoItem {
+    fileList;
+    operation;
+    fileItemSettings;
+    titleContainer;
+    icon;
+    preview = null;
+    previewType = PreviewType.NONE;
+    pasteContent = false;
     constructor(ext, clipboardManager, dbItem) {
         super(ext, clipboardManager, dbItem);
-        this.preview = null;
-        this.previewType = PreviewType.NONE;
-        this.pasteContent = false;
         const _ = gettext(ext);
         this.fileList = JSON.parse(this.dbItem.content);
         this.operation = this.dbItem.metaData || 'copy';
         this.fileItemSettings = this.settings.get_child('file-item');
         this.titleContainer = new St.BoxLayout({
             styleClass: 'title-container',
-            vertical: false,
+            ...orientationCompatibility(false),
             xExpand: true,
             yExpand: false,
             yAlign: Clutter.ActorAlign.FILL,
@@ -2077,7 +2190,7 @@ let FilePanoItem = FilePanoItem_1 = class FilePanoItem extends PanoItem {
                 .join('/');
             label.text = `${commonDirectory.replace(homeDir, '~')}`;
             const labelContainer = new St.BoxLayout({
-                vertical: true,
+                ...orientationCompatibility(true),
                 xExpand: true,
                 yExpand: false,
                 xAlign: Clutter.ActorAlign.FILL,
@@ -2094,7 +2207,7 @@ let FilePanoItem = FilePanoItem_1 = class FilePanoItem extends PanoItem {
             this.preview = new St.BoxLayout({
                 styleClass: 'copied-file-preview copied-file-preview-files',
                 clipToAllocation: true,
-                vertical: true,
+                ...orientationCompatibility(true),
                 xExpand: true,
                 yExpand: false,
                 yAlign: Clutter.ActorAlign.FILL,
@@ -2149,7 +2262,7 @@ let FilePanoItem = FilePanoItem_1 = class FilePanoItem extends PanoItem {
         this.header.set_style(`background-color: ${headerBgColor}; color: ${headerColor};`);
         this.body.set_style(`background-color: ${bodyBgColor};`);
         this.titleContainer.set_style(`color: ${titleColor}; font-family: ${titleFontFamily}; font-size: ${titleFontSize}px;`);
-        this.titleContainer.vertical = this.preview === null && !compactMode;
+        setOrientationCompatibility(this.titleContainer, this.preview === null && !compactMode);
         // Switch title and icon
         if (compactMode !== (this.titleContainer.firstChild !== this.icon)) {
             const children = this.titleContainer.get_children();
@@ -2173,18 +2286,12 @@ let FilePanoItem = FilePanoItem_1 = class FilePanoItem extends PanoItem {
             const file = Gio.File.new_for_uri(this.fileList[0]);
             const text = FilePanoItem_1.getFileContents(file);
             if (text !== null) {
-                this.clipboardManager.setContent(new ClipboardContent({
-                    type: ContentType.TEXT,
-                    value: text,
-                }), false);
+                this.clipboardManager.setContent(new ClipboardContent({ type: ContentType.TEXT, value: text }), false);
                 return;
             }
             this.pasteContent = false;
         }
-        this.clipboardManager.setContent(new ClipboardContent({
-            type: ContentType.FILE,
-            value: { fileList: this.fileList, operation: this.operation },
-        }));
+        this.clipboardManager.setContent(new ClipboardContent({ type: ContentType.FILE, value: { fileList: this.fileList, operation: this.operation } }));
     }
     vfunc_key_press_event(event) {
         if (this.previewType === PreviewType.TEXT &&
@@ -2281,6 +2388,8 @@ FilePanoItem = FilePanoItem_1 = __decorate([
 
 const NO_IMAGE_FOUND_FILE_NAME = 'no-image-found.svg';
 let ImagePanoItem = class ImagePanoItem extends PanoItem {
+    imageItemSettings;
+    ext;
     constructor(ext, clipboardManager, dbItem) {
         super(ext, clipboardManager, dbItem);
         this.ext = ext;
@@ -2316,10 +2425,7 @@ let ImagePanoItem = class ImagePanoItem extends PanoItem {
         if (!data) {
             return;
         }
-        this.clipboardManager.setContent(new ClipboardContent({
-            type: ContentType.IMAGE,
-            value: data,
-        }));
+        this.clipboardManager.setContent(new ClipboardContent({ type: ContentType.IMAGE, value: data }));
     }
 };
 ImagePanoItem = __decorate([
@@ -2328,6 +2434,12 @@ ImagePanoItem = __decorate([
 
 const DEFAULT_LINK_PREVIEW_IMAGE_NAME = 'link-preview.svg';
 let LinkPanoItem = class LinkPanoItem extends PanoItem {
+    linkItemSettings;
+    metaContainer;
+    imageContainer;
+    titleLabel;
+    descriptionLabel;
+    linkLabel;
     constructor(ext, clipboardManager, dbItem) {
         super(ext, clipboardManager, dbItem);
         const _ = gettext(ext);
@@ -2352,7 +2464,7 @@ let LinkPanoItem = class LinkPanoItem extends PanoItem {
             imageFilePath = `file://${getCachePath(ext)}/${image}.png`;
         }
         this.imageContainer = new St.BoxLayout({
-            vertical: true,
+            ...orientationCompatibility(true),
             xExpand: true,
             yExpand: true,
             yAlign: Clutter.ActorAlign.FILL,
@@ -2362,25 +2474,16 @@ let LinkPanoItem = class LinkPanoItem extends PanoItem {
         });
         this.metaContainer = new St.BoxLayout({
             styleClass: 'meta-container',
-            vertical: true,
+            ...orientationCompatibility(true),
             xExpand: true,
             yExpand: false,
             yAlign: Clutter.ActorAlign.END,
             xAlign: Clutter.ActorAlign.FILL,
         });
-        this.titleLabel = new St.Label({
-            text: titleText,
-            styleClass: 'link-title-label',
-        });
-        this.descriptionLabel = new St.Label({
-            text: descriptionText,
-            styleClass: 'link-description-label',
-        });
+        this.titleLabel = new St.Label({ text: titleText, styleClass: 'link-title-label' });
+        this.descriptionLabel = new St.Label({ text: descriptionText, styleClass: 'link-description-label' });
         this.descriptionLabel.clutterText.singleLineMode = true;
-        this.linkLabel = new St.Label({
-            text: this.dbItem.content,
-            styleClass: 'link-label',
-        });
+        this.linkLabel = new St.Label({ text: this.dbItem.content, styleClass: 'link-label' });
         this.metaContainer.add_child(this.titleLabel);
         this.metaContainer.add_child(this.descriptionLabel);
         this.metaContainer.add_child(this.linkLabel);
@@ -2393,10 +2496,7 @@ let LinkPanoItem = class LinkPanoItem extends PanoItem {
             this.setStyle();
         });
         this.settings.connect('changed::header-style', this.setCompactMode.bind(this));
-        const openLinkIcon = new St.Icon({
-            iconName: 'web-browser-symbolic',
-            styleClass: 'pano-item-action-button-icon',
-        });
+        const openLinkIcon = new St.Icon({ iconName: 'web-browser-symbolic', styleClass: 'pano-item-action-button-icon' });
         const openLinkButton = new St.Button({
             styleClass: 'pano-item-action-button pano-item-open-link-button',
             child: openLinkIcon,
@@ -2427,12 +2527,12 @@ let LinkPanoItem = class LinkPanoItem extends PanoItem {
     }
     setCompactMode() {
         if (this.settings.get_boolean('compact-mode')) {
-            this.body.vertical = false;
+            setOrientationCompatibility(this.body, false);
             this.imageContainer.width = this.settings.get_int('item-width') * 0.3;
             this.metaContainer.yAlign = Clutter.ActorAlign.CENTER;
         }
         else {
-            this.body.vertical = true;
+            setOrientationCompatibility(this.body, true);
             this.imageContainer.width = -1;
             this.metaContainer.yAlign = Clutter.ActorAlign.END;
         }
@@ -2460,10 +2560,7 @@ let LinkPanoItem = class LinkPanoItem extends PanoItem {
         this.linkLabel.set_style(`color: ${metadataLinkColor}; font-family: ${metadataLinkFontFamily}; font-size: ${metadataLinkFontSize}px;`);
     }
     setClipboardContent() {
-        this.clipboardManager.setContent(new ClipboardContent({
-            type: ContentType.TEXT,
-            value: this.dbItem.content,
-        }));
+        this.clipboardManager.setContent(new ClipboardContent({ type: ContentType.TEXT, value: this.dbItem.content }));
     }
     vfunc_key_press_event(event) {
         if (this.settings.get_boolean('open-links-in-browser') &&
@@ -2491,6 +2588,8 @@ LinkPanoItem = __decorate([
 ], LinkPanoItem);
 
 let TextPanoItem = class TextPanoItem extends PanoItem {
+    textItemSettings;
+    label;
     constructor(ext, clipboardManager, dbItem) {
         super(ext, clipboardManager, dbItem);
         this.textItemSettings = this.settings.get_child('text-item');
@@ -2726,7 +2825,7 @@ const isValidUrl = (text) => {
     try {
         return isUrl(text) && GLib.uri_parse(text, GLib.UriFlags.NONE) !== null;
     }
-    catch (err) {
+    catch (_err) {
         return false;
     }
 };
@@ -3008,30 +3107,42 @@ const sendNotification = (ext, dbItem) => {
 
 //TODO: the list member of St.BoxLayout are of type Clutter.Actor and we have to cast constantly from PanoItem to Clutter.Actor and reverse, fix that somehow
 let PanoScrollView = class PanoScrollView extends St.ScrollView {
+    static metaInfo = {
+        GTypeName: 'PanoScrollView',
+        Signals: {
+            'scroll-focus-out': {},
+            'scroll-update-list': {},
+            'scroll-alt-press': {},
+            'scroll-tab-press': { param_types: [GObject.TYPE_BOOLEAN], accumulator: 0 },
+            'scroll-backspace-press': {},
+            'scroll-key-press': { param_types: [GObject.TYPE_STRING], accumulator: 0 },
+        },
+    };
+    list;
+    settings;
+    currentFocus = null;
+    currentFilter = null;
+    currentItemTypeFilter = null;
+    showFavorites = null;
+    searchBox;
+    ext;
+    clipboardChangedSignalId = null;
+    clipboardManager;
     constructor(ext, clipboardManager, searchBox) {
-        super({
-            overlayScrollbars: true,
-            xExpand: true,
-            yExpand: true,
-        });
-        this.currentFocus = null;
-        this.currentFilter = null;
-        this.currentItemTypeFilter = null;
-        this.showFavorites = null;
-        this.clipboardChangedSignalId = null;
+        super({ overlayScrollbars: true, xExpand: true, yExpand: true });
         this.ext = ext;
         this.clipboardManager = clipboardManager;
         this.searchBox = searchBox;
         this.settings = getCurrentExtensionSettings(this.ext);
         this.setScrollbarPolicy();
         this.list = new St.BoxLayout({
-            vertical: isVertical(this.settings.get_uint('window-position')),
+            ...orientationCompatibility(isVertical(this.settings.get_uint('window-position'))),
             xExpand: true,
             yExpand: true,
         });
         this.settings.connect('changed::window-position', () => {
             this.setScrollbarPolicy();
-            this.list.set_vertical(isVertical(this.settings.get_uint('window-position')));
+            setOrientationCompatibility(this.list, isVertical(this.settings.get_uint('window-position')));
         });
         scrollViewAddChild(this, this.list);
         const shouldFocusOut = (symbol) => {
@@ -3305,12 +3416,8 @@ let PanoScrollView = class PanoScrollView extends St.ScrollView {
         }
         this.currentFocus = items[0];
         this.currentFocus.grab_key_focus();
-        if (isVertical(this.settings.get_uint('window-position'))) {
-            this.vscroll.adjustment.set_value(this.get_allocation_box().y1);
-        }
-        else {
-            this.hscroll.adjustment.set_value(this.get_allocation_box().x1);
-        }
+        const isVerticalScrollView = isVertical(this.settings.get_uint('window-position'));
+        getScrollViewAdjustment(this, isVerticalScrollView).set_value(isVerticalScrollView ? this.get_allocation_box().y1 : this.get_allocation_box().x1);
     }
     beforeHide() {
         this.currentFocus = null;
@@ -3332,10 +3439,7 @@ let PanoScrollView = class PanoScrollView extends St.ScrollView {
         if (!Number.isFinite(value)) {
             return;
         }
-        adjustment.ease(value, {
-            duration: 150,
-            mode: Clutter.AnimationMode.EASE_OUT_QUAD,
-        });
+        adjustment.ease(value, { duration: 150, mode: Clutter.AnimationMode.EASE_OUT_QUAD });
     }
     selectFirstItem() {
         const visibleItems = this.getVisibleItems();
@@ -3372,13 +3476,7 @@ let PanoScrollView = class PanoScrollView extends St.ScrollView {
         return Clutter.EVENT_PROPAGATE;
     }
     vfunc_scroll_event(event) {
-        let adjustment;
-        if (isVertical(this.settings.get_uint('window-position'))) {
-            adjustment = this.vscroll.adjustment;
-        }
-        else {
-            adjustment = this.hscroll.adjustment;
-        }
+        const adjustment = getScrollViewAdjustment(this, isVertical(this.settings.get_uint('window-position')));
         let value = adjustment.value;
         if (event.get_scroll_direction() === Clutter.ScrollDirection.SMOOTH) {
             return Clutter.EVENT_STOP;
@@ -3392,10 +3490,7 @@ let PanoScrollView = class PanoScrollView extends St.ScrollView {
             value += adjustment.stepIncrement * 2;
         }
         adjustment.remove_transition('value');
-        adjustment.ease(value, {
-            duration: 150,
-            mode: Clutter.AnimationMode.EASE_OUT_QUAD,
-        });
+        adjustment.ease(value, { duration: 150, mode: Clutter.AnimationMode.EASE_OUT_QUAD });
         return Clutter.EVENT_STOP;
     }
     destroy() {
@@ -3409,39 +3504,40 @@ let PanoScrollView = class PanoScrollView extends St.ScrollView {
         super.destroy();
     }
 };
-PanoScrollView.metaInfo = {
-    GTypeName: 'PanoScrollView',
-    Signals: {
-        'scroll-focus-out': {},
-        'scroll-update-list': {},
-        'scroll-alt-press': {},
-        'scroll-tab-press': {
-            param_types: [GObject.TYPE_BOOLEAN],
-            accumulator: 0,
-        },
-        'scroll-backspace-press': {},
-        'scroll-key-press': {
-            param_types: [GObject.TYPE_STRING],
-            accumulator: 0,
-        },
-    },
-};
 PanoScrollView = __decorate([
     registerGObjectClass
 ], PanoScrollView);
 
 let SearchBox = class SearchBox extends St.BoxLayout {
+    static metaInfo = {
+        GTypeName: 'SearchBox',
+        Signals: {
+            'search-text-changed': {
+                param_types: [GObject.TYPE_STRING, GObject.TYPE_STRING, GObject.TYPE_BOOLEAN],
+                accumulator: 0,
+            },
+            'search-item-select-shortcut': {
+                param_types: [GObject.TYPE_INT],
+                accumulator: 0,
+            },
+            'search-focus-out': {},
+            'search-submit': {},
+        },
+    };
+    search;
+    currentIndex = null;
+    showFavorites = false;
+    settings;
+    ext;
     constructor(ext) {
         super({
             xAlign: Clutter.ActorAlign.FILL,
             xExpand: true,
             styleClass: 'search-entry-container',
-            vertical: false,
+            ...orientationCompatibility(false),
             trackHover: true,
             reactive: true,
         });
-        this.currentIndex = null;
-        this.showFavorites = false;
         this.ext = ext;
         const _ = gettext(ext);
         this.settings = getCurrentExtensionSettings(ext);
@@ -3615,33 +3711,22 @@ let SearchBox = class SearchBox extends St.BoxLayout {
         return this.search.text || '';
     }
 };
-SearchBox.metaInfo = {
-    GTypeName: 'SearchBox',
-    Signals: {
-        'search-text-changed': {
-            param_types: [GObject.TYPE_STRING, GObject.TYPE_STRING, GObject.TYPE_BOOLEAN],
-            accumulator: 0,
-        },
-        'search-item-select-shortcut': {
-            param_types: [GObject.TYPE_INT],
-            accumulator: 0,
-        },
-        'search-focus-out': {},
-        'search-submit': {},
-    },
-};
 SearchBox = __decorate([
     registerGObjectClass
 ], SearchBox);
 
 let PanoWindow = class PanoWindow extends St.BoxLayout {
+    scrollView;
+    searchBox;
+    monitorBox;
+    settings;
     constructor(ext, clipboardManager) {
         super({
             name: 'pano-window',
             constraints: getMonitorConstraint(),
             styleClass: 'pano-window',
             visible: false,
-            vertical: true,
+            ...orientationCompatibility(true),
             reactive: true,
             opacity: 0,
             canFocus: true,
@@ -3855,6 +3940,7 @@ PanoWindow = __decorate([
 ], PanoWindow);
 
 class KeyManager {
+    settings;
     constructor(ext) {
         this.settings = getCurrentExtensionSettings(ext);
     }
@@ -3868,23 +3954,22 @@ class KeyManager {
 
 const { Extension } = extension;
 const debug = logger('extension');
-const global = Shell.Global.get();
 class PanoExtension extends Extension {
+    keyManager = null;
+    clipboardManager = null;
+    panoWindow = null;
+    indicator = null;
+    dbus = null;
+    settings = null;
+    windowTrackerId = null;
+    timeoutId = null;
+    shutdownSignalId = null;
+    logoutSignalId = null;
+    rebootSignalId = null;
+    systemdSignalId = null;
+    clipboardChangedSignalId = null;
     constructor(props) {
         super(props);
-        this.keyManager = null;
-        this.clipboardManager = null;
-        this.panoWindow = null;
-        this.indicator = null;
-        this.dbus = null;
-        this.settings = null;
-        this.windowTrackerId = null;
-        this.timeoutId = null;
-        this.shutdownSignalId = null;
-        this.logoutSignalId = null;
-        this.rebootSignalId = null;
-        this.systemdSignalId = null;
-        this.clipboardChangedSignalId = null;
         debug('extension is initialized');
     }
     enable() {
@@ -3896,7 +3981,7 @@ class PanoExtension extends Extension {
         this.start();
         this.indicator.enable();
         this.enableDbus();
-        Meta.disable_unredirect_for_display(global.display);
+        setUnredirectForDisplay(false);
         debug('extension is enabled');
     }
     disable() {
@@ -3907,7 +3992,7 @@ class PanoExtension extends Extension {
         this.keyManager = null;
         this.clipboardManager = null;
         this.indicator = null;
-        Meta.enable_unredirect_for_display(global.display);
+        setUnredirectForDisplay(true);
         debug('extension is disabled');
     }
     // for dbus
@@ -3962,11 +4047,12 @@ class PanoExtension extends Extension {
     }
     setupResources() {
         setupAppDirs(this);
-        db.setup(this);
+        db.setup(getDbPath(this));
     }
     async clearHistory() {
         this.stop();
         await deleteAppDirs(this);
+        this.setupResources();
         this.start();
     }
     async clearSessionHistory() {

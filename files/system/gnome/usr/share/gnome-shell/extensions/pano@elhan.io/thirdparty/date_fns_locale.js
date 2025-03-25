@@ -61,7 +61,7 @@ var formatDistanceLocale$1h = {
     other: 'byna {{count}} jaar'
   }
 };
-var formatDistance$2A = function formatDistance(token, count, options) {
+var formatDistance$1i = function formatDistance(token, count, options) {
   var result;
   var tokenValue = formatDistanceLocale$1h[token];
   if (typeof tokenValue === 'string') {
@@ -80,7 +80,6 @@ var formatDistance$2A = function formatDistance(token, count, options) {
   }
   return result;
 };
-const formatDistance$2B = formatDistance$2A;
 
 function buildFormatLongFn(args) {
   return function () {
@@ -110,7 +109,7 @@ var dateTimeFormats$1q = {
   medium: '{{date}}, {{time}}',
   short: '{{date}}, {{time}}'
 };
-var formatLong$2Q = {
+var formatLong$1q = {
   date: buildFormatLongFn({
     formats: dateFormats$1q,
     defaultWidth: 'full'
@@ -124,7 +123,6 @@ var formatLong$2Q = {
     defaultWidth: 'full'
   })
 };
-const formatLong$2R = formatLong$2Q;
 
 var formatRelativeLocale$1i = {
   lastWeek: "'verlede' eeee 'om' p",
@@ -134,10 +132,9 @@ var formatRelativeLocale$1i = {
   nextWeek: "eeee 'om' p",
   other: 'P'
 };
-var formatRelative$2A = function formatRelative(token, _date, _baseDate, _options) {
+var formatRelative$1i = function formatRelative(token, _date, _baseDate, _options) {
   return formatRelativeLocale$1i[token];
 };
-const formatRelative$2B = formatRelative$2A;
 
 function buildLocalizeFn(args) {
   return function (dirtyIndex, options) {
@@ -257,7 +254,7 @@ var ordinalNumber$1i = function ordinalNumber(dirtyNumber) {
   }
   return number + 'ste';
 };
-var localize$2A = {
+var localize$1i = {
   ordinalNumber: ordinalNumber$1i,
   era: buildLocalizeFn({
     values: eraValues$1i,
@@ -285,7 +282,6 @@ var localize$2A = {
     defaultFormattingWidth: 'wide'
   })
 };
-const localize$2B = localize$2A;
 
 function buildMatchFn(args) {
   return function (string) {
@@ -400,7 +396,7 @@ var parseDayPeriodPatterns$1h = {
     night: /aand/i
   }
 };
-var match$2y = {
+var match$1h = {
   ordinalNumber: buildMatchPatternFn({
     matchPattern: matchOrdinalNumberPattern$1h,
     parsePattern: parseOrdinalNumberPattern$1h,
@@ -442,7 +438,6 @@ var match$2y = {
     defaultParseWidth: 'any'
   })
 };
-const match$2z = match$2y;
 
 /**
  * @type {Locale}
@@ -452,19 +447,18 @@ const match$2z = match$2y;
  * @iso-639-2 afr
  * @author Marnus Weststrate [@marnusw]{@link https://github.com/marnusw}
  */
-var locale$2T = {
+var locale$1s = {
   code: 'af',
-  formatDistance: formatDistance$2B,
-  formatLong: formatLong$2R,
-  formatRelative: formatRelative$2B,
-  localize: localize$2B,
-  match: match$2z,
+  formatDistance: formatDistance$1i,
+  formatLong: formatLong$1q,
+  formatRelative: formatRelative$1i,
+  localize: localize$1i,
+  match: match$1h,
   options: {
     weekStartsOn: 0 /* Sunday */,
     firstWeekContainsDate: 1
   }
 };
-const locale$2U = locale$2T;
 
 var formatDistanceLocale$1g = {
   lessThanXSeconds: {
@@ -559,7 +553,7 @@ var formatDistanceLocale$1g = {
     other: 'ما يقارب {{count}} سنة'
   }
 };
-var formatDistance$2y = function formatDistance(token, count, options) {
+var formatDistance$1h = function formatDistance(token, count, options) {
   var usageGroup = formatDistanceLocale$1g[token];
   var result;
   if (typeof usageGroup === 'string') {
@@ -582,7 +576,6 @@ var formatDistance$2y = function formatDistance(token, count, options) {
   }
   return result;
 };
-const formatDistance$2z = formatDistance$2y;
 
 var dateFormats$1p = {
   full: 'EEEE، do MMMM y',
@@ -602,7 +595,7 @@ var dateTimeFormats$1p = {
   medium: '{{date}}, {{time}}',
   short: '{{date}}, {{time}}'
 };
-var formatLong$2O = {
+var formatLong$1p = {
   date: buildFormatLongFn({
     formats: dateFormats$1p,
     defaultWidth: 'full'
@@ -616,7 +609,6 @@ var formatLong$2O = {
     defaultWidth: 'full'
   })
 };
-const formatLong$2P = formatLong$2O;
 
 var formatRelativeLocale$1h = {
   lastWeek: "eeee 'الماضي عند الساعة' p",
@@ -626,10 +618,9 @@ var formatRelativeLocale$1h = {
   nextWeek: "eeee 'القادم عند الساعة' p",
   other: 'P'
 };
-var formatRelative$2y = function formatRelative(token) {
+var formatRelative$1h = function formatRelative(token) {
   return formatRelativeLocale$1h[token];
 };
-const formatRelative$2z = formatRelative$2y;
 
 var eraValues$1h = {
   narrow: ['ق', 'ب'],
@@ -719,7 +710,7 @@ var formattingDayPeriodValues$12 = {
 var ordinalNumber$1h = function ordinalNumber(num) {
   return String(num);
 };
-var localize$2y = {
+var localize$1h = {
   ordinalNumber: ordinalNumber$1h,
   era: buildLocalizeFn({
     values: eraValues$1h,
@@ -747,7 +738,6 @@ var localize$2y = {
     defaultFormattingWidth: 'wide'
   })
 };
-const localize$2z = localize$2y;
 
 var matchOrdinalNumberPattern$1g = /^(\d+)(th|st|nd|rd)?/i;
 var parseOrdinalNumberPattern$1g = /\d+/i;
@@ -803,7 +793,7 @@ var parseDayPeriodPatterns$1g = {
     night: /في الليل/
   }
 };
-var match$2w = {
+var match$1g = {
   ordinalNumber: buildMatchPatternFn({
     matchPattern: matchOrdinalNumberPattern$1g,
     parsePattern: parseOrdinalNumberPattern$1g,
@@ -845,7 +835,6 @@ var match$2w = {
     defaultParseWidth: 'any'
   })
 };
-const match$2x = match$2w;
 
 /**
  * @type {Locale}
@@ -856,19 +845,18 @@ const match$2x = match$2w;
  * @author Abdallah Hassan [@AbdallahAHO]{@link https://github.com/AbdallahAHO}
  * @author Koussay Haj Kacem [@essana3]{@link https://github.com/essana3}
  */
-var locale$2R = {
+var locale$1r = {
   code: 'ar',
-  formatDistance: formatDistance$2z,
-  formatLong: formatLong$2P,
-  formatRelative: formatRelative$2z,
-  localize: localize$2z,
-  match: match$2x,
+  formatDistance: formatDistance$1h,
+  formatLong: formatLong$1p,
+  formatRelative: formatRelative$1h,
+  localize: localize$1h,
+  match: match$1g,
   options: {
     weekStartsOn: 6 /* Saturday */,
     firstWeekContainsDate: 1
   }
 };
-const locale$2S = locale$2R;
 
 var formatDistanceLocale$1f = {
   lessThanXSeconds: {
@@ -963,7 +951,7 @@ var formatDistanceLocale$1f = {
     other: '{{count}} عام تقريباً'
   }
 };
-var formatDistance$2w = function formatDistance(token, count, options) {
+var formatDistance$1g = function formatDistance(token, count, options) {
   options = options || {};
   var usageGroup = formatDistanceLocale$1f[token];
   var result;
@@ -987,7 +975,6 @@ var formatDistance$2w = function formatDistance(token, count, options) {
   }
   return result;
 };
-const formatDistance$2x = formatDistance$2w;
 
 var dateFormats$1o = {
   full: 'EEEE, MMMM do, y',
@@ -1007,7 +994,7 @@ var dateTimeFormats$1o = {
   medium: '{{date}}, {{time}}',
   short: '{{date}}, {{time}}'
 };
-var formatLong$2M = {
+var formatLong$1o = {
   date: buildFormatLongFn({
     formats: dateFormats$1o,
     defaultWidth: 'full'
@@ -1021,7 +1008,6 @@ var formatLong$2M = {
     defaultWidth: 'full'
   })
 };
-const formatLong$2N = formatLong$2M;
 
 var formatRelativeLocale$1g = {
   lastWeek: "'أخر' eeee 'عند' p",
@@ -1031,10 +1017,9 @@ var formatRelativeLocale$1g = {
   nextWeek: "eeee 'عند' p",
   other: 'P'
 };
-var formatRelative$2w = function formatRelative(token, _date, _baseDate, _options) {
+var formatRelative$1g = function formatRelative(token, _date, _baseDate, _options) {
   return formatRelativeLocale$1g[token];
 };
-const formatRelative$2x = formatRelative$2w;
 
 var eraValues$1g = {
   narrow: ['ق', 'ب'],
@@ -1124,7 +1109,7 @@ var formattingDayPeriodValues$11 = {
 var ordinalNumber$1g = function ordinalNumber(dirtyNumber) {
   return String(dirtyNumber);
 };
-var localize$2w = {
+var localize$1g = {
   ordinalNumber: ordinalNumber$1g,
   era: buildLocalizeFn({
     values: eraValues$1g,
@@ -1152,7 +1137,6 @@ var localize$2w = {
     defaultFormattingWidth: 'wide'
   })
 };
-const localize$2x = localize$2w;
 
 var matchOrdinalNumberPattern$1f = /^(\d+)(th|st|nd|rd)?/i;
 var parseOrdinalNumberPattern$1f = /\d+/i;
@@ -1208,7 +1192,7 @@ var parseDayPeriodPatterns$1f = {
     night: /night/i
   }
 };
-var match$2u = {
+var match$1f = {
   ordinalNumber: buildMatchPatternFn({
     matchPattern: matchOrdinalNumberPattern$1f,
     parsePattern: parseOrdinalNumberPattern$1f,
@@ -1250,7 +1234,6 @@ var match$2u = {
     defaultParseWidth: 'any'
   })
 };
-const match$2v = match$2u;
 
 /**
  * @type {Locale}
@@ -1261,19 +1244,18 @@ const match$2v = match$2u;
  * @author Badreddine Boumaza [@badre429]{@link https://github.com/badre429}
  * @author Ahmed ElShahat [@elshahat]{@link https://github.com/elshahat}
  */
-var locale$2P = {
+var locale$1q = {
   code: 'ar-DZ',
-  formatDistance: formatDistance$2x,
-  formatLong: formatLong$2N,
-  formatRelative: formatRelative$2x,
-  localize: localize$2x,
-  match: match$2v,
+  formatDistance: formatDistance$1g,
+  formatLong: formatLong$1o,
+  formatRelative: formatRelative$1g,
+  localize: localize$1g,
+  match: match$1f,
   options: {
     weekStartsOn: 0 /* Sunday */,
     firstWeekContainsDate: 1
   }
 };
-const locale$2Q = locale$2P;
 
 var formatDistanceLocale$1e = {
   lessThanXSeconds: {
@@ -1368,7 +1350,7 @@ var formatDistanceLocale$1e = {
     other: '{{count}} عام تقريبًا'
   }
 };
-var formatDistance$2u = function formatDistance(token, count, options) {
+var formatDistance$1f = function formatDistance(token, count, options) {
   var result;
   var tokenValue = formatDistanceLocale$1e[token];
   if (typeof tokenValue === 'string') {
@@ -1391,7 +1373,6 @@ var formatDistance$2u = function formatDistance(token, count, options) {
   }
   return result;
 };
-const formatDistance$2v = formatDistance$2u;
 
 var dateFormats$1n = {
   full: 'EEEE، do MMMM y',
@@ -1411,7 +1392,7 @@ var dateTimeFormats$1n = {
   medium: '{{date}}, {{time}}',
   short: '{{date}}, {{time}}'
 };
-var formatLong$2K = {
+var formatLong$1n = {
   date: buildFormatLongFn({
     formats: dateFormats$1n,
     defaultWidth: 'full'
@@ -1425,7 +1406,6 @@ var formatLong$2K = {
     defaultWidth: 'full'
   })
 };
-const formatLong$2L = formatLong$2K;
 
 var formatRelativeLocale$1f = {
   lastWeek: "eeee 'اللي جاي الساعة' p",
@@ -1435,10 +1415,9 @@ var formatRelativeLocale$1f = {
   nextWeek: "eeee 'الساعة' p",
   other: 'P'
 };
-var formatRelative$2u = function formatRelative(token, _date, _baseDate, _options) {
+var formatRelative$1f = function formatRelative(token, _date, _baseDate, _options) {
   return formatRelativeLocale$1f[token];
 };
-const formatRelative$2v = formatRelative$2u;
 
 var eraValues$1f = {
   narrow: ['ق', 'ب'],
@@ -1528,7 +1507,7 @@ var formattingDayPeriodValues$10 = {
 var ordinalNumber$1f = function ordinalNumber(dirtyNumber, _options) {
   return String(dirtyNumber);
 };
-var localize$2u = {
+var localize$1f = {
   ordinalNumber: ordinalNumber$1f,
   era: buildLocalizeFn({
     values: eraValues$1f,
@@ -1556,7 +1535,6 @@ var localize$2u = {
     defaultFormattingWidth: 'wide'
   })
 };
-const localize$2v = localize$2u;
 
 var matchOrdinalNumberPattern$1e = /^(\d+)/;
 var parseOrdinalNumberPattern$1e = /\d+/i;
@@ -1614,7 +1592,7 @@ var parseDayPeriodPatterns$1e = {
     night: /^ل/
   }
 };
-var match$2s = {
+var match$1e = {
   ordinalNumber: buildMatchPatternFn({
     matchPattern: matchOrdinalNumberPattern$1e,
     parsePattern: parseOrdinalNumberPattern$1e,
@@ -1656,7 +1634,6 @@ var match$2s = {
     defaultParseWidth: 'any'
   })
 };
-const match$2t = match$2s;
 
 /**
  * @type {Locale}
@@ -1666,19 +1643,18 @@ const match$2t = match$2s;
  * @iso-639-2 ara
  * @author AbdAllah AbdElFattah [@AbdAllahAbdElFattah13]{@link https://github.com/AbdAllahAbdElFattah13}
  */
-var locale$2N = {
+var locale$1p = {
   code: 'ar-EG',
-  formatDistance: formatDistance$2v,
-  formatLong: formatLong$2L,
-  formatRelative: formatRelative$2v,
-  localize: localize$2v,
-  match: match$2t,
+  formatDistance: formatDistance$1f,
+  formatLong: formatLong$1n,
+  formatRelative: formatRelative$1f,
+  localize: localize$1f,
+  match: match$1e,
   options: {
     weekStartsOn: 0 /* Sunday */,
     firstWeekContainsDate: 1
   }
 };
-const locale$2O = locale$2N;
 
 var formatDistanceLocale$1d = {
   lessThanXSeconds: {
@@ -1773,7 +1749,7 @@ var formatDistanceLocale$1d = {
     other: '{{count}} عام تقريباً'
   }
 };
-var formatDistance$2s = function formatDistance(token, count, options) {
+var formatDistance$1e = function formatDistance(token, count, options) {
   options = options || {};
   var usageGroup = formatDistanceLocale$1d[token];
   var result;
@@ -1797,7 +1773,6 @@ var formatDistance$2s = function formatDistance(token, count, options) {
   }
   return result;
 };
-const formatDistance$2t = formatDistance$2s;
 
 var dateFormats$1m = {
   full: 'EEEE, MMMM do, y',
@@ -1817,7 +1792,7 @@ var dateTimeFormats$1m = {
   medium: '{{date}}, {{time}}',
   short: '{{date}}, {{time}}'
 };
-var formatLong$2I = {
+var formatLong$1m = {
   date: buildFormatLongFn({
     formats: dateFormats$1m,
     defaultWidth: 'full'
@@ -1831,7 +1806,6 @@ var formatLong$2I = {
     defaultWidth: 'full'
   })
 };
-const formatLong$2J = formatLong$2I;
 
 var formatRelativeLocale$1e = {
   lastWeek: "'أخر' eeee 'عند' p",
@@ -1841,10 +1815,9 @@ var formatRelativeLocale$1e = {
   nextWeek: "eeee 'عند' p",
   other: 'P'
 };
-var formatRelative$2s = function formatRelative(token, _date, _baseDate, _options) {
+var formatRelative$1e = function formatRelative(token, _date, _baseDate, _options) {
   return formatRelativeLocale$1e[token];
 };
-const formatRelative$2t = formatRelative$2s;
 
 var eraValues$1e = {
   narrow: ['ق', 'ب'],
@@ -1934,7 +1907,7 @@ var formattingDayPeriodValues$$ = {
 var ordinalNumber$1e = function ordinalNumber(dirtyNumber) {
   return String(dirtyNumber);
 };
-var localize$2s = {
+var localize$1e = {
   ordinalNumber: ordinalNumber$1e,
   era: buildLocalizeFn({
     values: eraValues$1e,
@@ -1962,7 +1935,6 @@ var localize$2s = {
     defaultFormattingWidth: 'wide'
   })
 };
-const localize$2t = localize$2s;
 
 var matchOrdinalNumberPattern$1d = /^(\d+)(th|st|nd|rd)?/i;
 var parseOrdinalNumberPattern$1d = /\d+/i;
@@ -2018,7 +1990,7 @@ var parseDayPeriodPatterns$1d = {
     night: /night/i
   }
 };
-var match$2q = {
+var match$1d = {
   ordinalNumber: buildMatchPatternFn({
     matchPattern: matchOrdinalNumberPattern$1d,
     parsePattern: parseOrdinalNumberPattern$1d,
@@ -2060,7 +2032,6 @@ var match$2q = {
     defaultParseWidth: 'any'
   })
 };
-const match$2r = match$2q;
 
 /**
  * @type {Locale}
@@ -2070,20 +2041,19 @@ const match$2r = match$2q;
  * @iso-639-2 ara
  * @author Achraf Rrami [@rramiachraf]{@link https://github.com/rramiachraf}
  */
-var locale$2L = {
+var locale$1o = {
   code: 'ar-MA',
-  formatDistance: formatDistance$2t,
-  formatLong: formatLong$2J,
-  formatRelative: formatRelative$2t,
-  localize: localize$2t,
-  match: match$2r,
+  formatDistance: formatDistance$1e,
+  formatLong: formatLong$1m,
+  formatRelative: formatRelative$1e,
+  localize: localize$1e,
+  match: match$1d,
   options: {
     // Monday is 1
     weekStartsOn: 1,
     firstWeekContainsDate: 1
   }
 };
-const locale$2M = locale$2L;
 
 var formatDistanceLocale$1c = {
   lessThanXSeconds: {
@@ -2178,7 +2148,7 @@ var formatDistanceLocale$1c = {
     other: '{{count}} عام تقريباً'
   }
 };
-var formatDistance$2q = function formatDistance(token, count, options) {
+var formatDistance$1d = function formatDistance(token, count, options) {
   var result;
   var tokenValue = formatDistanceLocale$1c[token];
   if (typeof tokenValue === 'string') {
@@ -2201,7 +2171,6 @@ var formatDistance$2q = function formatDistance(token, count, options) {
   }
   return result;
 };
-const formatDistance$2r = formatDistance$2q;
 
 var dateFormats$1l = {
   full: 'EEEE, MMMM do, y',
@@ -2221,7 +2190,7 @@ var dateTimeFormats$1l = {
   medium: '{{date}}, {{time}}',
   short: '{{date}}, {{time}}'
 };
-var formatLong$2G = {
+var formatLong$1l = {
   date: buildFormatLongFn({
     formats: dateFormats$1l,
     defaultWidth: 'full'
@@ -2235,7 +2204,6 @@ var formatLong$2G = {
     defaultWidth: 'full'
   })
 };
-const formatLong$2H = formatLong$2G;
 
 var formatRelativeLocale$1d = {
   lastWeek: "'أخر' eeee 'عند' p",
@@ -2245,10 +2213,9 @@ var formatRelativeLocale$1d = {
   nextWeek: "eeee 'عند' p",
   other: 'P'
 };
-var formatRelative$2q = function formatRelative(token, _date, _baseDate, _options) {
+var formatRelative$1d = function formatRelative(token, _date, _baseDate, _options) {
   return formatRelativeLocale$1d[token];
 };
-const formatRelative$2r = formatRelative$2q;
 
 var eraValues$1d = {
   narrow: ['ق', 'ب'],
@@ -2338,7 +2305,7 @@ var formattingDayPeriodValues$_ = {
 var ordinalNumber$1d = function ordinalNumber(dirtyNumber) {
   return String(dirtyNumber);
 };
-var localize$2q = {
+var localize$1d = {
   ordinalNumber: ordinalNumber$1d,
   era: buildLocalizeFn({
     values: eraValues$1d,
@@ -2366,7 +2333,6 @@ var localize$2q = {
     defaultFormattingWidth: 'wide'
   })
 };
-const localize$2r = localize$2q;
 
 var matchOrdinalNumberPattern$1c = /^(\d+)(th|st|nd|rd)?/i;
 var parseOrdinalNumberPattern$1c = /\d+/i;
@@ -2422,7 +2388,7 @@ var parseDayPeriodPatterns$1c = {
     night: /night/i
   }
 };
-var match$2o = {
+var match$1c = {
   ordinalNumber: buildMatchPatternFn({
     matchPattern: matchOrdinalNumberPattern$1c,
     parsePattern: parseOrdinalNumberPattern$1c,
@@ -2464,7 +2430,6 @@ var match$2o = {
     defaultParseWidth: 'any'
   })
 };
-const match$2p = match$2o;
 
 /**
  * @type {Locale}
@@ -2474,19 +2439,18 @@ const match$2p = match$2o;
  * @iso-639-2 ara
  * @author Dhaifallah Alwadani [@dalwadani]{@link https://github.com/dalwadani}
  */
-var locale$2J = {
+var locale$1n = {
   code: 'ar-SA',
-  formatDistance: formatDistance$2r,
-  formatLong: formatLong$2H,
-  formatRelative: formatRelative$2r,
-  localize: localize$2r,
-  match: match$2p,
+  formatDistance: formatDistance$1d,
+  formatLong: formatLong$1l,
+  formatRelative: formatRelative$1d,
+  localize: localize$1d,
+  match: match$1c,
   options: {
     weekStartsOn: 0 /* Sunday */,
     firstWeekContainsDate: 1
   }
 };
-const locale$2K = locale$2J;
 
 var formatDistanceLocale$1b = {
   lessThanXSeconds: {
@@ -2581,7 +2545,7 @@ var formatDistanceLocale$1b = {
     other: '{{count}} عام تقريب'
   }
 };
-var formatDistance$2o = function formatDistance(token, count, options) {
+var formatDistance$1c = function formatDistance(token, count, options) {
   var usageGroup = formatDistanceLocale$1b[token];
   var result;
   if (typeof usageGroup === 'string') {
@@ -2604,7 +2568,6 @@ var formatDistance$2o = function formatDistance(token, count, options) {
   }
   return result;
 };
-const formatDistance$2p = formatDistance$2o;
 
 var dateFormats$1k = {
   full: 'EEEE، do MMMM y',
@@ -2624,7 +2587,7 @@ var dateTimeFormats$1k = {
   medium: '{{date}}, {{time}}',
   short: '{{date}}, {{time}}'
 };
-var formatLong$2E = {
+var formatLong$1k = {
   date: buildFormatLongFn({
     formats: dateFormats$1k,
     defaultWidth: 'full'
@@ -2638,7 +2601,6 @@ var formatLong$2E = {
     defaultWidth: 'full'
   })
 };
-const formatLong$2F = formatLong$2E;
 
 var formatRelativeLocale$1c = {
   lastWeek: "eeee 'إلي فات مع' p",
@@ -2648,10 +2610,9 @@ var formatRelativeLocale$1c = {
   nextWeek: "eeee 'الجمعة الجاية مع' p 'نهار'",
   other: 'P'
 };
-var formatRelative$2o = function formatRelative(token) {
+var formatRelative$1c = function formatRelative(token) {
   return formatRelativeLocale$1c[token];
 };
-const formatRelative$2p = formatRelative$2o;
 
 var eraValues$1c = {
   narrow: ['ق', 'ب'],
@@ -2741,7 +2702,7 @@ var formattingDayPeriodValues$Z = {
 var ordinalNumber$1c = function ordinalNumber(num) {
   return String(num);
 };
-var localize$2o = {
+var localize$1c = {
   ordinalNumber: ordinalNumber$1c,
   era: buildLocalizeFn({
     values: eraValues$1c,
@@ -2769,7 +2730,6 @@ var localize$2o = {
     defaultFormattingWidth: 'wide'
   })
 };
-const localize$2p = localize$2o;
 
 var matchOrdinalNumberPattern$1b = /^(\d+)(th|st|nd|rd)?/i;
 var parseOrdinalNumberPattern$1b = /\d+/i;
@@ -2825,7 +2785,7 @@ var parseDayPeriodPatterns$1b = {
     night: /ليل/
   }
 };
-var match$2m = {
+var match$1b = {
   ordinalNumber: buildMatchPatternFn({
     matchPattern: matchOrdinalNumberPattern$1b,
     parsePattern: parseOrdinalNumberPattern$1b,
@@ -2867,7 +2827,6 @@ var match$2m = {
     defaultParseWidth: 'any'
   })
 };
-const match$2n = match$2m;
 
 /**
  * @type {Locale}
@@ -2877,19 +2836,18 @@ const match$2n = match$2m;
  * @iso-639-2 ara
  * @author Koussay Haj Kacem [@essana3]{@link https://github.com/essana3}
  */
-var locale$2H = {
+var locale$1m = {
   code: 'ar-TN',
-  formatDistance: formatDistance$2p,
-  formatLong: formatLong$2F,
-  formatRelative: formatRelative$2p,
-  localize: localize$2p,
-  match: match$2n,
+  formatDistance: formatDistance$1c,
+  formatLong: formatLong$1k,
+  formatRelative: formatRelative$1c,
+  localize: localize$1c,
+  match: match$1b,
   options: {
     weekStartsOn: 1 /* Monday */,
     firstWeekContainsDate: 1
   }
 };
-const locale$2I = locale$2H;
 
 var formatDistanceLocale$1a = {
   lessThanXSeconds: {
@@ -2954,7 +2912,7 @@ var formatDistanceLocale$1a = {
     other: 'demək olar ki {{count}} il'
   }
 };
-var formatDistance$2m = function formatDistance(token, count, options) {
+var formatDistance$1b = function formatDistance(token, count, options) {
   var result;
   var tokenValue = formatDistanceLocale$1a[token];
   if (typeof tokenValue === 'string') {
@@ -2973,7 +2931,6 @@ var formatDistance$2m = function formatDistance(token, count, options) {
   }
   return result;
 };
-const formatDistance$2n = formatDistance$2m;
 
 var dateFormats$1j = {
   full: "EEEE, do MMMM y 'il'",
@@ -2993,7 +2950,7 @@ var dateTimeFormats$1j = {
   medium: '{{date}}, {{time}}',
   short: '{{date}}, {{time}}'
 };
-var formatLong$2C = {
+var formatLong$1j = {
   date: buildFormatLongFn({
     formats: dateFormats$1j,
     defaultWidth: 'full'
@@ -3007,7 +2964,6 @@ var formatLong$2C = {
     defaultWidth: 'full'
   })
 };
-const formatLong$2D = formatLong$2C;
 
 var formatRelativeLocale$1b = {
   lastWeek: "'sonuncu' eeee p -'də'",
@@ -3017,10 +2973,9 @@ var formatRelativeLocale$1b = {
   nextWeek: "eeee p -'də'",
   other: 'P'
 };
-var formatRelative$2m = function formatRelative(token, _date, _baseDate, _options) {
+var formatRelative$1b = function formatRelative(token, _date, _baseDate, _options) {
   return formatRelativeLocale$1b[token];
 };
-const formatRelative$2n = formatRelative$2m;
 
 var eraValues$1b = {
   narrow: ['e.ə', 'b.e'],
@@ -3149,7 +3104,7 @@ var ordinalNumber$1b = function ordinalNumber(dirtyNumber, _options) {
   var suffix = getSuffix(number);
   return number + suffix;
 };
-var localize$2m = {
+var localize$1b = {
   ordinalNumber: ordinalNumber$1b,
   era: buildLocalizeFn({
     values: eraValues$1b,
@@ -3177,7 +3132,6 @@ var localize$2m = {
     defaultFormattingWidth: 'wide'
   })
 };
-const localize$2n = localize$2m;
 
 var matchOrdinalNumberPattern$1a = /^(\d+)(-?(ci|inci|nci|uncu|üncü|ncı))?/i;
 var parseOrdinalNumberPattern$1a = /\d+/i;
@@ -3235,7 +3189,7 @@ var parseDayPeriodPatterns$1a = {
     night: /gecə$/i
   }
 };
-var match$2k = {
+var match$1a = {
   ordinalNumber: buildMatchPatternFn({
     matchPattern: matchOrdinalNumberPattern$1a,
     parsePattern: parseOrdinalNumberPattern$1a,
@@ -3277,7 +3231,6 @@ var match$2k = {
     defaultParseWidth: 'any'
   })
 };
-const match$2l = match$2k;
 
 /**
  * @type {Locale}
@@ -3286,19 +3239,18 @@ const match$2l = match$2k;
  * @language Azerbaijani
  * @iso-639-2 aze
  */
-var locale$2F = {
+var locale$1l = {
   code: 'az',
-  formatDistance: formatDistance$2n,
-  formatLong: formatLong$2D,
-  formatRelative: formatRelative$2n,
-  localize: localize$2n,
-  match: match$2l,
+  formatDistance: formatDistance$1b,
+  formatLong: formatLong$1j,
+  formatRelative: formatRelative$1b,
+  localize: localize$1b,
+  match: match$1a,
   options: {
     weekStartsOn: 1,
     firstWeekContainsDate: 1
   }
 };
-const locale$2G = locale$2F;
 
 function declension$6(scheme, count) {
   // scheme for count=1 exists
@@ -3540,11 +3492,10 @@ var formatDistanceLocale$19 = {
     }
   })
 };
-var formatDistance$2k = function formatDistance(token, count, options) {
+var formatDistance$1a = function formatDistance(token, count, options) {
   options = options || {};
   return formatDistanceLocale$19[token](count, options);
 };
-const formatDistance$2l = formatDistance$2k;
 
 var dateFormats$1i = {
   full: "EEEE, d MMMM y 'г.'",
@@ -3561,7 +3512,7 @@ var timeFormats$1i = {
 var dateTimeFormats$1i = {
   any: '{{date}}, {{time}}'
 };
-var formatLong$2A = {
+var formatLong$1i = {
   date: buildFormatLongFn({
     formats: dateFormats$1i,
     defaultWidth: 'full'
@@ -3575,7 +3526,6 @@ var formatLong$2A = {
     defaultWidth: 'any'
   })
 };
-const formatLong$2B = formatLong$2A;
 
 function _typeof(o) {
   "@babel/helpers - typeof";
@@ -3741,7 +3691,7 @@ var formatDistanceLocale$18 = {
     other: 'almost {{count}} years'
   }
 };
-var formatDistance$2i = function formatDistance(token, count, options) {
+var formatDistance$19 = function formatDistance(token, count, options) {
   var result;
   var tokenValue = formatDistanceLocale$18[token];
   if (typeof tokenValue === 'string') {
@@ -3760,7 +3710,6 @@ var formatDistance$2i = function formatDistance(token, count, options) {
   }
   return result;
 };
-const formatDistance$2j = formatDistance$2i;
 
 var dateFormats$1h = {
   full: 'EEEE, MMMM do, y',
@@ -3780,7 +3729,7 @@ var dateTimeFormats$1h = {
   medium: '{{date}}, {{time}}',
   short: '{{date}}, {{time}}'
 };
-var formatLong$2y = {
+var formatLong$1h = {
   date: buildFormatLongFn({
     formats: dateFormats$1h,
     defaultWidth: 'full'
@@ -3794,7 +3743,6 @@ var formatLong$2y = {
     defaultWidth: 'full'
   })
 };
-const formatLong$2z = formatLong$2y;
 
 var formatRelativeLocale$1a = {
   lastWeek: "'last' eeee 'at' p",
@@ -3804,10 +3752,9 @@ var formatRelativeLocale$1a = {
   nextWeek: "eeee 'at' p",
   other: 'P'
 };
-var formatRelative$2k = function formatRelative(token, _date, _baseDate, _options) {
+var formatRelative$1a = function formatRelative(token, _date, _baseDate, _options) {
   return formatRelativeLocale$1a[token];
 };
-const formatRelative$2l = formatRelative$2k;
 
 var eraValues$1a = {
   narrow: ['B', 'A'],
@@ -3922,7 +3869,7 @@ var ordinalNumber$1a = function ordinalNumber(dirtyNumber, _options) {
   }
   return number + 'th';
 };
-var localize$2k = {
+var localize$1a = {
   ordinalNumber: ordinalNumber$1a,
   era: buildLocalizeFn({
     values: eraValues$1a,
@@ -3950,7 +3897,6 @@ var localize$2k = {
     defaultFormattingWidth: 'wide'
   })
 };
-const localize$2l = localize$2k;
 
 var matchOrdinalNumberPattern$19 = /^(\d+)(th|st|nd|rd)?/i;
 var parseOrdinalNumberPattern$19 = /\d+/i;
@@ -4005,7 +3951,7 @@ var parseDayPeriodPatterns$19 = {
     night: /night/i
   }
 };
-var match$2i = {
+var match$19 = {
   ordinalNumber: buildMatchPatternFn({
     matchPattern: matchOrdinalNumberPattern$19,
     parsePattern: parseOrdinalNumberPattern$19,
@@ -4047,7 +3993,6 @@ var match$2i = {
     defaultParseWidth: 'any'
   })
 };
-const match$2j = match$2i;
 
 /**
  * @type {Locale}
@@ -4058,19 +4003,18 @@ const match$2j = match$2i;
  * @author Sasha Koss [@kossnocorp]{@link https://github.com/kossnocorp}
  * @author Lesha Koss [@leshakoss]{@link https://github.com/leshakoss}
  */
-var locale$2E = {
+var locale$1k = {
   code: 'en-US',
-  formatDistance: formatDistance$2j,
-  formatLong: formatLong$2z,
-  formatRelative: formatRelative$2l,
-  localize: localize$2l,
-  match: match$2j,
+  formatDistance: formatDistance$19,
+  formatLong: formatLong$1h,
+  formatRelative: formatRelative$1a,
+  localize: localize$1a,
+  match: match$19,
   options: {
     weekStartsOn: 0 /* Sunday */,
     firstWeekContainsDate: 1
   }
 };
-const defaultLocale = locale$2E;
 
 function isSameUTCWeek(dirtyDateLeft, dirtyDateRight, options) {
   requiredArgs(2, arguments);
@@ -4138,14 +4082,13 @@ var formatRelativeLocale$19 = {
   nextWeek: nextWeekFormat$2,
   other: 'P'
 };
-var formatRelative$2i = function formatRelative(token, date, baseDate, options) {
+var formatRelative$19 = function formatRelative(token, date, baseDate, options) {
   var format = formatRelativeLocale$19[token];
   if (typeof format === 'function') {
     return format(date, baseDate, options);
   }
   return format;
 };
-const formatRelative$2j = formatRelative$2i;
 
 var eraValues$19 = {
   narrow: ['да н.э.', 'н.э.'],
@@ -4263,7 +4206,7 @@ var ordinalNumber$19 = function ordinalNumber(dirtyNumber, options) {
   }
   return number + suffix;
 };
-var localize$2i = {
+var localize$19 = {
   ordinalNumber: ordinalNumber$19,
   era: buildLocalizeFn({
     values: eraValues$19,
@@ -4293,7 +4236,6 @@ var localize$2i = {
     defaultFormattingWidth: 'wide'
   })
 };
-const localize$2j = localize$2i;
 
 var matchOrdinalNumberPattern$18 = /^(\d+)(-?(е|я|га|і|ы|ае|ая|яя|шы|гі|ці|ты|мы))?/i;
 var parseOrdinalNumberPattern$18 = /\d+/i;
@@ -4349,7 +4291,7 @@ var parseDayPeriodPatterns$18 = {
     night: /^н/i
   }
 };
-var match$2g = {
+var match$18 = {
   ordinalNumber: buildMatchPatternFn({
     matchPattern: matchOrdinalNumberPattern$18,
     parsePattern: parseOrdinalNumberPattern$18,
@@ -4391,7 +4333,6 @@ var match$2g = {
     defaultParseWidth: 'any'
   })
 };
-const match$2h = match$2g;
 
 /**
  * @type {Locale}
@@ -4402,19 +4343,18 @@ const match$2h = match$2g;
  * @author Kiryl Anokhin [@alyrik]{@link https://github.com/alyrik}
  * @author Martin Wind [@arvigeus]{@link https://github.com/mawi12345}
  */
-var locale$2C = {
+var locale$1j = {
   code: 'be',
-  formatDistance: formatDistance$2l,
-  formatLong: formatLong$2B,
-  formatRelative: formatRelative$2j,
-  localize: localize$2j,
-  match: match$2h,
+  formatDistance: formatDistance$1a,
+  formatLong: formatLong$1i,
+  formatRelative: formatRelative$19,
+  localize: localize$19,
+  match: match$18,
   options: {
     weekStartsOn: 1 /* Monday */,
     firstWeekContainsDate: 1
   }
 };
-const locale$2D = locale$2C;
 
 function declension$5(scheme, count) {
   // scheme for count=1 exists
@@ -4656,11 +4596,10 @@ var formatDistanceLocale$17 = {
     }
   })
 };
-var formatDistance$2g = function formatDistance(token, count, options) {
+var formatDistance$18 = function formatDistance(token, count, options) {
   options = options || {};
   return formatDistanceLocale$17[token](count, options);
 };
-const formatDistance$2h = formatDistance$2g;
 
 var dateFormats$1g = {
   full: "EEEE, d MMMM y 'г.'",
@@ -4677,7 +4616,7 @@ var timeFormats$1g = {
 var dateTimeFormats$1g = {
   any: '{{date}}, {{time}}'
 };
-var formatLong$2w = {
+var formatLong$1g = {
   date: buildFormatLongFn({
     formats: dateFormats$1g,
     defaultWidth: 'full'
@@ -4691,7 +4630,6 @@ var formatLong$2w = {
     defaultWidth: 'any'
   })
 };
-const formatLong$2x = formatLong$2w;
 
 var accusativeWeekdays$6 = ['нядзелю', 'панядзелак', 'аўторак', 'сераду', 'чацьвер', 'пятніцу', 'суботу'];
 function lastWeek$2(day) {
@@ -4752,14 +4690,13 @@ var formatRelativeLocale$18 = {
   nextWeek: nextWeekFormat$1,
   other: 'P'
 };
-var formatRelative$2g = function formatRelative(token, date, baseDate, options) {
+var formatRelative$18 = function formatRelative(token, date, baseDate, options) {
   var format = formatRelativeLocale$18[token];
   if (typeof format === 'function') {
     return format(date, baseDate, options);
   }
   return format;
 };
-const formatRelative$2h = formatRelative$2g;
 
 var eraValues$18 = {
   narrow: ['да н.э.', 'н.э.'],
@@ -4877,7 +4814,7 @@ var ordinalNumber$18 = function ordinalNumber(dirtyNumber, options) {
   }
   return number + suffix;
 };
-var localize$2g = {
+var localize$18 = {
   ordinalNumber: ordinalNumber$18,
   era: buildLocalizeFn({
     values: eraValues$18,
@@ -4907,7 +4844,6 @@ var localize$2g = {
     defaultFormattingWidth: 'wide'
   })
 };
-const localize$2h = localize$2g;
 
 var matchOrdinalNumberPattern$17 = /^(\d+)(-?(е|я|га|і|ы|ае|ая|яя|шы|гі|ці|ты|мы))?/i;
 var parseOrdinalNumberPattern$17 = /\d+/i;
@@ -4963,7 +4899,7 @@ var parseDayPeriodPatterns$17 = {
     night: /^н/i
   }
 };
-var match$2e = {
+var match$17 = {
   ordinalNumber: buildMatchPatternFn({
     matchPattern: matchOrdinalNumberPattern$17,
     parsePattern: parseOrdinalNumberPattern$17,
@@ -5005,7 +4941,6 @@ var match$2e = {
     defaultParseWidth: 'any'
   })
 };
-const match$2f = match$2e;
 
 /**
  * @type {Locale}
@@ -5015,19 +4950,18 @@ const match$2f = match$2e;
  * @iso-639-2 bel
  * @author Ryhor Nopears [@nopears]{@link https://github.com/nopears}
  */
-var locale$2A = {
+var locale$1i = {
   code: 'be-tarask',
-  formatDistance: formatDistance$2h,
-  formatLong: formatLong$2x,
-  formatRelative: formatRelative$2h,
-  localize: localize$2h,
-  match: match$2f,
+  formatDistance: formatDistance$18,
+  formatLong: formatLong$1g,
+  formatRelative: formatRelative$18,
+  localize: localize$18,
+  match: match$17,
   options: {
     weekStartsOn: 1 /* Monday */,
     firstWeekContainsDate: 1
   }
 };
-const locale$2B = locale$2A;
 
 var formatDistanceLocale$16 = {
   lessThanXSeconds: {
@@ -5092,7 +5026,7 @@ var formatDistanceLocale$16 = {
     other: 'почти {{count}} години'
   }
 };
-var formatDistance$2e = function formatDistance(token, count, options) {
+var formatDistance$17 = function formatDistance(token, count, options) {
   var result;
   var tokenValue = formatDistanceLocale$16[token];
   if (typeof tokenValue === 'string') {
@@ -5111,7 +5045,6 @@ var formatDistance$2e = function formatDistance(token, count, options) {
   }
   return result;
 };
-const formatDistance$2f = formatDistance$2e;
 
 var dateFormats$1f = {
   full: 'EEEE, dd MMMM yyyy',
@@ -5128,7 +5061,7 @@ var timeFormats$1f = {
 var dateTimeFormats$1f = {
   any: '{{date}} {{time}}'
 };
-var formatLong$2u = {
+var formatLong$1f = {
   date: buildFormatLongFn({
     formats: dateFormats$1f,
     defaultWidth: 'full'
@@ -5142,7 +5075,6 @@ var formatLong$2u = {
     defaultWidth: 'any'
   })
 };
-const formatLong$2v = formatLong$2u;
 
 // Adapted from the `ru` translation
 
@@ -5209,14 +5141,13 @@ var formatRelativeLocale$17 = {
   nextWeek: nextWeekFormatToken,
   other: 'P'
 };
-var formatRelative$2e = function formatRelative(token, date, baseDate, options) {
+var formatRelative$17 = function formatRelative(token, date, baseDate, options) {
   var format = formatRelativeLocale$17[token];
   if (typeof format === 'function') {
     return format(date, baseDate, options);
   }
   return format;
 };
-const formatRelative$2f = formatRelative$2e;
 
 var eraValues$17 = {
   narrow: ['пр.н.е.', 'н.е.'],
@@ -5284,7 +5215,7 @@ var ordinalNumber$17 = function ordinalNumber(dirtyNumber, options) {
   }
   return numberWithSuffix(number, unit, 'ти', 'та', 'то');
 };
-var localize$2e = {
+var localize$17 = {
   ordinalNumber: ordinalNumber$17,
   era: buildLocalizeFn({
     values: eraValues$17,
@@ -5310,7 +5241,6 @@ var localize$2e = {
     defaultWidth: 'wide'
   })
 };
-const localize$2f = localize$2e;
 
 var matchOrdinalNumberPattern$16 = /^(\d+)(-?[врмт][аи]|-?т?(ен|на)|-?(ев|ева))?/i;
 var parseOrdinalNumberPattern$16 = /\d+/i;
@@ -5362,7 +5292,7 @@ var parseDayPeriodPatterns$16 = {
     night: /^през н/i
   }
 };
-var match$2c = {
+var match$16 = {
   ordinalNumber: buildMatchPatternFn({
     matchPattern: matchOrdinalNumberPattern$16,
     parsePattern: parseOrdinalNumberPattern$16,
@@ -5404,7 +5334,6 @@ var match$2c = {
     defaultParseWidth: 'any'
   })
 };
-const match$2d = match$2c;
 
 /**
  * @type {Locale}
@@ -5415,19 +5344,18 @@ const match$2d = match$2c;
  * @author Nikolay Stoynov [@arvigeus]{@link https://github.com/arvigeus}
  * @author Tsvetan Ovedenski [@fintara]{@link https://github.com/fintara}
  */
-var locale$2y = {
+var locale$1h = {
   code: 'bg',
-  formatDistance: formatDistance$2f,
-  formatLong: formatLong$2v,
-  formatRelative: formatRelative$2f,
-  localize: localize$2f,
-  match: match$2d,
+  formatDistance: formatDistance$17,
+  formatLong: formatLong$1f,
+  formatRelative: formatRelative$17,
+  localize: localize$17,
+  match: match$16,
   options: {
     weekStartsOn: 1 /* Monday */,
     firstWeekContainsDate: 1
   }
 };
-const locale$2z = locale$2y;
 
 var numberValues$1 = {
   locale: {
@@ -5441,20 +5369,7 @@ var numberValues$1 = {
     '8': '৮',
     '9': '৯',
     '0': '০'
-  },
-  number: {
-    '১': '1',
-    '২': '2',
-    '৩': '3',
-    '৪': '4',
-    '৫': '5',
-    '৬': '6',
-    '৭': '7',
-    '৮': '8',
-    '৯': '9',
-    '০': '0'
-  }
-};
+  }};
 var eraValues$16 = {
   narrow: ['খ্রিঃপূঃ', 'খ্রিঃ'],
   abbreviated: ['খ্রিঃপূর্ব', 'খ্রিঃ'],
@@ -5591,7 +5506,7 @@ function numberToLocale$1(enNumber) {
     return numberValues$1.locale[match];
   });
 }
-var localize$2c = {
+var localize$16 = {
   ordinalNumber: ordinalNumber$16,
   era: buildLocalizeFn({
     values: eraValues$16,
@@ -5619,7 +5534,6 @@ var localize$2c = {
     defaultFormattingWidth: 'wide'
   })
 };
-const localize$2d = localize$2c;
 
 var formatDistanceLocale$15 = {
   lessThanXSeconds: {
@@ -5684,7 +5598,7 @@ var formatDistanceLocale$15 = {
     other: 'প্রায় {{count}} বছর'
   }
 };
-var formatDistance$2c = function formatDistance(token, count, options) {
+var formatDistance$16 = function formatDistance(token, count, options) {
   var result;
   var tokenValue = formatDistanceLocale$15[token];
   if (typeof tokenValue === 'string') {
@@ -5703,7 +5617,6 @@ var formatDistance$2c = function formatDistance(token, count, options) {
   }
   return result;
 };
-const formatDistance$2d = formatDistance$2c;
 
 var dateFormats$1e = {
   full: 'EEEE, MMMM do, y',
@@ -5723,7 +5636,7 @@ var dateTimeFormats$1e = {
   medium: '{{date}}, {{time}}',
   short: '{{date}}, {{time}}'
 };
-var formatLong$2s = {
+var formatLong$1e = {
   date: buildFormatLongFn({
     formats: dateFormats$1e,
     defaultWidth: 'full'
@@ -5737,7 +5650,6 @@ var formatLong$2s = {
     defaultWidth: 'full'
   })
 };
-const formatLong$2t = formatLong$2s;
 
 var formatRelativeLocale$16 = {
   lastWeek: "'গত' eeee 'সময়' p",
@@ -5747,10 +5659,9 @@ var formatRelativeLocale$16 = {
   nextWeek: "eeee 'সময়' p",
   other: 'P'
 };
-var formatRelative$2c = function formatRelative(token, _date, _baseDate, _options) {
+var formatRelative$16 = function formatRelative(token, _date, _baseDate, _options) {
   return formatRelativeLocale$16[token];
 };
-const formatRelative$2d = formatRelative$2c;
 
 var matchOrdinalNumberPattern$15 = /^(\d+)(ম|য়|র্থ|ষ্ঠ|শে|ই|তম)?/i;
 var parseOrdinalNumberPattern$15 = /\d+/i;
@@ -5809,7 +5720,7 @@ var parseDayPeriodPatterns$15 = {
     night: /রাত/i
   }
 };
-var match$2a = {
+var match$15 = {
   ordinalNumber: buildMatchPatternFn({
     matchPattern: matchOrdinalNumberPattern$15,
     parsePattern: parseOrdinalNumberPattern$15,
@@ -5851,7 +5762,6 @@ var match$2a = {
     defaultParseWidth: 'any'
   })
 };
-const match$2b = match$2a;
 
 /**
  * @type {Locale}
@@ -5862,19 +5772,18 @@ const match$2b = match$2a;
  * @author Touhidur Rahman [@touhidrahman]{@link https://github.com/touhidrahman}
  * @author Farhad Yasir [@nutboltu]{@link https://github.com/nutboltu}
  */
-var locale$2w = {
+var locale$1g = {
   code: 'bn',
-  formatDistance: formatDistance$2d,
-  formatLong: formatLong$2t,
-  formatRelative: formatRelative$2d,
-  localize: localize$2d,
-  match: match$2b,
+  formatDistance: formatDistance$16,
+  formatLong: formatLong$1e,
+  formatRelative: formatRelative$16,
+  localize: localize$16,
+  match: match$15,
   options: {
     weekStartsOn: 0 /* Sunday */,
     firstWeekContainsDate: 1
   }
 };
-const locale$2x = locale$2w;
 
 var formatDistanceLocale$14 = {
   lessThanXSeconds: {
@@ -6014,7 +5923,7 @@ var formatDistanceLocale$14 = {
     other: 'gotovo {{count}} godina'
   }
 };
-var formatDistance$2a = function formatDistance(token, count, options) {
+var formatDistance$15 = function formatDistance(token, count, options) {
   var result;
   var tokenValue = formatDistanceLocale$14[token];
   if (typeof tokenValue === 'string') {
@@ -6046,7 +5955,6 @@ var formatDistance$2a = function formatDistance(token, count, options) {
   }
   return result;
 };
-const formatDistance$2b = formatDistance$2a;
 
 var dateFormats$1d = {
   full: 'EEEE, d. MMMM yyyy.',
@@ -6066,7 +5974,7 @@ var dateTimeFormats$1d = {
   medium: '{{date}} {{time}}',
   short: '{{date}} {{time}}'
 };
-var formatLong$2q = {
+var formatLong$1d = {
   date: buildFormatLongFn({
     formats: dateFormats$1d,
     defaultWidth: 'full'
@@ -6080,7 +5988,6 @@ var formatLong$2q = {
     defaultWidth: 'full'
   })
 };
-const formatLong$2r = formatLong$2q;
 
 var formatRelativeLocale$15 = {
   lastWeek: function lastWeek(date) {
@@ -6112,14 +6019,13 @@ var formatRelativeLocale$15 = {
   },
   other: 'P'
 };
-var formatRelative$2a = function formatRelative(token, date, _baseDate, _options) {
+var formatRelative$15 = function formatRelative(token, date, _baseDate, _options) {
   var format = formatRelativeLocale$15[token];
   if (typeof format === 'function') {
     return format(date);
   }
   return format;
 };
-const formatRelative$2b = formatRelative$2a;
 
 var eraValues$15 = {
   narrow: ['pr.n.e.', 'AD'],
@@ -6215,7 +6121,7 @@ var ordinalNumber$15 = function ordinalNumber(dirtyNumber, _options) {
   var number = Number(dirtyNumber);
   return String(number) + '.';
 };
-var localize$2a = {
+var localize$15 = {
   ordinalNumber: ordinalNumber$15,
   era: buildLocalizeFn({
     values: eraValues$15,
@@ -6245,7 +6151,6 @@ var localize$2a = {
     defaultFormattingWidth: 'wide'
   })
 };
-const localize$2b = localize$2a;
 
 var matchOrdinalNumberPattern$14 = /^(\d+)\./i;
 var parseOrdinalNumberPattern$14 = /\d+/i;
@@ -6299,7 +6204,7 @@ var parseDayPeriodPatterns$14 = {
     night: /(nocu|noću)/i
   }
 };
-var match$28 = {
+var match$14 = {
   ordinalNumber: buildMatchPatternFn({
     matchPattern: matchOrdinalNumberPattern$14,
     parsePattern: parseOrdinalNumberPattern$14,
@@ -6341,7 +6246,6 @@ var match$28 = {
     defaultParseWidth: 'any'
   })
 };
-const match$29 = match$28;
 
 /**
  * @type {Locale}
@@ -6351,19 +6255,18 @@ const match$29 = match$28;
  * @iso-639-2 bos
  * @author Branislav Lazić [@branislavlazic]{@link https://github.com/branislavlazic}
  */
-var locale$2u = {
+var locale$1f = {
   code: 'bs',
-  formatDistance: formatDistance$2b,
-  formatLong: formatLong$2r,
-  formatRelative: formatRelative$2b,
-  localize: localize$2b,
-  match: match$29,
+  formatDistance: formatDistance$15,
+  formatLong: formatLong$1d,
+  formatRelative: formatRelative$15,
+  localize: localize$15,
+  match: match$14,
   options: {
     weekStartsOn: 1 /* Monday */,
     firstWeekContainsDate: 4
   }
 };
-const locale$2v = locale$2u;
 
 /**
  * Davant de les xifres que es diuen amb vocal inicial, 1 i 11, s'apostrofen els articles el i la i la preposició de igual que si estiguessin escrits amb lletres.
@@ -6442,7 +6345,7 @@ var formatDistanceLocale$13 = {
     other: 'gairebé {{count}} anys'
   }
 };
-var formatDistance$28 = function formatDistance(token, count, options) {
+var formatDistance$14 = function formatDistance(token, count, options) {
   var result;
   var tokenValue = formatDistanceLocale$13[token];
   if (typeof tokenValue === 'string') {
@@ -6463,7 +6366,6 @@ var formatDistance$28 = function formatDistance(token, count, options) {
   }
   return result;
 };
-const formatDistance$29 = formatDistance$28;
 
 var dateFormats$1c = {
   full: "EEEE, d 'de' MMMM y",
@@ -6483,7 +6385,7 @@ var dateTimeFormats$1c = {
   medium: '{{date}}, {{time}}',
   short: '{{date}}, {{time}}'
 };
-var formatLong$2o = {
+var formatLong$1c = {
   date: buildFormatLongFn({
     formats: dateFormats$1c,
     defaultWidth: 'full'
@@ -6497,7 +6399,6 @@ var formatLong$2o = {
     defaultWidth: 'full'
   })
 };
-const formatLong$2p = formatLong$2o;
 
 var formatRelativeLocale$14 = {
   lastWeek: "'el' eeee 'passat a la' LT",
@@ -6515,13 +6416,12 @@ var formatRelativeLocalePlural$3 = {
   nextWeek: "eeee 'a les' p",
   other: 'P'
 };
-var formatRelative$28 = function formatRelative(token, date, _baseDate, _options) {
+var formatRelative$14 = function formatRelative(token, date, _baseDate, _options) {
   if (date.getUTCHours() !== 1) {
     return formatRelativeLocalePlural$3[token];
   }
   return formatRelativeLocale$14[token];
 };
-const formatRelative$29 = formatRelative$28;
 
 /**
  * General information
@@ -6669,7 +6569,7 @@ var ordinalNumber$14 = function ordinalNumber(dirtyNumber, _options) {
   }
   return number + 'è';
 };
-var localize$28 = {
+var localize$14 = {
   ordinalNumber: ordinalNumber$14,
   era: buildLocalizeFn({
     values: eraValues$14,
@@ -6697,7 +6597,6 @@ var localize$28 = {
     defaultFormattingWidth: 'wide'
   })
 };
-const localize$29 = localize$28;
 
 var matchOrdinalNumberPattern$13 = /^(\d+)(è|r|n|r|t)?/i;
 var parseOrdinalNumberPattern$13 = /\d+/i;
@@ -6757,7 +6656,7 @@ var parseDayPeriodPatterns$13 = {
     night: /nit/i
   }
 };
-var match$26 = {
+var match$13 = {
   ordinalNumber: buildMatchPatternFn({
     matchPattern: matchOrdinalNumberPattern$13,
     parsePattern: parseOrdinalNumberPattern$13,
@@ -6799,7 +6698,6 @@ var match$26 = {
     defaultParseWidth: 'any'
   })
 };
-const match$27 = match$26;
 
 /**
  * @type {Locale}
@@ -6810,19 +6708,18 @@ const match$27 = match$26;
  * @author Guillermo Grau [@guigrpa]{@link https://github.com/guigrpa}
  * @author Alex Vizcaino [@avizcaino]{@link https://github.com/avizcaino}
  */
-var locale$2s = {
+var locale$1e = {
   code: 'ca',
-  formatDistance: formatDistance$29,
-  formatLong: formatLong$2p,
-  formatRelative: formatRelative$29,
-  localize: localize$29,
-  match: match$27,
+  formatDistance: formatDistance$14,
+  formatLong: formatLong$1c,
+  formatRelative: formatRelative$14,
+  localize: localize$14,
+  match: match$13,
   options: {
     weekStartsOn: 1 /* Monday */,
     firstWeekContainsDate: 4
   }
 };
-const locale$2t = locale$2s;
 
 // throw new Error('ca locale is currently unavailable. Please check the progress of converting this locale to v2.0.0 in this issue on Github: TBA')
 
@@ -7091,7 +6988,7 @@ var formatDistanceLocale$12 = {
     }
   }
 };
-var formatDistance$26 = function formatDistance(token, count, options) {
+var formatDistance$13 = function formatDistance(token, count, options) {
   var pluralResult;
   var tokenValue = formatDistanceLocale$12[token];
 
@@ -7119,7 +7016,6 @@ var formatDistance$26 = function formatDistance(token, count, options) {
   }
   return timeResult.replace('{{count}}', String(count));
 };
-const formatDistance$27 = formatDistance$26;
 
 var dateFormats$1b = {
   full: 'EEEE, d. MMMM yyyy',
@@ -7139,7 +7035,7 @@ var dateTimeFormats$1b = {
   medium: '{{date}}, {{time}}',
   short: '{{date}}, {{time}}'
 };
-var formatLong$2m = {
+var formatLong$1b = {
   date: buildFormatLongFn({
     formats: dateFormats$1b,
     defaultWidth: 'full'
@@ -7153,7 +7049,6 @@ var formatLong$2m = {
     defaultWidth: 'full'
   })
 };
-const formatLong$2n = formatLong$2m;
 
 var accusativeWeekdays$5 = ['neděli', 'pondělí', 'úterý', 'středu', 'čtvrtek', 'pátek', 'sobotu'];
 var formatRelativeLocale$13 = {
@@ -7167,14 +7062,13 @@ var formatRelativeLocale$13 = {
   },
   other: 'P'
 };
-var formatRelative$26 = function formatRelative(token, date) {
+var formatRelative$13 = function formatRelative(token, date) {
   var format = formatRelativeLocale$13[token];
   if (typeof format === 'function') {
     return format(date);
   }
   return format;
 };
-const formatRelative$27 = formatRelative$26;
 
 var eraValues$13 = {
   narrow: ['př. n. l.', 'n. l.'],
@@ -7270,7 +7164,7 @@ var ordinalNumber$13 = function ordinalNumber(dirtyNumber, _options) {
   var number = Number(dirtyNumber);
   return number + '.';
 };
-var localize$26 = {
+var localize$13 = {
   ordinalNumber: ordinalNumber$13,
   era: buildLocalizeFn({
     values: eraValues$13,
@@ -7300,7 +7194,6 @@ var localize$26 = {
     defaultFormattingWidth: 'wide'
   })
 };
-const localize$27 = localize$26;
 
 var matchOrdinalNumberPattern$12 = /^(\d+)\.?/i;
 var parseOrdinalNumberPattern$12 = /\d+/i;
@@ -7354,7 +7247,7 @@ var parseDayPeriodPatterns$12 = {
     night: /noc/i
   }
 };
-var match$24 = {
+var match$12 = {
   ordinalNumber: buildMatchPatternFn({
     matchPattern: matchOrdinalNumberPattern$12,
     parsePattern: parseOrdinalNumberPattern$12,
@@ -7396,7 +7289,6 @@ var match$24 = {
     defaultParseWidth: 'any'
   })
 };
-const match$25 = match$24;
 
 /**
  * @type {Locale}
@@ -7408,19 +7300,18 @@ const match$25 = match$24;
  * @author Pavel Hrách [@SilenY]{@link https://github.com/SilenY}
  * @author Jozef Bíroš [@JozefBiros]{@link https://github.com/JozefBiros}
  */
-var locale$2q = {
+var locale$1d = {
   code: 'cs',
-  formatDistance: formatDistance$27,
-  formatLong: formatLong$2n,
-  formatRelative: formatRelative$27,
-  localize: localize$27,
-  match: match$25,
+  formatDistance: formatDistance$13,
+  formatLong: formatLong$1b,
+  formatRelative: formatRelative$13,
+  localize: localize$13,
+  match: match$12,
   options: {
     weekStartsOn: 1 /* Monday */,
     firstWeekContainsDate: 4
   }
 };
-const locale$2r = locale$2q;
 
 var formatDistanceLocale$11 = {
   lessThanXSeconds: {
@@ -7496,7 +7387,7 @@ var formatDistanceLocale$11 = {
     other: 'bron {{count}} mlynedd'
   }
 };
-var formatDistance$24 = function formatDistance(token, count, options) {
+var formatDistance$12 = function formatDistance(token, count, options) {
   var result;
   var tokenValue = formatDistanceLocale$11[token];
   if (typeof tokenValue === 'string') {
@@ -7517,7 +7408,6 @@ var formatDistance$24 = function formatDistance(token, count, options) {
   }
   return result;
 };
-const formatDistance$25 = formatDistance$24;
 
 var dateFormats$1a = {
   full: 'EEEE, d MMMM yyyy',
@@ -7537,7 +7427,7 @@ var dateTimeFormats$1a = {
   medium: '{{date}}, {{time}}',
   short: '{{date}}, {{time}}'
 };
-var formatLong$2k = {
+var formatLong$1a = {
   date: buildFormatLongFn({
     formats: dateFormats$1a,
     defaultWidth: 'full'
@@ -7551,7 +7441,6 @@ var formatLong$2k = {
     defaultWidth: 'full'
   })
 };
-const formatLong$2l = formatLong$2k;
 
 var formatRelativeLocale$12 = {
   lastWeek: "eeee 'diwethaf am' p",
@@ -7561,10 +7450,9 @@ var formatRelativeLocale$12 = {
   nextWeek: "eeee 'am' p",
   other: 'P'
 };
-var formatRelative$24 = function formatRelative(token, _date, _baseDate, _options) {
+var formatRelative$12 = function formatRelative(token, _date, _baseDate, _options) {
   return formatRelativeLocale$12[token];
 };
-const formatRelative$25 = formatRelative$24;
 
 var eraValues$12 = {
   narrow: ['C', 'O'],
@@ -7693,7 +7581,7 @@ var ordinalNumber$12 = function ordinalNumber(dirtyNumber, _options) {
   }
   return number + 'ain';
 };
-var localize$24 = {
+var localize$12 = {
   ordinalNumber: ordinalNumber$12,
   era: buildLocalizeFn({
     values: eraValues$12,
@@ -7721,7 +7609,6 @@ var localize$24 = {
     defaultFormattingWidth: 'wide'
   })
 };
-const localize$25 = localize$24;
 
 var matchOrdinalNumberPattern$11 = /^(\d+)(af|ail|ydd|ed|fed|eg|ain)?/i;
 var parseOrdinalNumberPattern$11 = /\d+/i;
@@ -7778,7 +7665,7 @@ var parseDayPeriodPatterns$11 = {
     night: /blah/i
   }
 };
-var match$22 = {
+var match$11 = {
   ordinalNumber: buildMatchPatternFn({
     matchPattern: matchOrdinalNumberPattern$11,
     parsePattern: parseOrdinalNumberPattern$11,
@@ -7820,7 +7707,6 @@ var match$22 = {
     defaultParseWidth: 'any'
   })
 };
-const match$23 = match$22;
 
 /**
  * @type {Locale}
@@ -7830,19 +7716,18 @@ const match$23 = match$22;
  * @iso-639-2 cym
  * @author Elwyn Malethan [@elmomalmo]{@link https://github.com/elmomalmo}
  */
-var locale$2o = {
+var locale$1c = {
   code: 'cy',
-  formatDistance: formatDistance$25,
-  formatLong: formatLong$2l,
-  formatRelative: formatRelative$25,
-  localize: localize$25,
-  match: match$23,
+  formatDistance: formatDistance$12,
+  formatLong: formatLong$1a,
+  formatRelative: formatRelative$12,
+  localize: localize$12,
+  match: match$11,
   options: {
     weekStartsOn: 0 /* Sunday */,
     firstWeekContainsDate: 1
   }
 };
-const locale$2p = locale$2o;
 
 var formatDistanceLocale$10 = {
   lessThanXSeconds: {
@@ -7907,7 +7792,7 @@ var formatDistanceLocale$10 = {
     other: 'næsten {{count}} år'
   }
 };
-var formatDistance$22 = function formatDistance(token, count, options) {
+var formatDistance$11 = function formatDistance(token, count, options) {
   var result;
   var tokenValue = formatDistanceLocale$10[token];
   if (typeof tokenValue === 'string') {
@@ -7926,7 +7811,6 @@ var formatDistance$22 = function formatDistance(token, count, options) {
   }
   return result;
 };
-const formatDistance$23 = formatDistance$22;
 
 var dateFormats$19 = {
   full: "EEEE 'den' d. MMMM y",
@@ -7946,7 +7830,7 @@ var dateTimeFormats$19 = {
   medium: '{{date}} {{time}}',
   short: '{{date}} {{time}}'
 };
-var formatLong$2i = {
+var formatLong$19 = {
   date: buildFormatLongFn({
     formats: dateFormats$19,
     defaultWidth: 'full'
@@ -7960,7 +7844,6 @@ var formatLong$2i = {
     defaultWidth: 'full'
   })
 };
-const formatLong$2j = formatLong$2i;
 
 var formatRelativeLocale$11 = {
   lastWeek: "'sidste' eeee 'kl.' p",
@@ -7970,10 +7853,9 @@ var formatRelativeLocale$11 = {
   nextWeek: "'på' eeee 'kl.' p",
   other: 'P'
 };
-var formatRelative$22 = function formatRelative(token, _date, _baseDate, _options) {
+var formatRelative$11 = function formatRelative(token, _date, _baseDate, _options) {
   return formatRelativeLocale$11[token];
 };
-const formatRelative$23 = formatRelative$22;
 
 var eraValues$11 = {
   narrow: ['fvt', 'vt'],
@@ -8068,7 +7950,7 @@ var ordinalNumber$11 = function ordinalNumber(dirtyNumber, _options) {
   var number = Number(dirtyNumber);
   return number + '.';
 };
-var localize$22 = {
+var localize$11 = {
   ordinalNumber: ordinalNumber$11,
   era: buildLocalizeFn({
     values: eraValues$11,
@@ -8096,7 +7978,6 @@ var localize$22 = {
     defaultFormattingWidth: 'wide'
   })
 };
-const localize$23 = localize$22;
 
 var matchOrdinalNumberPattern$10 = /^(\d+)(\.)?/i;
 var parseOrdinalNumberPattern$10 = /\d+/i;
@@ -8151,7 +8032,7 @@ var parseDayPeriodPatterns$10 = {
     night: /nat/i
   }
 };
-var match$20 = {
+var match$10 = {
   ordinalNumber: buildMatchPatternFn({
     matchPattern: matchOrdinalNumberPattern$10,
     parsePattern: parseOrdinalNumberPattern$10,
@@ -8193,7 +8074,6 @@ var match$20 = {
     defaultParseWidth: 'any'
   })
 };
-const match$21 = match$20;
 
 /**
  * @type {Locale}
@@ -8206,19 +8086,18 @@ const match$21 = match$20;
  * @author [@kgram]{@link https://github.com/kgram}
  * @author [@stefanbugge]{@link https://github.com/stefanbugge}
  */
-var locale$2m = {
+var locale$1b = {
   code: 'da',
-  formatDistance: formatDistance$23,
-  formatLong: formatLong$2j,
-  formatRelative: formatRelative$23,
-  localize: localize$23,
-  match: match$21,
+  formatDistance: formatDistance$11,
+  formatLong: formatLong$19,
+  formatRelative: formatRelative$11,
+  localize: localize$11,
+  match: match$10,
   options: {
     weekStartsOn: 1 /* Monday */,
     firstWeekContainsDate: 4
   }
 };
-const locale$2n = locale$2m;
 
 var formatDistanceLocale$$ = {
   lessThanXSeconds: {
@@ -8376,7 +8255,7 @@ var formatDistanceLocale$$ = {
     }
   }
 };
-var formatDistance$20 = function formatDistance(token, count, options) {
+var formatDistance$10 = function formatDistance(token, count, options) {
   var result;
   var tokenValue = options !== null && options !== void 0 && options.addSuffix ? formatDistanceLocale$$[token].withPreposition : formatDistanceLocale$$[token].standalone;
   if (typeof tokenValue === 'string') {
@@ -8395,7 +8274,6 @@ var formatDistance$20 = function formatDistance(token, count, options) {
   }
   return result;
 };
-const formatDistance$21 = formatDistance$20;
 
 // DIN 5008: https://de.wikipedia.org/wiki/Datumsformat#DIN_5008
 var dateFormats$18 = {
@@ -8420,7 +8298,7 @@ var dateTimeFormats$18 = {
   medium: '{{date}} {{time}}',
   short: '{{date}} {{time}}'
 };
-var formatLong$2g = {
+var formatLong$18 = {
   date: buildFormatLongFn({
     formats: dateFormats$18,
     defaultWidth: 'full'
@@ -8434,7 +8312,6 @@ var formatLong$2g = {
     defaultWidth: 'full'
   })
 };
-const formatLong$2h = formatLong$2g;
 
 var formatRelativeLocale$10 = {
   lastWeek: "'letzten' eeee 'um' p",
@@ -8444,10 +8321,9 @@ var formatRelativeLocale$10 = {
   nextWeek: "eeee 'um' p",
   other: 'P'
 };
-var formatRelative$20 = function formatRelative(token, _date, _baseDate, _options) {
+var formatRelative$10 = function formatRelative(token, _date, _baseDate, _options) {
   return formatRelativeLocale$10[token];
 };
-const formatRelative$21 = formatRelative$20;
 
 var eraValues$10 = {
   narrow: ['v.Chr.', 'n.Chr.'],
@@ -8552,7 +8428,7 @@ var ordinalNumber$10 = function ordinalNumber(dirtyNumber) {
   var number = Number(dirtyNumber);
   return number + '.';
 };
-var localize$20 = {
+var localize$10 = {
   ordinalNumber: ordinalNumber$10,
   era: buildLocalizeFn({
     values: eraValues$10,
@@ -8581,7 +8457,6 @@ var localize$20 = {
     defaultFormattingWidth: 'wide'
   })
 };
-const localize$21 = localize$20;
 
 var matchOrdinalNumberPattern$$ = /^(\d+)(\.)?/i;
 var parseOrdinalNumberPattern$$ = /\d+/i;
@@ -8638,7 +8513,7 @@ var parseDayPeriodPatterns$$ = {
   }
 };
 
-var match$1_ = {
+var match$$ = {
   ordinalNumber: buildMatchPatternFn({
     matchPattern: matchOrdinalNumberPattern$$,
     parsePattern: parseOrdinalNumberPattern$$,
@@ -8680,7 +8555,6 @@ var match$1_ = {
     defaultParseWidth: 'any'
   })
 };
-const match$1$ = match$1_;
 
 /**
  * @type {Locale}
@@ -8694,19 +8568,18 @@ const match$1$ = match$1_;
  * @author RomanErnst [@pex]{@link https://github.com/pex}
  * @author Philipp Keck [@Philipp91]{@link https://github.com/Philipp91}
  */
-var locale$2k = {
+var locale$1a = {
   code: 'de',
-  formatDistance: formatDistance$21,
-  formatLong: formatLong$2h,
-  formatRelative: formatRelative$21,
-  localize: localize$21,
-  match: match$1$,
+  formatDistance: formatDistance$10,
+  formatLong: formatLong$18,
+  formatRelative: formatRelative$10,
+  localize: localize$10,
+  match: match$$,
   options: {
     weekStartsOn: 1 /* Monday */,
     firstWeekContainsDate: 4
   }
 };
-const locale$2l = locale$2k;
 
 var eraValues$$ = {
   narrow: ['v.Chr.', 'n.Chr.'],
@@ -8811,7 +8684,7 @@ var ordinalNumber$$ = function ordinalNumber(dirtyNumber) {
   var number = Number(dirtyNumber);
   return number + '.';
 };
-var localize$1_ = {
+var localize$$ = {
   ordinalNumber: ordinalNumber$$,
   era: buildLocalizeFn({
     values: eraValues$$,
@@ -8840,7 +8713,6 @@ var localize$1_ = {
     defaultFormattingWidth: 'wide'
   })
 };
-const localize$1$ = localize$1_;
 
 /**
  * @type {Locale}
@@ -8850,19 +8722,18 @@ const localize$1$ = localize$1_;
  * @iso-639-2 deu
  * @author Christoph Tobias Stenglein [@cstenglein]{@link https://github.com/cstenglein}
  */
-var locale$2i = {
+var locale$19 = {
   code: 'de-AT',
-  formatDistance: formatDistance$21,
-  formatLong: formatLong$2h,
-  formatRelative: formatRelative$21,
-  localize: localize$1$,
-  match: match$1$,
+  formatDistance: formatDistance$10,
+  formatLong: formatLong$18,
+  formatRelative: formatRelative$10,
+  localize: localize$$,
+  match: match$$,
   options: {
     weekStartsOn: 1 /* Monday */,
     firstWeekContainsDate: 4
   }
 };
-const locale$2j = locale$2i;
 
 var formatDistanceLocale$_ = {
   lessThanXSeconds: {
@@ -8927,7 +8798,7 @@ var formatDistanceLocale$_ = {
     other: 'περίπου {{count}} χρόνια'
   }
 };
-var formatDistance$1_ = function formatDistance(token, count, options) {
+var formatDistance$$ = function formatDistance(token, count, options) {
   var result;
   var tokenValue = formatDistanceLocale$_[token];
   if (typeof tokenValue === 'string') {
@@ -8946,7 +8817,6 @@ var formatDistance$1_ = function formatDistance(token, count, options) {
   }
   return result;
 };
-const formatDistance$1$ = formatDistance$1_;
 
 var dateFormats$17 = {
   full: 'EEEE, d MMMM y',
@@ -8966,7 +8836,7 @@ var dateTimeFormats$17 = {
   medium: '{{date}}, {{time}}',
   short: '{{date}}, {{time}}'
 };
-var formatLong$2e = {
+var formatLong$17 = {
   date: buildFormatLongFn({
     formats: dateFormats$17,
     defaultWidth: 'full'
@@ -8980,7 +8850,6 @@ var formatLong$2e = {
     defaultWidth: 'full'
   })
 };
-const formatLong$2f = formatLong$2e;
 
 var formatRelativeLocale$$ = {
   lastWeek: function lastWeek(date) {
@@ -8998,12 +8867,11 @@ var formatRelativeLocale$$ = {
   nextWeek: "eeee 'στις' p",
   other: 'P'
 };
-var formatRelative$1_ = function formatRelative(token, date) {
+var formatRelative$$ = function formatRelative(token, date) {
   var format = formatRelativeLocale$$[token];
   if (typeof format === 'function') return format(date);
   return format;
 };
-const formatRelative$1$ = formatRelative$1_;
 
 var eraValues$_ = {
   narrow: ['πΧ', 'μΧ'],
@@ -9076,7 +8944,7 @@ var ordinalNumber$_ = function ordinalNumber(dirtyNumber, options) {
   }
   return number + suffix;
 };
-var localize$1Y = {
+var localize$_ = {
   ordinalNumber: ordinalNumber$_,
   era: buildLocalizeFn({
     values: eraValues$_,
@@ -9104,7 +8972,6 @@ var localize$1Y = {
     defaultWidth: 'wide'
   })
 };
-const localize$1Z = localize$1Y;
 
 var matchOrdinalNumberPattern$_ = /^(\d+)(ος|η|ο)?/i;
 var parseOrdinalNumberPattern$_ = /\d+/i;
@@ -9159,7 +9026,7 @@ var parseDayPeriodPatterns$_ = {
     night: /ν(ύ|υ)χτα/i
   }
 };
-var match$1Y = {
+var match$_ = {
   ordinalNumber: buildMatchPatternFn({
     matchPattern: matchOrdinalNumberPattern$_,
     parsePattern: parseOrdinalNumberPattern$_,
@@ -9201,7 +9068,6 @@ var match$1Y = {
     defaultParseWidth: 'any'
   })
 };
-const match$1Z = match$1Y;
 
 /**
  * @type {Locale}
@@ -9212,19 +9078,18 @@ const match$1Z = match$1Y;
  * @author Fanis Katsimpas [@fanixk]{@link https://github.com/fanixk}
  * @author Theodoros Orfanidis [@teoulas]{@link https://github.com/teoulas}
  */
-var locale$2g = {
+var locale$18 = {
   code: 'el',
-  formatDistance: formatDistance$1$,
-  formatLong: formatLong$2f,
-  formatRelative: formatRelative$1$,
-  localize: localize$1Z,
-  match: match$1Z,
+  formatDistance: formatDistance$$,
+  formatLong: formatLong$17,
+  formatRelative: formatRelative$$,
+  localize: localize$_,
+  match: match$_,
   options: {
     weekStartsOn: 1 /* Monday */,
     firstWeekContainsDate: 4
   }
 };
-const locale$2h = locale$2g;
 
 var dateFormats$16 = {
   full: 'EEEE, d MMMM yyyy',
@@ -9244,7 +9109,7 @@ var dateTimeFormats$16 = {
   medium: '{{date}}, {{time}}',
   short: '{{date}}, {{time}}'
 };
-var formatLong$2c = {
+var formatLong$16 = {
   date: buildFormatLongFn({
     formats: dateFormats$16,
     defaultWidth: 'full'
@@ -9258,7 +9123,6 @@ var formatLong$2c = {
     defaultWidth: 'full'
   })
 };
-const formatLong$2d = formatLong$2c;
 
 /**
  * @type {Locale}
@@ -9268,19 +9132,18 @@ const formatLong$2d = formatLong$2c;
  * @iso-639-2 eng
  * @author Julien Malige [@JulienMalige]{@link https://github.com/JulienMalige}
  */
-var locale$2e = {
+var locale$17 = {
   code: 'en-AU',
-  formatDistance: formatDistance$2j,
-  formatLong: formatLong$2d,
-  formatRelative: formatRelative$2l,
-  localize: localize$2l,
-  match: match$2j,
+  formatDistance: formatDistance$19,
+  formatLong: formatLong$16,
+  formatRelative: formatRelative$1a,
+  localize: localize$1a,
+  match: match$19,
   options: {
     weekStartsOn: 1 /* Monday */,
     firstWeekContainsDate: 4
   }
 };
-const locale$2f = locale$2e;
 
 var formatDistanceLocale$Z = {
   lessThanXSeconds: {
@@ -9345,7 +9208,7 @@ var formatDistanceLocale$Z = {
     other: 'almost {{count}} years'
   }
 };
-var formatDistance$1Y = function formatDistance(token, count, options) {
+var formatDistance$_ = function formatDistance(token, count, options) {
   var result;
   var tokenValue = formatDistanceLocale$Z[token];
   if (typeof tokenValue === 'string') {
@@ -9364,7 +9227,6 @@ var formatDistance$1Y = function formatDistance(token, count, options) {
   }
   return result;
 };
-const formatDistance$1Z = formatDistance$1Y;
 
 var dateFormats$15 = {
   full: 'EEEE, MMMM do, yyyy',
@@ -9384,7 +9246,7 @@ var dateTimeFormats$15 = {
   medium: '{{date}}, {{time}}',
   short: '{{date}}, {{time}}'
 };
-var formatLong$2a = {
+var formatLong$15 = {
   date: buildFormatLongFn({
     formats: dateFormats$15,
     defaultWidth: 'full'
@@ -9398,7 +9260,6 @@ var formatLong$2a = {
     defaultWidth: 'full'
   })
 };
-const formatLong$2b = formatLong$2a;
 
 /**
  * @type {Locale}
@@ -9409,19 +9270,18 @@ const formatLong$2b = formatLong$2a;
  * @author Mark Owsiak [@markowsiak]{@link https://github.com/markowsiak}
  * @author Marco Imperatore [@mimperatore]{@link https://github.com/mimperatore}
  */
-var locale$2c = {
+var locale$16 = {
   code: 'en-CA',
-  formatDistance: formatDistance$1Z,
-  formatLong: formatLong$2b,
-  formatRelative: formatRelative$2l,
-  localize: localize$2l,
-  match: match$2j,
+  formatDistance: formatDistance$_,
+  formatLong: formatLong$15,
+  formatRelative: formatRelative$1a,
+  localize: localize$1a,
+  match: match$19,
   options: {
     weekStartsOn: 0 /* Sunday */,
     firstWeekContainsDate: 1
   }
 };
-const locale$2d = locale$2c;
 
 var dateFormats$14 = {
   full: 'EEEE, d MMMM yyyy',
@@ -9441,7 +9301,7 @@ var dateTimeFormats$14 = {
   medium: '{{date}}, {{time}}',
   short: '{{date}}, {{time}}'
 };
-var formatLong$28 = {
+var formatLong$14 = {
   date: buildFormatLongFn({
     formats: dateFormats$14,
     defaultWidth: 'full'
@@ -9455,7 +9315,6 @@ var formatLong$28 = {
     defaultWidth: 'full'
   })
 };
-const formatLong$29 = formatLong$28;
 
 /**
  * @type {Locale}
@@ -9465,19 +9324,18 @@ const formatLong$29 = formatLong$28;
  * @iso-639-2 eng
  * @author Alex [@glintik]{@link https://github.com/glintik}
  */
-var locale$2a = {
+var locale$15 = {
   code: 'en-GB',
-  formatDistance: formatDistance$2j,
-  formatLong: formatLong$29,
-  formatRelative: formatRelative$2l,
-  localize: localize$2l,
-  match: match$2j,
+  formatDistance: formatDistance$19,
+  formatLong: formatLong$14,
+  formatRelative: formatRelative$1a,
+  localize: localize$1a,
+  match: match$19,
   options: {
     weekStartsOn: 1 /* Monday */,
     firstWeekContainsDate: 4
   }
 };
-const locale$2b = locale$2a;
 
 /**
  * @type {Locale}
@@ -9487,19 +9345,18 @@ const locale$2b = locale$2a;
  * @iso-639-2 eng
  * @author Tetiana [@tan75]{@link https://github.com/tan75}
  */
-var locale$28 = {
+var locale$14 = {
   code: 'en-IE',
-  formatDistance: formatDistance$2j,
-  formatLong: formatLong$29,
-  formatRelative: formatRelative$2l,
-  localize: localize$2l,
-  match: match$2j,
+  formatDistance: formatDistance$19,
+  formatLong: formatLong$14,
+  formatRelative: formatRelative$1a,
+  localize: localize$1a,
+  match: match$19,
   options: {
     weekStartsOn: 1 /* Monday */,
     firstWeekContainsDate: 4
   }
 };
-const locale$29 = locale$28;
 
 var dateFormats$13 = {
   full: 'EEEE, d MMMM yyyy',
@@ -9519,7 +9376,7 @@ var dateTimeFormats$13 = {
   medium: '{{date}}, {{time}}',
   short: '{{date}}, {{time}}'
 };
-var formatLong$26 = {
+var formatLong$13 = {
   date: buildFormatLongFn({
     formats: dateFormats$13,
     defaultWidth: 'full'
@@ -9533,7 +9390,6 @@ var formatLong$26 = {
     defaultWidth: 'full'
   })
 };
-const formatLong$27 = formatLong$26;
 
 /**
  * @type {Locale}
@@ -9543,21 +9399,19 @@ const formatLong$27 = formatLong$26;
  * @iso-639-2 eng
  * @author Galeel Bhasha Satthar [@gbhasha]{@link https://github.com/gbhasha}
  */
-var locale$26 = {
+var locale$13 = {
   code: 'en-IN',
-  formatDistance: formatDistance$2j,
-  formatLong: formatLong$27,
-  formatRelative: formatRelative$2l,
-  localize: localize$2l,
-  match: match$2j,
+  formatDistance: formatDistance$19,
+  formatLong: formatLong$13,
+  formatRelative: formatRelative$1a,
+  localize: localize$1a,
+  match: match$19,
   options: {
     weekStartsOn: 1,
     // Monday is the first day of the week.
     firstWeekContainsDate: 4 // The week that contains Jan 4th is the first week of the year.
   }
 };
-
-const locale$27 = locale$26;
 
 var dateFormats$12 = {
   full: 'EEEE, d MMMM yyyy',
@@ -9577,7 +9431,7 @@ var dateTimeFormats$12 = {
   medium: '{{date}}, {{time}}',
   short: '{{date}}, {{time}}'
 };
-var formatLong$24 = {
+var formatLong$12 = {
   date: buildFormatLongFn({
     formats: dateFormats$12,
     defaultWidth: 'full'
@@ -9591,7 +9445,6 @@ var formatLong$24 = {
     defaultWidth: 'full'
   })
 };
-const formatLong$25 = formatLong$24;
 
 /**
  * @type {Locale}
@@ -9601,19 +9454,18 @@ const formatLong$25 = formatLong$24;
  * @iso-639-2 eng
  * @author Murray Lucas [@muntact]{@link https://github.com/muntact}
  */
-var locale$24 = {
+var locale$12 = {
   code: 'en-NZ',
-  formatDistance: formatDistance$2j,
-  formatLong: formatLong$25,
-  formatRelative: formatRelative$2l,
-  localize: localize$2l,
-  match: match$2j,
+  formatDistance: formatDistance$19,
+  formatLong: formatLong$12,
+  formatRelative: formatRelative$1a,
+  localize: localize$1a,
+  match: match$19,
   options: {
     weekStartsOn: 1 /* Monday */,
     firstWeekContainsDate: 4
   }
 };
-const locale$25 = locale$24;
 
 var dateFormats$11 = {
   full: 'EEEE, dd MMMM yyyy',
@@ -9633,7 +9485,7 @@ var dateTimeFormats$11 = {
   medium: '{{date}}, {{time}}',
   short: '{{date}}, {{time}}'
 };
-var formatLong$22 = {
+var formatLong$11 = {
   date: buildFormatLongFn({
     formats: dateFormats$11,
     defaultWidth: 'full'
@@ -9647,7 +9499,6 @@ var formatLong$22 = {
     defaultWidth: 'full'
   })
 };
-const formatLong$23 = formatLong$22;
 
 /**
  * @type {Locale}
@@ -9657,21 +9508,19 @@ const formatLong$23 = formatLong$22;
  * @iso-639-2 eng
  * @author Shaila Kavrakova [@shaykav]{@link https://github.com/shaykav}
  */
-var locale$22 = {
+var locale$11 = {
   code: 'en-ZA',
-  formatDistance: formatDistance$2j,
-  formatLong: formatLong$23,
-  formatRelative: formatRelative$2l,
-  localize: localize$2l,
-  match: match$2j,
+  formatDistance: formatDistance$19,
+  formatLong: formatLong$11,
+  formatRelative: formatRelative$1a,
+  localize: localize$1a,
+  match: match$19,
   options: {
     weekStartsOn: 0,
     // Sunday is the first day of the week.
     firstWeekContainsDate: 1 // The week that contains Jan 1st is the first week of the year.
   }
 };
-
-const locale$23 = locale$22;
 
 var formatDistanceLocale$Y = {
   lessThanXSeconds: {
@@ -9736,7 +9585,7 @@ var formatDistanceLocale$Y = {
     other: 'preskaŭ {{count}} jaroj'
   }
 };
-var formatDistance$1W = function formatDistance(token, count, options) {
+var formatDistance$Z = function formatDistance(token, count, options) {
   var result;
   var tokenValue = formatDistanceLocale$Y[token];
   if (typeof tokenValue === 'string') {
@@ -9755,7 +9604,6 @@ var formatDistance$1W = function formatDistance(token, count, options) {
   }
   return result;
 };
-const formatDistance$1X = formatDistance$1W;
 
 var dateFormats$10 = {
   full: "EEEE, do 'de' MMMM y",
@@ -9772,7 +9620,7 @@ var timeFormats$10 = {
 var dateTimeFormats$10 = {
   any: '{{date}} {{time}}'
 };
-var formatLong$20 = {
+var formatLong$10 = {
   date: buildFormatLongFn({
     formats: dateFormats$10,
     defaultWidth: 'full'
@@ -9786,7 +9634,6 @@ var formatLong$20 = {
     defaultWidth: 'any'
   })
 };
-const formatLong$21 = formatLong$20;
 
 var formatRelativeLocale$_ = {
   lastWeek: "'pasinta' eeee 'je' p",
@@ -9796,10 +9643,9 @@ var formatRelativeLocale$_ = {
   nextWeek: "eeee 'je' p",
   other: 'P'
 };
-var formatRelative$1Y = function formatRelative(token, _date, _baseDate, _options) {
+var formatRelative$_ = function formatRelative(token, _date, _baseDate, _options) {
   return formatRelativeLocale$_[token];
 };
-const formatRelative$1Z = formatRelative$1Y;
 
 var eraValues$Z = {
   narrow: ['aK', 'pK'],
@@ -9858,7 +9704,7 @@ var ordinalNumber$Z = function ordinalNumber(dirtyNumber) {
   var number = Number(dirtyNumber);
   return number + '-a';
 };
-var localize$1W = {
+var localize$Z = {
   ordinalNumber: ordinalNumber$Z,
   era: buildLocalizeFn({
     values: eraValues$Z,
@@ -9884,7 +9730,6 @@ var localize$1W = {
     defaultWidth: 'wide'
   })
 };
-const localize$1X = localize$1W;
 
 var matchOrdinalNumberPattern$Z = /^(\d+)(-?a)?/i;
 var parseOrdinalNumberPattern$Z = /\d+/i;
@@ -9940,7 +9785,7 @@ var parseDayPeriodPatterns$Z = {
     night: /^n/i
   }
 };
-var match$1W = {
+var match$Z = {
   ordinalNumber: buildMatchPatternFn({
     matchPattern: matchOrdinalNumberPattern$Z,
     parsePattern: parseOrdinalNumberPattern$Z,
@@ -9982,7 +9827,6 @@ var match$1W = {
     defaultParseWidth: 'any'
   })
 };
-const match$1X = match$1W;
 
 /**
  * @type {Locale}
@@ -9992,19 +9836,18 @@ const match$1X = match$1W;
  * @iso-639-2 epo
  * @author date-fns
  */
-var locale$20 = {
+var locale$10 = {
   code: 'eo',
-  formatDistance: formatDistance$1X,
-  formatLong: formatLong$21,
-  formatRelative: formatRelative$1Z,
-  localize: localize$1X,
-  match: match$1X,
+  formatDistance: formatDistance$Z,
+  formatLong: formatLong$10,
+  formatRelative: formatRelative$_,
+  localize: localize$Z,
+  match: match$Z,
   options: {
     weekStartsOn: 1 /* Monday */,
     firstWeekContainsDate: 4
   }
 };
-const locale$21 = locale$20;
 
 var formatDistanceLocale$X = {
   lessThanXSeconds: {
@@ -10069,7 +9912,7 @@ var formatDistanceLocale$X = {
     other: 'casi {{count}} años'
   }
 };
-var formatDistance$1U = function formatDistance(token, count, options) {
+var formatDistance$Y = function formatDistance(token, count, options) {
   var result;
   var tokenValue = formatDistanceLocale$X[token];
   if (typeof tokenValue === 'string') {
@@ -10088,7 +9931,6 @@ var formatDistance$1U = function formatDistance(token, count, options) {
   }
   return result;
 };
-const formatDistance$1V = formatDistance$1U;
 
 var dateFormats$$ = {
   full: "EEEE, d 'de' MMMM 'de' y",
@@ -10108,7 +9950,7 @@ var dateTimeFormats$$ = {
   medium: '{{date}}, {{time}}',
   short: '{{date}}, {{time}}'
 };
-var formatLong$1_ = {
+var formatLong$$ = {
   date: buildFormatLongFn({
     formats: dateFormats$$,
     defaultWidth: 'full'
@@ -10122,7 +9964,6 @@ var formatLong$1_ = {
     defaultWidth: 'full'
   })
 };
-const formatLong$1$ = formatLong$1_;
 
 var formatRelativeLocale$Z = {
   lastWeek: "'el' eeee 'pasado a la' p",
@@ -10140,14 +9981,13 @@ var formatRelativeLocalePlural$2 = {
   nextWeek: "eeee 'a las' p",
   other: 'P'
 };
-var formatRelative$1W = function formatRelative(token, date, _baseDate, _options) {
+var formatRelative$Z = function formatRelative(token, date, _baseDate, _options) {
   if (date.getUTCHours() !== 1) {
     return formatRelativeLocalePlural$2[token];
   } else {
     return formatRelativeLocale$Z[token];
   }
 };
-const formatRelative$1X = formatRelative$1W;
 
 var eraValues$Y = {
   narrow: ['AC', 'DC'],
@@ -10238,7 +10078,7 @@ var ordinalNumber$Y = function ordinalNumber(dirtyNumber, _options) {
   var number = Number(dirtyNumber);
   return number + 'º';
 };
-var localize$1U = {
+var localize$Y = {
   ordinalNumber: ordinalNumber$Y,
   era: buildLocalizeFn({
     values: eraValues$Y,
@@ -10266,7 +10106,6 @@ var localize$1U = {
     defaultFormattingWidth: 'wide'
   })
 };
-const localize$1V = localize$1U;
 
 var matchOrdinalNumberPattern$Y = /^(\d+)(º)?/i;
 var parseOrdinalNumberPattern$Y = /\d+/i;
@@ -10322,7 +10161,7 @@ var parseDayPeriodPatterns$Y = {
     night: /noche/i
   }
 };
-var match$1U = {
+var match$Y = {
   ordinalNumber: buildMatchPatternFn({
     matchPattern: matchOrdinalNumberPattern$Y,
     parsePattern: parseOrdinalNumberPattern$Y,
@@ -10364,7 +10203,6 @@ var match$1U = {
     defaultParseWidth: 'any'
   })
 };
-const match$1V = match$1U;
 
 /**
  * @type {Locale}
@@ -10378,19 +10216,18 @@ const match$1V = match$1U;
  * @author Gastón Haro [@harogaston]{@link https://github.com/harogaston}
  * @author Yago Carballo [@YagoCarballo]{@link https://github.com/YagoCarballo}
  */
-var locale$1_ = {
+var locale$$ = {
   code: 'es',
-  formatDistance: formatDistance$1V,
-  formatLong: formatLong$1$,
-  formatRelative: formatRelative$1X,
-  localize: localize$1V,
-  match: match$1V,
+  formatDistance: formatDistance$Y,
+  formatLong: formatLong$$,
+  formatRelative: formatRelative$Z,
+  localize: localize$Y,
+  match: match$Y,
   options: {
     weekStartsOn: 1 /* Monday */,
     firstWeekContainsDate: 1
   }
 };
-const locale$1$ = locale$1_;
 
 var formatDistanceLocale$W = {
   lessThanXSeconds: {
@@ -10548,7 +10385,7 @@ var formatDistanceLocale$W = {
     }
   }
 };
-var formatDistance$1S = function formatDistance(token, count, options) {
+var formatDistance$X = function formatDistance(token, count, options) {
   var usageGroup = options !== null && options !== void 0 && options.addSuffix ? formatDistanceLocale$W[token].withPreposition : formatDistanceLocale$W[token].standalone;
   var result;
   if (typeof usageGroup === 'string') {
@@ -10567,7 +10404,6 @@ var formatDistance$1S = function formatDistance(token, count, options) {
   }
   return result;
 };
-const formatDistance$1T = formatDistance$1S;
 
 var dateFormats$_ = {
   full: 'EEEE, d. MMMM y',
@@ -10587,7 +10423,7 @@ var dateTimeFormats$_ = {
   medium: '{{date}}. {{time}}',
   short: '{{date}}. {{time}}'
 };
-var formatLong$1Y = {
+var formatLong$_ = {
   date: buildFormatLongFn({
     formats: dateFormats$_,
     defaultWidth: 'full'
@@ -10601,7 +10437,6 @@ var formatLong$1Y = {
     defaultWidth: 'full'
   })
 };
-const formatLong$1Z = formatLong$1Y;
 
 var formatRelativeLocale$Y = {
   lastWeek: "'eelmine' eeee 'kell' p",
@@ -10611,10 +10446,9 @@ var formatRelativeLocale$Y = {
   nextWeek: "'järgmine' eeee 'kell' p",
   other: 'P'
 };
-var formatRelative$1U = function formatRelative(token, _date, _baseDate, _options) {
+var formatRelative$Y = function formatRelative(token, _date, _baseDate, _options) {
   return formatRelativeLocale$Y[token];
 };
-const formatRelative$1V = formatRelative$1U;
 
 var eraValues$X = {
   narrow: ['e.m.a', 'm.a.j'],
@@ -10705,7 +10539,7 @@ var ordinalNumber$X = function ordinalNumber(dirtyNumber, _options) {
   var number = Number(dirtyNumber);
   return number + '.';
 };
-var localize$1S = {
+var localize$X = {
   ordinalNumber: ordinalNumber$X,
   era: buildLocalizeFn({
     values: eraValues$X,
@@ -10737,7 +10571,6 @@ var localize$1S = {
     defaultFormattingWidth: 'wide'
   })
 };
-const localize$1T = localize$1S;
 
 var matchOrdinalNumberPattern$X = /^\d+\./i;
 var parseOrdinalNumberPattern$X = /\d+/i;
@@ -10790,7 +10623,7 @@ var parseDayPeriodPatterns$X = {
     night: /öö/i
   }
 };
-var match$1S = {
+var match$X = {
   ordinalNumber: buildMatchPatternFn({
     matchPattern: matchOrdinalNumberPattern$X,
     parsePattern: parseOrdinalNumberPattern$X,
@@ -10832,7 +10665,6 @@ var match$1S = {
     defaultParseWidth: 'any'
   })
 };
-const match$1T = match$1S;
 
 /**
  * @type {Locale}
@@ -10842,19 +10674,18 @@ const match$1T = match$1S;
  * @iso-639-2 est
  * @author Priit Hansen [@HansenPriit]{@link https://github.com/priithansen}
  */
-var locale$1Y = {
+var locale$_ = {
   code: 'et',
-  formatDistance: formatDistance$1T,
-  formatLong: formatLong$1Z,
-  formatRelative: formatRelative$1V,
-  localize: localize$1T,
-  match: match$1T,
+  formatDistance: formatDistance$X,
+  formatLong: formatLong$_,
+  formatRelative: formatRelative$Y,
+  localize: localize$X,
+  match: match$X,
   options: {
     weekStartsOn: 1 /* Monday */,
     firstWeekContainsDate: 4
   }
 };
-const locale$1Z = locale$1Y;
 
 var formatDistanceLocale$V = {
   lessThanXSeconds: {
@@ -10919,7 +10750,7 @@ var formatDistanceLocale$V = {
     other: 'ia {{count}} urte'
   }
 };
-var formatDistance$1Q = function formatDistance(token, count, options) {
+var formatDistance$W = function formatDistance(token, count, options) {
   var result;
   var tokenValue = formatDistanceLocale$V[token];
   if (typeof tokenValue === 'string') {
@@ -10938,7 +10769,6 @@ var formatDistance$1Q = function formatDistance(token, count, options) {
   }
   return result;
 };
-const formatDistance$1R = formatDistance$1Q;
 
 var dateFormats$Z = {
   full: "EEEE, y'ko' MMMM'ren' d'a' y'ren'",
@@ -10958,7 +10788,7 @@ var dateTimeFormats$Z = {
   medium: '{{date}}, {{time}}',
   short: '{{date}}, {{time}}'
 };
-var formatLong$1W = {
+var formatLong$Z = {
   date: buildFormatLongFn({
     formats: dateFormats$Z,
     defaultWidth: 'full'
@@ -10972,7 +10802,6 @@ var formatLong$1W = {
     defaultWidth: 'full'
   })
 };
-const formatLong$1X = formatLong$1W;
 
 var formatRelativeLocale$X = {
   lastWeek: "'joan den' eeee, LT",
@@ -10990,13 +10819,12 @@ var formatRelativeLocalePlural$1 = {
   nextWeek: 'eeee, p',
   other: 'P'
 };
-var formatRelative$1S = function formatRelative(token, date) {
+var formatRelative$X = function formatRelative(token, date) {
   if (date.getUTCHours() !== 1) {
     return formatRelativeLocalePlural$1[token];
   }
   return formatRelativeLocale$X[token];
 };
-const formatRelative$1T = formatRelative$1S;
 
 var eraValues$W = {
   narrow: ['k.a.', 'k.o.'],
@@ -11087,7 +10915,7 @@ var ordinalNumber$W = function ordinalNumber(dirtyNumber, _options) {
   var number = Number(dirtyNumber);
   return number + '.';
 };
-var localize$1Q = {
+var localize$W = {
   ordinalNumber: ordinalNumber$W,
   era: buildLocalizeFn({
     values: eraValues$W,
@@ -11115,7 +10943,6 @@ var localize$1Q = {
     defaultFormattingWidth: 'wide'
   })
 };
-const localize$1R = localize$1Q;
 
 var matchOrdinalNumberPattern$W = /^(\d+)(.)?/i;
 var parseOrdinalNumberPattern$W = /\d+/i;
@@ -11184,7 +11011,7 @@ var parseDayPeriodPatterns$W = {
     night: /gau/i
   }
 };
-var match$1Q = {
+var match$W = {
   ordinalNumber: buildMatchPatternFn({
     matchPattern: matchOrdinalNumberPattern$W,
     parsePattern: parseOrdinalNumberPattern$W,
@@ -11226,7 +11053,6 @@ var match$1Q = {
     defaultParseWidth: 'any'
   })
 };
-const match$1R = match$1Q;
 
 /**
  * @type {Locale}
@@ -11236,19 +11062,18 @@ const match$1R = match$1Q;
  * @iso-639-2 eus
  * @author Jacob Söderblom [@JacobSoderblom]{@link https://github.com/JacobSoderblom}
  */
-var locale$1W = {
+var locale$Z = {
   code: 'eu',
-  formatDistance: formatDistance$1R,
-  formatLong: formatLong$1X,
-  formatRelative: formatRelative$1T,
-  localize: localize$1R,
-  match: match$1R,
+  formatDistance: formatDistance$W,
+  formatLong: formatLong$Z,
+  formatRelative: formatRelative$X,
+  localize: localize$W,
+  match: match$W,
   options: {
     weekStartsOn: 1 /* Monday */,
     firstWeekContainsDate: 1
   }
 };
-const locale$1X = locale$1W;
 
 var formatDistanceLocale$U = {
   lessThanXSeconds: {
@@ -11313,7 +11138,7 @@ var formatDistanceLocale$U = {
     other: 'نزدیک {{count}} سال'
   }
 };
-var formatDistance$1O = function formatDistance(token, count, options) {
+var formatDistance$V = function formatDistance(token, count, options) {
   var result;
   var tokenValue = formatDistanceLocale$U[token];
   if (typeof tokenValue === 'string') {
@@ -11332,7 +11157,6 @@ var formatDistance$1O = function formatDistance(token, count, options) {
   }
   return result;
 };
-const formatDistance$1P = formatDistance$1O;
 
 var dateFormats$Y = {
   full: 'EEEE do MMMM y',
@@ -11352,7 +11176,7 @@ var dateTimeFormats$Y = {
   medium: '{{date}}, {{time}}',
   short: '{{date}}, {{time}}'
 };
-var formatLong$1U = {
+var formatLong$Y = {
   date: buildFormatLongFn({
     formats: dateFormats$Y,
     defaultWidth: 'full'
@@ -11366,7 +11190,6 @@ var formatLong$1U = {
     defaultWidth: 'full'
   })
 };
-const formatLong$1V = formatLong$1U;
 
 var formatRelativeLocale$W = {
   lastWeek: "eeee 'گذشته در' p",
@@ -11376,10 +11199,9 @@ var formatRelativeLocale$W = {
   nextWeek: "eeee 'در' p",
   other: 'P'
 };
-var formatRelative$1Q = function formatRelative(token, _date, _baseDate, _options) {
+var formatRelative$W = function formatRelative(token, _date, _baseDate, _options) {
   return formatRelativeLocale$W[token];
 };
-const formatRelative$1R = formatRelative$1Q;
 
 var eraValues$V = {
   narrow: ['ق', 'ب'],
@@ -11474,7 +11296,7 @@ var formattingDayPeriodValues$J = {
 var ordinalNumber$V = function ordinalNumber(dirtyNumber, _options) {
   return String(dirtyNumber);
 };
-var localize$1O = {
+var localize$V = {
   ordinalNumber: ordinalNumber$V,
   era: buildLocalizeFn({
     values: eraValues$V,
@@ -11502,7 +11324,6 @@ var localize$1O = {
     defaultFormattingWidth: 'wide'
   })
 };
-const localize$1P = localize$1O;
 
 var matchOrdinalNumberPattern$V = /^(\d+)(th|st|nd|rd)?/i;
 var parseOrdinalNumberPattern$V = /\d+/i;
@@ -11558,7 +11379,7 @@ var parseDayPeriodPatterns$V = {
     night: /(ش|شب)/i
   }
 };
-var match$1O = {
+var match$V = {
   ordinalNumber: buildMatchPatternFn({
     matchPattern: matchOrdinalNumberPattern$V,
     parsePattern: parseOrdinalNumberPattern$V,
@@ -11600,7 +11421,6 @@ var match$1O = {
     defaultParseWidth: 'any'
   })
 };
-const match$1P = match$1O;
 
 /**
  * @type {Locale}
@@ -11610,19 +11430,18 @@ const match$1P = match$1O;
  * @iso-639-2 ira
  * @author Morteza Ziyae [@mort3za]{@link https://github.com/mort3za}
  */
-var locale$1U = {
+var locale$Y = {
   code: 'fa-IR',
-  formatDistance: formatDistance$1P,
-  formatLong: formatLong$1V,
-  formatRelative: formatRelative$1R,
-  localize: localize$1P,
-  match: match$1P,
+  formatDistance: formatDistance$V,
+  formatLong: formatLong$Y,
+  formatRelative: formatRelative$W,
+  localize: localize$V,
+  match: match$V,
   options: {
     weekStartsOn: 6 /* Saturday */,
     firstWeekContainsDate: 1
   }
 };
-const locale$1V = locale$1U;
 
 function futureSeconds(text) {
   return text.replace(/sekuntia?/, 'sekunnin');
@@ -11729,7 +11548,7 @@ var formatDistanceLocale$T = {
     futureTense: futureYears
   }
 };
-var formatDistance$1M = function formatDistance(token, count, options) {
+var formatDistance$U = function formatDistance(token, count, options) {
   var tokenValue = formatDistanceLocale$T[token];
   var result = count === 1 ? tokenValue.one : tokenValue.other.replace('{{count}}', String(count));
   if (options !== null && options !== void 0 && options.addSuffix) {
@@ -11741,7 +11560,6 @@ var formatDistance$1M = function formatDistance(token, count, options) {
   }
   return result;
 };
-const formatDistance$1N = formatDistance$1M;
 
 var dateFormats$X = {
   full: 'eeee d. MMMM y',
@@ -11761,7 +11579,7 @@ var dateTimeFormats$X = {
   medium: '{{date}} {{time}}',
   short: '{{date}} {{time}}'
 };
-var formatLong$1S = {
+var formatLong$X = {
   date: buildFormatLongFn({
     formats: dateFormats$X,
     defaultWidth: 'full'
@@ -11775,7 +11593,6 @@ var formatLong$1S = {
     defaultWidth: 'full'
   })
 };
-const formatLong$1T = formatLong$1S;
 
 var formatRelativeLocale$V = {
   lastWeek: "'viime' eeee 'klo' p",
@@ -11785,10 +11602,9 @@ var formatRelativeLocale$V = {
   nextWeek: "'ensi' eeee 'klo' p",
   other: 'P'
 };
-var formatRelative$1O = function formatRelative(token, _date, _baseDate, _options) {
+var formatRelative$V = function formatRelative(token, _date, _baseDate, _options) {
   return formatRelativeLocale$V[token];
 };
-const formatRelative$1P = formatRelative$1O;
 
 var eraValues$U = {
   narrow: ['eaa.', 'jaa.'],
@@ -11858,7 +11674,7 @@ var ordinalNumber$U = function ordinalNumber(dirtyNumber, _options) {
   var number = Number(dirtyNumber);
   return number + '.';
 };
-var localize$1M = {
+var localize$U = {
   ordinalNumber: ordinalNumber$U,
   era: buildLocalizeFn({
     values: eraValues$U,
@@ -11888,7 +11704,6 @@ var localize$1M = {
     defaultWidth: 'wide'
   })
 };
-const localize$1N = localize$1M;
 
 var matchOrdinalNumberPattern$U = /^(\d+)(\.)/i;
 var parseOrdinalNumberPattern$U = /\d+/i;
@@ -11943,7 +11758,7 @@ var parseDayPeriodPatterns$U = {
     night: /yöllä/i
   }
 };
-var match$1M = {
+var match$U = {
   ordinalNumber: buildMatchPatternFn({
     matchPattern: matchOrdinalNumberPattern$U,
     parsePattern: parseOrdinalNumberPattern$U,
@@ -11985,7 +11800,6 @@ var match$1M = {
     defaultParseWidth: 'any'
   })
 };
-const match$1N = match$1M;
 
 /**
  * @type {Locale}
@@ -11997,19 +11811,18 @@ const match$1N = match$1M;
  * @author Edo Rivai [@mikolajgrzyb]{@link https://github.com/mikolajgrzyb}
  * @author Samu Juvonen [@sjuvonen]{@link https://github.com/sjuvonen}
  */
-var locale$1S = {
+var locale$X = {
   code: 'fi',
-  formatDistance: formatDistance$1N,
-  formatLong: formatLong$1T,
-  formatRelative: formatRelative$1P,
-  localize: localize$1N,
-  match: match$1N,
+  formatDistance: formatDistance$U,
+  formatLong: formatLong$X,
+  formatRelative: formatRelative$V,
+  localize: localize$U,
+  match: match$U,
   options: {
     weekStartsOn: 1 /* Monday */,
     firstWeekContainsDate: 4
   }
 };
-const locale$1T = locale$1S;
 
 var formatDistanceLocale$S = {
   lessThanXSeconds: {
@@ -12074,7 +11887,7 @@ var formatDistanceLocale$S = {
     other: 'presque {{count}} ans'
   }
 };
-var formatDistance$1K = function formatDistance(token, count, options) {
+var formatDistance$T = function formatDistance(token, count, options) {
   var result;
   var form = formatDistanceLocale$S[token];
   if (typeof form === 'string') {
@@ -12093,7 +11906,6 @@ var formatDistance$1K = function formatDistance(token, count, options) {
   }
   return result;
 };
-const formatDistance$1L = formatDistance$1K;
 
 var dateFormats$W = {
   full: 'EEEE d MMMM y',
@@ -12113,7 +11925,7 @@ var dateTimeFormats$W = {
   medium: '{{date}}, {{time}}',
   short: '{{date}}, {{time}}'
 };
-var formatLong$1Q = {
+var formatLong$W = {
   date: buildFormatLongFn({
     formats: dateFormats$W,
     defaultWidth: 'full'
@@ -12127,7 +11939,6 @@ var formatLong$1Q = {
     defaultWidth: 'full'
   })
 };
-const formatLong$1R = formatLong$1Q;
 
 var formatRelativeLocale$U = {
   lastWeek: "eeee 'dernier à' p",
@@ -12137,10 +11948,9 @@ var formatRelativeLocale$U = {
   nextWeek: "eeee 'prochain à' p",
   other: 'P'
 };
-var formatRelative$1M = function formatRelative(token, _date, _baseDate, _options) {
+var formatRelative$U = function formatRelative(token, _date, _baseDate, _options) {
   return formatRelativeLocale$U[token];
 };
-const formatRelative$1N = formatRelative$1M;
 
 var eraValues$T = {
   narrow: ['av. J.-C', 'ap. J.-C'],
@@ -12208,7 +12018,7 @@ var ordinalNumber$T = function ordinalNumber(dirtyNumber, options) {
   }
   return number + suffix;
 };
-var localize$1K = {
+var localize$T = {
   ordinalNumber: ordinalNumber$T,
   era: buildLocalizeFn({
     values: eraValues$T,
@@ -12234,7 +12044,6 @@ var localize$1K = {
     defaultWidth: 'wide'
   })
 };
-const localize$1L = localize$1K;
 
 var matchOrdinalNumberPattern$T = /^(\d+)(ième|ère|ème|er|e)?/i;
 var parseOrdinalNumberPattern$T = /\d+/i;
@@ -12289,7 +12098,7 @@ var parseDayPeriodPatterns$T = {
     night: /nuit/i
   }
 };
-var match$1K = {
+var match$T = {
   ordinalNumber: buildMatchPatternFn({
     matchPattern: matchOrdinalNumberPattern$T,
     parsePattern: parseOrdinalNumberPattern$T,
@@ -12331,7 +12140,6 @@ var match$1K = {
     defaultParseWidth: 'any'
   })
 };
-const match$1L = match$1K;
 
 /**
  * @type {Locale}
@@ -12342,19 +12150,18 @@ const match$1L = match$1K;
  * @author Jean Dupouy [@izeau]{@link https://github.com/izeau}
  * @author François B [@fbonzon]{@link https://github.com/fbonzon}
  */
-var locale$1Q = {
+var locale$W = {
   code: 'fr',
-  formatDistance: formatDistance$1L,
-  formatLong: formatLong$1R,
-  formatRelative: formatRelative$1N,
-  localize: localize$1L,
-  match: match$1L,
+  formatDistance: formatDistance$T,
+  formatLong: formatLong$W,
+  formatRelative: formatRelative$U,
+  localize: localize$T,
+  match: match$T,
   options: {
     weekStartsOn: 1 /* Monday */,
     firstWeekContainsDate: 4
   }
 };
-const locale$1R = locale$1Q;
 
 var dateFormats$V = {
   full: 'EEEE d MMMM y',
@@ -12374,7 +12181,7 @@ var dateTimeFormats$V = {
   medium: '{{date}}, {{time}}',
   short: '{{date}}, {{time}}'
 };
-var formatLong$1O = {
+var formatLong$V = {
   date: buildFormatLongFn({
     formats: dateFormats$V,
     defaultWidth: 'full'
@@ -12388,7 +12195,6 @@ var formatLong$1O = {
     defaultWidth: 'full'
   })
 };
-const formatLong$1P = formatLong$1O;
 
 // Same as fr
 /**
@@ -12401,20 +12207,19 @@ const formatLong$1P = formatLong$1O;
  * @author François B [@fbonzon]{@link https://github.com/fbonzon}
  * @author Gabriele Petrioli [@gpetrioli]{@link https://github.com/gpetrioli}
  */
-var locale$1O = {
+var locale$V = {
   code: 'fr-CA',
-  formatDistance: formatDistance$1L,
-  formatLong: formatLong$1P,
-  formatRelative: formatRelative$1N,
-  localize: localize$1L,
-  match: match$1L,
+  formatDistance: formatDistance$T,
+  formatLong: formatLong$V,
+  formatRelative: formatRelative$U,
+  localize: localize$T,
+  match: match$T,
   // Unique for fr-CA
   options: {
     weekStartsOn: 0 /* Sunday */,
     firstWeekContainsDate: 1
   }
 };
-const locale$1P = locale$1O;
 
 var dateFormats$U = {
   full: 'EEEE d MMMM y',
@@ -12434,7 +12239,7 @@ var dateTimeFormats$U = {
   medium: '{{date}}, {{time}}',
   short: '{{date}}, {{time}}'
 };
-var formatLong$1M = {
+var formatLong$U = {
   date: buildFormatLongFn({
     formats: dateFormats$U,
     defaultWidth: 'full'
@@ -12448,7 +12253,6 @@ var formatLong$1M = {
     defaultWidth: 'full'
   })
 };
-const formatLong$1N = formatLong$1M;
 
 var formatRelativeLocale$T = {
   lastWeek: "eeee 'la semaine dernière à' p",
@@ -12458,10 +12262,9 @@ var formatRelativeLocale$T = {
   nextWeek: "eeee 'la semaine prochaine à' p",
   other: 'P'
 };
-var formatRelative$1K = function formatRelative(token, _date, _baseDate, _options) {
+var formatRelative$T = function formatRelative(token, _date, _baseDate, _options) {
   return formatRelativeLocale$T[token];
 };
-const formatRelative$1L = formatRelative$1K;
 
 // Same as fr
 /**
@@ -12475,19 +12278,18 @@ const formatRelative$1L = formatRelative$1K;
  * @author Van Vuong Ngo [@vanvuongngo]{@link https://github.com/vanvuongngo}
  * @author Alex Hoeing [@dcbn]{@link https://github.com/dcbn}
  */
-var locale$1M = {
+var locale$U = {
   code: 'fr-CH',
-  formatDistance: formatDistance$1L,
-  formatLong: formatLong$1N,
-  formatRelative: formatRelative$1L,
-  localize: localize$1L,
-  match: match$1L,
+  formatDistance: formatDistance$T,
+  formatLong: formatLong$U,
+  formatRelative: formatRelative$T,
+  localize: localize$T,
+  match: match$T,
   options: {
     weekStartsOn: 1 /* Monday */,
     firstWeekContainsDate: 4
   }
 };
-const locale$1N = locale$1M;
 
 var formatDistanceLocale$R = {
   lessThanXSeconds: {
@@ -12552,7 +12354,7 @@ var formatDistanceLocale$R = {
     other: 'hast {{count}} jier'
   }
 };
-var formatDistance$1I = function formatDistance(token, count, options) {
+var formatDistance$S = function formatDistance(token, count, options) {
   var result;
   var tokenValue = formatDistanceLocale$R[token];
   if (typeof tokenValue === 'string') {
@@ -12571,7 +12373,6 @@ var formatDistance$1I = function formatDistance(token, count, options) {
   }
   return result;
 };
-const formatDistance$1J = formatDistance$1I;
 
 var dateFormats$T = {
   full: 'EEEE d MMMM y',
@@ -12591,7 +12392,7 @@ var dateTimeFormats$T = {
   medium: '{{date}}, {{time}}',
   short: '{{date}}, {{time}}'
 };
-var formatLong$1K = {
+var formatLong$T = {
   date: buildFormatLongFn({
     formats: dateFormats$T,
     defaultWidth: 'full'
@@ -12605,7 +12406,6 @@ var formatLong$1K = {
     defaultWidth: 'full'
   })
 };
-const formatLong$1L = formatLong$1K;
 
 var formatRelativeLocale$S = {
   lastWeek: "'ôfrûne' eeee 'om' p",
@@ -12615,10 +12415,9 @@ var formatRelativeLocale$S = {
   nextWeek: "eeee 'om' p",
   other: 'P'
 };
-var formatRelative$1I = function formatRelative(token, _date, _baseDate, _options) {
+var formatRelative$S = function formatRelative(token, _date, _baseDate, _options) {
   return formatRelativeLocale$S[token];
 };
-const formatRelative$1J = formatRelative$1I;
 
 var eraValues$S = {
   narrow: ['f.K.', 'n.K.'],
@@ -12677,7 +12476,7 @@ var ordinalNumber$S = function ordinalNumber(dirtyNumber, _options) {
   var number = Number(dirtyNumber);
   return number + 'e';
 };
-var localize$1I = {
+var localize$S = {
   ordinalNumber: ordinalNumber$S,
   era: buildLocalizeFn({
     values: eraValues$S,
@@ -12703,7 +12502,6 @@ var localize$1I = {
     defaultWidth: 'wide'
   })
 };
-const localize$1J = localize$1I;
 
 var matchOrdinalNumberPattern$S = /^(\d+)e?/i;
 var parseOrdinalNumberPattern$S = /\d+/i;
@@ -12757,7 +12555,7 @@ var parseDayPeriodPatterns$S = {
     night: /nachts/i
   }
 };
-var match$1I = {
+var match$S = {
   ordinalNumber: buildMatchPatternFn({
     matchPattern: matchOrdinalNumberPattern$S,
     parsePattern: parseOrdinalNumberPattern$S,
@@ -12799,7 +12597,6 @@ var match$1I = {
     defaultParseWidth: 'any'
   })
 };
-const match$1J = match$1I;
 
 /**
  * @type {Locale}
@@ -12809,19 +12606,18 @@ const match$1J = match$1I;
  * @iso-639-2 fry
  * @author Damon Asberg [@damon02]{@link https://github.com/damon02}
  */
-var locale$1K = {
+var locale$T = {
   code: 'fy',
-  formatDistance: formatDistance$1J,
-  formatLong: formatLong$1L,
-  formatRelative: formatRelative$1J,
-  localize: localize$1J,
-  match: match$1J,
+  formatDistance: formatDistance$S,
+  formatLong: formatLong$T,
+  formatRelative: formatRelative$S,
+  localize: localize$S,
+  match: match$S,
   options: {
     weekStartsOn: 1 /* Monday */,
     firstWeekContainsDate: 4
   }
 };
-const locale$1L = locale$1K;
 
 var formatDistanceLocale$Q = {
   lessThanXSeconds: {
@@ -12892,7 +12688,7 @@ var formatDistanceLocale$Q = {
     other: 'cha mhòr {{count}} bliadhnaichean'
   }
 };
-var formatDistance$1G = function formatDistance(token, count, options) {
+var formatDistance$R = function formatDistance(token, count, options) {
   var result;
   var tokenValue = formatDistanceLocale$Q[token];
   if (typeof tokenValue === 'string') {
@@ -12915,7 +12711,6 @@ var formatDistance$1G = function formatDistance(token, count, options) {
   }
   return result;
 };
-const formatDistance$1H = formatDistance$1G;
 
 var dateFormats$S = {
   full: 'EEEE, MMMM do, y',
@@ -12935,7 +12730,7 @@ var dateTimeFormats$S = {
   medium: '{{date}}, {{time}}',
   short: '{{date}}, {{time}}'
 };
-var formatLong$1I = {
+var formatLong$S = {
   date: buildFormatLongFn({
     formats: dateFormats$S,
     defaultWidth: 'full'
@@ -12949,7 +12744,6 @@ var formatLong$1I = {
     defaultWidth: 'full'
   })
 };
-const formatLong$1J = formatLong$1I;
 
 var formatRelativeLocale$R = {
   lastWeek: "'mu dheireadh' eeee 'aig' p",
@@ -12960,10 +12754,9 @@ var formatRelativeLocale$R = {
   nextWeek: "eeee 'aig' p",
   other: 'P'
 };
-var formatRelative$1G = function formatRelative(token, _date, _baseDate, _options) {
+var formatRelative$R = function formatRelative(token, _date, _baseDate, _options) {
   return formatRelativeLocale$R[token];
 };
-const formatRelative$1H = formatRelative$1G;
 
 var eraValues$R = {
   narrow: ['R', 'A'],
@@ -13071,7 +12864,7 @@ var ordinalNumber$R = function ordinalNumber(dirtyNumber) {
   }
   return number + 'mh';
 };
-var localize$1G = {
+var localize$R = {
   ordinalNumber: ordinalNumber$R,
   era: buildLocalizeFn({
     values: eraValues$R,
@@ -13099,7 +12892,6 @@ var localize$1G = {
     defaultFormattingWidth: 'wide'
   })
 };
-const localize$1H = localize$1G;
 
 var matchOrdinalNumberPattern$R = /^(\d+)(d|na|tr|mh)?/i;
 var parseOrdinalNumberPattern$R = /\d+/i;
@@ -13154,7 +12946,7 @@ var parseDayPeriodPatterns$R = {
     night: /air an oidhche/i
   }
 };
-var match$1G = {
+var match$R = {
   ordinalNumber: buildMatchPatternFn({
     matchPattern: matchOrdinalNumberPattern$R,
     parsePattern: parseOrdinalNumberPattern$R,
@@ -13196,7 +12988,6 @@ var match$1G = {
     defaultParseWidth: 'any'
   })
 };
-const match$1H = match$1G;
 
 /**
  * @type {Locale}
@@ -13206,19 +12997,18 @@ const match$1H = match$1G;
  * @iso-639-2 gla
  * @author Lee Driscoll [@leedriscoll]{@link https://github.com/leedriscoll}
  */
-var locale$1I = {
+var locale$S = {
   code: 'gd',
-  formatDistance: formatDistance$1H,
-  formatLong: formatLong$1J,
-  formatRelative: formatRelative$1H,
-  localize: localize$1H,
-  match: match$1H,
+  formatDistance: formatDistance$R,
+  formatLong: formatLong$S,
+  formatRelative: formatRelative$R,
+  localize: localize$R,
+  match: match$R,
   options: {
     weekStartsOn: 0 /* Sunday */,
     firstWeekContainsDate: 1
   }
 };
-const locale$1J = locale$1I;
 
 var formatDistanceLocale$P = {
   lessThanXSeconds: {
@@ -13283,7 +13073,7 @@ var formatDistanceLocale$P = {
     other: 'case {{count}} anos'
   }
 };
-var formatDistance$1E = function formatDistance(token, count, options) {
+var formatDistance$Q = function formatDistance(token, count, options) {
   var result;
   var tokenValue = formatDistanceLocale$P[token];
   if (typeof tokenValue === 'string') {
@@ -13302,7 +13092,6 @@ var formatDistance$1E = function formatDistance(token, count, options) {
   }
   return result;
 };
-const formatDistance$1F = formatDistance$1E;
 
 var dateFormats$R = {
   full: "EEEE, d 'de' MMMM y",
@@ -13322,7 +13111,7 @@ var dateTimeFormats$R = {
   medium: '{{date}}, {{time}}',
   short: '{{date}}, {{time}}'
 };
-var formatLong$1G = {
+var formatLong$R = {
   date: buildFormatLongFn({
     formats: dateFormats$R,
     defaultWidth: 'full'
@@ -13336,7 +13125,6 @@ var formatLong$1G = {
     defaultWidth: 'full'
   })
 };
-const formatLong$1H = formatLong$1G;
 
 var formatRelativeLocale$Q = {
   lastWeek: "'o' eeee 'pasado á' LT",
@@ -13354,13 +13142,12 @@ var formatRelativeLocalePlural = {
   nextWeek: "eeee 'ás' p",
   other: 'P'
 };
-var formatRelative$1E = function formatRelative(token, date, _baseDate, _options) {
+var formatRelative$Q = function formatRelative(token, date, _baseDate, _options) {
   if (date.getUTCHours() !== 1) {
     return formatRelativeLocalePlural[token];
   }
   return formatRelativeLocale$Q[token];
 };
-const formatRelative$1F = formatRelative$1E;
 
 var eraValues$Q = {
   narrow: ['AC', 'DC'],
@@ -13451,7 +13238,7 @@ var ordinalNumber$Q = function ordinalNumber(dirtyNumber, _options) {
   var number = Number(dirtyNumber);
   return number + 'º';
 };
-var localize$1E = {
+var localize$Q = {
   ordinalNumber: ordinalNumber$Q,
   era: buildLocalizeFn({
     values: eraValues$Q,
@@ -13479,7 +13266,6 @@ var localize$1E = {
     defaultFormattingWidth: 'wide'
   })
 };
-const localize$1F = localize$1E;
 
 var matchOrdinalNumberPattern$Q = /^(\d+)(º)?/i;
 var parseOrdinalNumberPattern$Q = /\d+/i;
@@ -13535,7 +13321,7 @@ var parseDayPeriodPatterns$Q = {
     night: /noite/i
   }
 };
-var match$1E = {
+var match$Q = {
   ordinalNumber: buildMatchPatternFn({
     matchPattern: matchOrdinalNumberPattern$Q,
     parsePattern: parseOrdinalNumberPattern$Q,
@@ -13577,7 +13363,6 @@ var match$1E = {
     defaultParseWidth: 'any'
   })
 };
-const match$1F = match$1E;
 
 /**
  * @type {Locale}
@@ -13588,19 +13373,18 @@ const match$1F = match$1E;
  * @author Alberto Doval - Cocodin Technology[@cocodinTech]{@link https://github.com/cocodinTech}
  * @author Fidel Pita [@fidelpita]{@link https://github.com/fidelpita}
  */
-var locale$1G = {
+var locale$R = {
   code: 'gl',
-  formatDistance: formatDistance$1F,
-  formatLong: formatLong$1H,
-  formatRelative: formatRelative$1F,
-  localize: localize$1F,
-  match: match$1F,
+  formatDistance: formatDistance$Q,
+  formatLong: formatLong$R,
+  formatRelative: formatRelative$Q,
+  localize: localize$Q,
+  match: match$Q,
   options: {
     weekStartsOn: 1 /* Monday */,
     firstWeekContainsDate: 1
   }
 };
-const locale$1H = locale$1G;
 
 // Source: https://www.unicode.org/cldr/charts/32/summary/gu.html
 var formatDistanceLocale$O = {
@@ -13668,7 +13452,7 @@ var formatDistanceLocale$O = {
     other: 'લગભગ {{count}} વર્ષ'
   }
 };
-var formatDistance$1C = function formatDistance(token, count, options) {
+var formatDistance$P = function formatDistance(token, count, options) {
   var result;
   var tokenValue = formatDistanceLocale$O[token];
   if (typeof tokenValue === 'string') {
@@ -13687,7 +13471,6 @@ var formatDistance$1C = function formatDistance(token, count, options) {
   }
   return result;
 };
-const formatDistance$1D = formatDistance$1C;
 
 var dateFormats$Q = {
   full: 'EEEE, d MMMM, y',
@@ -13719,7 +13502,7 @@ var dateTimeFormats$Q = {
   short: '{{date}} {{time}}' // CLDR #1836
 };
 
-var formatLong$1E = {
+var formatLong$Q = {
   date: buildFormatLongFn({
     formats: dateFormats$Q,
     defaultWidth: 'full'
@@ -13733,7 +13516,6 @@ var formatLong$1E = {
     defaultWidth: 'full'
   })
 };
-const formatLong$1F = formatLong$1E;
 
 // Source: https://www.unicode.org/cldr/charts/32/summary/gu.html
 
@@ -13750,10 +13532,9 @@ var formatRelativeLocale$P = {
   // CLDR #1386
   other: 'P'
 };
-var formatRelative$1C = function formatRelative(token, _date, _baseDate, _options) {
+var formatRelative$P = function formatRelative(token, _date, _baseDate, _options) {
   return formatRelativeLocale$P[token];
 };
-const formatRelative$1D = formatRelative$1C;
 
 // #1621 - #1630
 var eraValues$P = {
@@ -13861,7 +13642,7 @@ var formattingDayPeriodValues$G = {
 var ordinalNumber$P = function ordinalNumber(dirtyNumber, _options) {
   return String(dirtyNumber);
 };
-var localize$1C = {
+var localize$P = {
   ordinalNumber: ordinalNumber$P,
   era: buildLocalizeFn({
     values: eraValues$P,
@@ -13889,7 +13670,6 @@ var localize$1C = {
     defaultFormattingWidth: 'wide'
   })
 };
-const localize$1D = localize$1C;
 
 var matchOrdinalNumberPattern$P = /^(\d+)(લ|જ|થ|ઠ્ઠ|મ)?/i;
 var parseOrdinalNumberPattern$P = /\d+/i;
@@ -13945,7 +13725,7 @@ var parseDayPeriodPatterns$P = {
     night: /રા/i
   }
 };
-var match$1C = {
+var match$P = {
   ordinalNumber: buildMatchPatternFn({
     matchPattern: matchOrdinalNumberPattern$P,
     parsePattern: parseOrdinalNumberPattern$P,
@@ -13987,7 +13767,6 @@ var match$1C = {
     defaultParseWidth: 'any'
   })
 };
-const match$1D = match$1C;
 
 /**
  * @type {Locale}
@@ -13997,19 +13776,18 @@ const match$1D = match$1C;
  * @iso-639-2 guj
  * @author Manaday Mavani [@ManadayM]{@link https://github.com/manadaym}
  */
-var locale$1E = {
+var locale$Q = {
   code: 'gu',
-  formatDistance: formatDistance$1D,
-  formatLong: formatLong$1F,
-  formatRelative: formatRelative$1D,
-  localize: localize$1D,
-  match: match$1D,
+  formatDistance: formatDistance$P,
+  formatLong: formatLong$Q,
+  formatRelative: formatRelative$P,
+  localize: localize$P,
+  match: match$P,
   options: {
     weekStartsOn: 1 /* Monday */,
     firstWeekContainsDate: 4
   }
 };
-const locale$1F = locale$1E;
 
 var formatDistanceLocale$N = {
   lessThanXSeconds: {
@@ -14089,7 +13867,7 @@ var formatDistanceLocale$N = {
     other: 'כמעט {{count}} שנים'
   }
 };
-var formatDistance$1A = function formatDistance(token, count, options) {
+var formatDistance$O = function formatDistance(token, count, options) {
   // Return word instead of `in one day` or `one day ago`
   if (token === 'xDays' && options !== null && options !== void 0 && options.addSuffix && count <= 2) {
     if (options.comparison && options.comparison > 0) {
@@ -14117,7 +13895,6 @@ var formatDistance$1A = function formatDistance(token, count, options) {
   }
   return result;
 };
-const formatDistance$1B = formatDistance$1A;
 
 var dateFormats$P = {
   full: 'EEEE, d בMMMM y',
@@ -14137,7 +13914,7 @@ var dateTimeFormats$P = {
   medium: '{{date}}, {{time}}',
   short: '{{date}}, {{time}}'
 };
-var formatLong$1C = {
+var formatLong$P = {
   date: buildFormatLongFn({
     formats: dateFormats$P,
     defaultWidth: 'full'
@@ -14151,7 +13928,6 @@ var formatLong$1C = {
     defaultWidth: 'full'
   })
 };
-const formatLong$1D = formatLong$1C;
 
 var formatRelativeLocale$O = {
   lastWeek: "eeee 'שעבר בשעה' p",
@@ -14161,10 +13937,9 @@ var formatRelativeLocale$O = {
   nextWeek: "eeee 'בשעה' p",
   other: 'P'
 };
-var formatRelative$1A = function formatRelative(token, _date, _baseDate, _options) {
+var formatRelative$O = function formatRelative(token, _date, _baseDate, _options) {
   return formatRelativeLocale$O[token];
 };
-const formatRelative$1B = formatRelative$1A;
 
 var eraValues$O = {
   narrow: ['לפנה״ס', 'לספירה'],
@@ -14263,7 +14038,7 @@ var ordinalNumber$O = function ordinalNumber(dirtyNumber, options) {
   var index = number - 1;
   return isFemale ? female[index] : male[index];
 };
-var localize$1A = {
+var localize$O = {
   ordinalNumber: ordinalNumber$O,
   era: buildLocalizeFn({
     values: eraValues$O,
@@ -14291,7 +14066,6 @@ var localize$1A = {
     defaultFormattingWidth: 'wide'
   })
 };
-const localize$1B = localize$1A;
 
 var matchOrdinalNumberPattern$O = /^(\d+|(ראשון|שני|שלישי|רביעי|חמישי|שישי|שביעי|שמיני|תשיעי|עשירי|ראשונה|שנייה|שלישית|רביעית|חמישית|שישית|שביעית|שמינית|תשיעית|עשירית))/i;
 var parseOrdinalNumberPattern$O = /^(\d+|רא|שנ|של|רב|ח|שי|שב|שמ|ת|ע)/i;
@@ -14347,7 +14121,7 @@ var parseDayPeriodPatterns$O = {
   }
 };
 var ordinalName = ['רא', 'שנ', 'של', 'רב', 'ח', 'שי', 'שב', 'שמ', 'ת', 'ע'];
-var match$1A = {
+var match$O = {
   ordinalNumber: buildMatchPatternFn({
     matchPattern: matchOrdinalNumberPattern$O,
     parsePattern: parseOrdinalNumberPattern$O,
@@ -14390,7 +14164,6 @@ var match$1A = {
     defaultParseWidth: 'any'
   })
 };
-const match$1B = match$1A;
 
 /**
  * @type {Locale}
@@ -14400,19 +14173,18 @@ const match$1B = match$1A;
  * @iso-639-2 heb
  * @author Nir Lahad [@nirlah]{@link https://github.com/nirlah}
  */
-var locale$1C = {
+var locale$P = {
   code: 'he',
-  formatDistance: formatDistance$1B,
-  formatLong: formatLong$1D,
-  formatRelative: formatRelative$1B,
-  localize: localize$1B,
-  match: match$1B,
+  formatDistance: formatDistance$O,
+  formatLong: formatLong$P,
+  formatRelative: formatRelative$O,
+  localize: localize$O,
+  match: match$O,
   options: {
     weekStartsOn: 0 /* Sunday */,
     firstWeekContainsDate: 1
   }
 };
-const locale$1D = locale$1C;
 
 var numberValues = {
   locale: {
@@ -14553,7 +14325,7 @@ function numberToLocale(enNumber) {
     return numberValues.locale[match];
   });
 }
-var localize$1y = {
+var localize$N = {
   ordinalNumber: ordinalNumber$N,
   era: buildLocalizeFn({
     values: eraValues$N,
@@ -14581,7 +14353,6 @@ var localize$1y = {
     defaultFormattingWidth: 'wide'
   })
 };
-const localize$1z = localize$1y;
 
 var formatDistanceLocale$M = {
   lessThanXSeconds: {
@@ -14652,7 +14423,7 @@ var formatDistanceLocale$M = {
     other: 'लगभग {{count}} वर्ष'
   }
 };
-var formatDistance$1y = function formatDistance(token, count, options) {
+var formatDistance$N = function formatDistance(token, count, options) {
   var result;
   var tokenValue = formatDistanceLocale$M[token];
   if (typeof tokenValue === 'string') {
@@ -14671,7 +14442,6 @@ var formatDistance$1y = function formatDistance(token, count, options) {
   }
   return result;
 };
-const formatDistance$1z = formatDistance$1y;
 
 var dateFormats$O = {
   full: 'EEEE, do MMMM, y',
@@ -14703,7 +14473,7 @@ var dateTimeFormats$O = {
   short: '{{date}}, {{time}}' // CLDR #1798
 };
 
-var formatLong$1A = {
+var formatLong$O = {
   date: buildFormatLongFn({
     formats: dateFormats$O,
     defaultWidth: 'full'
@@ -14717,7 +14487,6 @@ var formatLong$1A = {
     defaultWidth: 'full'
   })
 };
-const formatLong$1B = formatLong$1A;
 
 var formatRelativeLocale$N = {
   lastWeek: "'पिछले' eeee p",
@@ -14727,10 +14496,9 @@ var formatRelativeLocale$N = {
   nextWeek: "eeee 'को' p",
   other: 'P'
 };
-var formatRelative$1y = function formatRelative(token, _date, _baseDate, _options) {
+var formatRelative$N = function formatRelative(token, _date, _baseDate, _options) {
   return formatRelativeLocale$N[token];
 };
-const formatRelative$1z = formatRelative$1y;
 
 var matchOrdinalNumberPattern$N = /^[०१२३४५६७८९]+/i;
 var parseOrdinalNumberPattern$N = /^[०१२३४५६७८९]+/i;
@@ -14787,7 +14555,7 @@ var parseDayPeriodPatterns$N = {
     night: /रा/i
   }
 };
-var match$1y = {
+var match$N = {
   ordinalNumber: buildMatchPatternFn({
     matchPattern: matchOrdinalNumberPattern$N,
     parsePattern: parseOrdinalNumberPattern$N,
@@ -14827,7 +14595,6 @@ var match$1y = {
     defaultParseWidth: 'any'
   })
 };
-const match$1z = match$1y;
 
 /**
  * @type {Locale}
@@ -14837,19 +14604,18 @@ const match$1z = match$1y;
  * @iso-639-2 hin
  * @author Mukesh Mandiwal [@mukeshmandiwal]{@link https://github.com/mukeshmandiwal}
  */
-var locale$1A = {
+var locale$O = {
   code: 'hi',
-  formatDistance: formatDistance$1z,
-  formatLong: formatLong$1B,
-  formatRelative: formatRelative$1z,
-  localize: localize$1z,
-  match: match$1z,
+  formatDistance: formatDistance$N,
+  formatLong: formatLong$O,
+  formatRelative: formatRelative$N,
+  localize: localize$N,
+  match: match$N,
   options: {
     weekStartsOn: 0 /* Monday */,
     firstWeekContainsDate: 4
   }
 };
-const locale$1B = locale$1A;
 
 var formatDistanceLocale$L = {
   lessThanXSeconds: {
@@ -14989,7 +14755,7 @@ var formatDistanceLocale$L = {
     other: 'gotovo {{count}} godina'
   }
 };
-var formatDistance$1w = function formatDistance(token, count, options) {
+var formatDistance$M = function formatDistance(token, count, options) {
   var result;
   var tokenValue = formatDistanceLocale$L[token];
   if (typeof tokenValue === 'string') {
@@ -15021,7 +14787,6 @@ var formatDistance$1w = function formatDistance(token, count, options) {
   }
   return result;
 };
-const formatDistance$1x = formatDistance$1w;
 
 var dateFormats$N = {
   full: 'EEEE, d. MMMM y.',
@@ -15041,7 +14806,7 @@ var dateTimeFormats$N = {
   medium: '{{date}} {{time}}',
   short: '{{date}} {{time}}'
 };
-var formatLong$1y = {
+var formatLong$N = {
   date: buildFormatLongFn({
     formats: dateFormats$N,
     defaultWidth: 'full'
@@ -15055,7 +14820,6 @@ var formatLong$1y = {
     defaultWidth: 'full'
   })
 };
-const formatLong$1z = formatLong$1y;
 
 var formatRelativeLocale$M = {
   lastWeek: function lastWeek(date) {
@@ -15087,14 +14851,13 @@ var formatRelativeLocale$M = {
   },
   other: 'P'
 };
-var formatRelative$1w = function formatRelative(token, date, _baseDate, _options) {
+var formatRelative$M = function formatRelative(token, date, _baseDate, _options) {
   var format = formatRelativeLocale$M[token];
   if (typeof format === 'function') {
     return format(date);
   }
   return format;
 };
-const formatRelative$1x = formatRelative$1w;
 
 var eraValues$M = {
   narrow: ['pr.n.e.', 'AD'],
@@ -15190,7 +14953,7 @@ var ordinalNumber$M = function ordinalNumber(dirtyNumber, _options) {
   var number = Number(dirtyNumber);
   return number + '.';
 };
-var localize$1w = {
+var localize$M = {
   ordinalNumber: ordinalNumber$M,
   era: buildLocalizeFn({
     values: eraValues$M,
@@ -15220,7 +14983,6 @@ var localize$1w = {
     defaultFormattingWidth: 'wide'
   })
 };
-const localize$1x = localize$1w;
 
 var matchOrdinalNumberPattern$M = /^(\d+)\./i;
 var parseOrdinalNumberPattern$M = /\d+/i;
@@ -15275,7 +15037,7 @@ var parseDayPeriodPatterns$M = {
     night: /(nocu|noću)/i
   }
 };
-var match$1w = {
+var match$M = {
   ordinalNumber: buildMatchPatternFn({
     matchPattern: matchOrdinalNumberPattern$M,
     parsePattern: parseOrdinalNumberPattern$M,
@@ -15317,7 +15079,6 @@ var match$1w = {
     defaultParseWidth: 'any'
   })
 };
-const match$1x = match$1w;
 
 /**
  * @type {Locale}
@@ -15329,19 +15090,18 @@ const match$1x = match$1w;
  * @author Manico [@manico]{@link https://github.com/manico}
  * @author Ivan Jeržabek [@jerzabek]{@link https://github.com/jerzabek}
  */
-var locale$1y = {
+var locale$N = {
   code: 'hr',
-  formatDistance: formatDistance$1x,
-  formatLong: formatLong$1z,
-  formatRelative: formatRelative$1x,
-  localize: localize$1x,
-  match: match$1x,
+  formatDistance: formatDistance$M,
+  formatLong: formatLong$N,
+  formatRelative: formatRelative$M,
+  localize: localize$M,
+  match: match$M,
   options: {
     weekStartsOn: 1 /* Monday */,
     firstWeekContainsDate: 1
   }
 };
-const locale$1z = locale$1y;
 
 var formatDistanceLocale$K = {
   lessThanXSeconds: {
@@ -15406,7 +15166,7 @@ var formatDistanceLocale$K = {
     other: 'prèske {{count}} an'
   }
 };
-var formatDistance$1u = function formatDistance(token, count, options) {
+var formatDistance$L = function formatDistance(token, count, options) {
   var result;
   var tokenValue = formatDistanceLocale$K[token];
   if (typeof tokenValue === 'string') {
@@ -15425,7 +15185,6 @@ var formatDistance$1u = function formatDistance(token, count, options) {
   }
   return result;
 };
-const formatDistance$1v = formatDistance$1u;
 
 var dateFormats$M = {
   full: 'EEEE d MMMM y',
@@ -15445,7 +15204,7 @@ var dateTimeFormats$M = {
   medium: '{{date}}, {{time}}',
   short: '{{date}}, {{time}}'
 };
-var formatLong$1w = {
+var formatLong$M = {
   date: buildFormatLongFn({
     formats: dateFormats$M,
     defaultWidth: 'full'
@@ -15459,7 +15218,6 @@ var formatLong$1w = {
     defaultWidth: 'full'
   })
 };
-const formatLong$1x = formatLong$1w;
 
 var formatRelativeLocale$L = {
   lastWeek: "eeee 'pase nan lè' p",
@@ -15469,10 +15227,9 @@ var formatRelativeLocale$L = {
   nextWeek: "eeee 'pwochen nan lè' p",
   other: 'P'
 };
-var formatRelative$1u = function formatRelative(token, _date, _baseDate, _options) {
+var formatRelative$L = function formatRelative(token, _date, _baseDate, _options) {
   return formatRelativeLocale$L[token];
 };
-const formatRelative$1v = formatRelative$1u;
 
 var eraValues$L = {
   narrow: ['av. J.-K', 'ap. J.-K'],
@@ -15533,7 +15290,7 @@ var ordinalNumber$L = function ordinalNumber(dirtyNumber, _options) {
   var suffix = number === 1 ? 'ye' : 'yèm';
   return number + suffix;
 };
-var localize$1u = {
+var localize$L = {
   ordinalNumber: ordinalNumber$L,
   era: buildLocalizeFn({
     values: eraValues$L,
@@ -15559,7 +15316,6 @@ var localize$1u = {
     defaultWidth: 'wide'
   })
 };
-const localize$1v = localize$1u;
 
 var matchOrdinalNumberPattern$L = /^(\d+)(ye|yèm)?/i;
 var parseOrdinalNumberPattern$L = /\d+/i;
@@ -15614,7 +15370,7 @@ var parseDayPeriodPatterns$L = {
     night: /nwit/i
   }
 };
-var match$1u = {
+var match$L = {
   ordinalNumber: buildMatchPatternFn({
     matchPattern: matchOrdinalNumberPattern$L,
     parsePattern: parseOrdinalNumberPattern$L,
@@ -15656,7 +15412,6 @@ var match$1u = {
     defaultParseWidth: 'any'
   })
 };
-const match$1v = match$1u;
 
 /**
  * @type {Locale}
@@ -15667,19 +15422,18 @@ const match$1v = match$1u;
  * @author Rubens Mariuzzo [@rmariuzzo]{@link https://github.com/rmariuzzo}
  * @author Watson Marcelain [@watsongm24]{@link https://github.com/watsongm24}
  */
-var locale$1w = {
+var locale$M = {
   code: 'ht',
-  formatDistance: formatDistance$1v,
-  formatLong: formatLong$1x,
-  formatRelative: formatRelative$1v,
-  localize: localize$1v,
-  match: match$1v,
+  formatDistance: formatDistance$L,
+  formatLong: formatLong$M,
+  formatRelative: formatRelative$L,
+  localize: localize$L,
+  match: match$L,
   options: {
     weekStartsOn: 1 /* Monday */,
     firstWeekContainsDate: 4
   }
 };
-const locale$1x = locale$1w;
 
 var translations$1 = {
   about: 'körülbelül',
@@ -15739,7 +15493,7 @@ var withSuffixes = {
     '0': ' éve'
   }
 };
-var formatDistance$1s = function formatDistance(token, count, options) {
+var formatDistance$K = function formatDistance(token, count, options) {
   var adverb = token.match(/about|over|almost|lessthan/i);
   var unit = adverb ? token.replace(adverb[0], '') : token;
   var addSuffix = (options === null || options === void 0 ? void 0 : options.addSuffix) === true;
@@ -15753,7 +15507,6 @@ var formatDistance$1s = function formatDistance(token, count, options) {
   }
   return result;
 };
-const formatDistance$1t = formatDistance$1s;
 
 var dateFormats$L = {
   full: 'y. MMMM d., EEEE',
@@ -15773,7 +15526,7 @@ var dateTimeFormats$L = {
   medium: '{{date}} {{time}}',
   short: '{{date}} {{time}}'
 };
-var formatLong$1u = {
+var formatLong$L = {
   date: buildFormatLongFn({
     formats: dateFormats$L,
     defaultWidth: 'full'
@@ -15787,7 +15540,6 @@ var formatLong$1u = {
     defaultWidth: 'full'
   })
 };
-const formatLong$1v = formatLong$1u;
 
 var accusativeWeekdays$4 = ['vasárnap', 'hétfőn', 'kedden', 'szerdán', 'csütörtökön', 'pénteken', 'szombaton'];
 function week(isFuture) {
@@ -15805,14 +15557,13 @@ var formatRelativeLocale$K = {
   nextWeek: week(true),
   other: 'P'
 };
-var formatRelative$1s = function formatRelative(token, date) {
+var formatRelative$K = function formatRelative(token, date) {
   var format = formatRelativeLocale$K[token];
   if (typeof format === 'function') {
     return format(date);
   }
   return format;
 };
-const formatRelative$1t = formatRelative$1s;
 
 var eraValues$K = {
   narrow: ['ie.', 'isz.'],
@@ -15876,7 +15627,7 @@ var ordinalNumber$K = function ordinalNumber(dirtyNumber, _options) {
   var number = Number(dirtyNumber);
   return number + '.';
 };
-var localize$1s = {
+var localize$K = {
   ordinalNumber: ordinalNumber$K,
   era: buildLocalizeFn({
     values: eraValues$K,
@@ -15904,7 +15655,6 @@ var localize$1s = {
     defaultWidth: 'wide'
   })
 };
-const localize$1t = localize$1s;
 
 var matchOrdinalNumberPattern$K = /^(\d+)\.?/i;
 var parseOrdinalNumberPattern$K = /\d+/i;
@@ -15960,7 +15710,7 @@ var parseDayPeriodPatterns$K = {
     night: /éjj/i
   }
 };
-var match$1s = {
+var match$K = {
   ordinalNumber: buildMatchPatternFn({
     matchPattern: matchOrdinalNumberPattern$K,
     parsePattern: parseOrdinalNumberPattern$K,
@@ -16002,7 +15752,6 @@ var match$1s = {
     defaultParseWidth: 'any'
   })
 };
-const match$1t = match$1s;
 
 /**
  * @type {Locale}
@@ -16014,19 +15763,18 @@ const match$1t = match$1s;
  * @author Eduardo Pardo [@eduardopsll]{@link https://github.com/eduardopsll}
  * @author Zoltan Szepesi [@twodcube]{@link https://github.com/twodcube}
  */
-var locale$1u = {
+var locale$L = {
   code: 'hu',
-  formatDistance: formatDistance$1t,
-  formatLong: formatLong$1v,
-  formatRelative: formatRelative$1t,
-  localize: localize$1t,
-  match: match$1t,
+  formatDistance: formatDistance$K,
+  formatLong: formatLong$L,
+  formatRelative: formatRelative$K,
+  localize: localize$K,
+  match: match$K,
   options: {
     weekStartsOn: 1 /* Monday */,
     firstWeekContainsDate: 4
   }
 };
-const locale$1v = locale$1u;
 
 var formatDistanceLocale$J = {
   lessThanXSeconds: {
@@ -16091,7 +15839,7 @@ var formatDistanceLocale$J = {
     other: 'համարյա {{count}} տարի'
   }
 };
-var formatDistance$1q = function formatDistance(token, count, options) {
+var formatDistance$J = function formatDistance(token, count, options) {
   var result;
   var tokenValue = formatDistanceLocale$J[token];
   if (typeof tokenValue === 'string') {
@@ -16110,7 +15858,6 @@ var formatDistance$1q = function formatDistance(token, count, options) {
   }
   return result;
 };
-const formatDistance$1r = formatDistance$1q;
 
 var dateFormats$K = {
   full: 'd MMMM, y, EEEE',
@@ -16130,7 +15877,7 @@ var dateTimeFormats$K = {
   medium: '{{date}}, {{time}}',
   short: '{{date}}, {{time}}'
 };
-var formatLong$1s = {
+var formatLong$K = {
   date: buildFormatLongFn({
     formats: dateFormats$K,
     defaultWidth: 'full'
@@ -16144,7 +15891,6 @@ var formatLong$1s = {
     defaultWidth: 'full'
   })
 };
-const formatLong$1t = formatLong$1s;
 
 var formatRelativeLocale$J = {
   lastWeek: "'նախորդ' eeee p'֊ին'",
@@ -16154,10 +15900,9 @@ var formatRelativeLocale$J = {
   nextWeek: "'հաջորդ' eeee p'֊ին'",
   other: 'P'
 };
-var formatRelative$1q = function formatRelative(token, _date, _baseDate, _options) {
+var formatRelative$J = function formatRelative(token, _date, _baseDate, _options) {
   return formatRelativeLocale$J[token];
 };
-const formatRelative$1r = formatRelative$1q;
 
 var eraValues$J = {
   narrow: ['Ք', 'Մ'],
@@ -16262,7 +16007,7 @@ var ordinalNumber$J = function ordinalNumber(dirtyNumber, _options) {
   }
   return number + '֊րդ';
 };
-var localize$1q = {
+var localize$J = {
   ordinalNumber: ordinalNumber$J,
   era: buildLocalizeFn({
     values: eraValues$J,
@@ -16290,7 +16035,6 @@ var localize$1q = {
     defaultFormattingWidth: 'wide'
   })
 };
-const localize$1r = localize$1q;
 
 var matchOrdinalNumberPattern$J = /^(\d+)((-|֊)?(ին|րդ))?/i;
 var parseOrdinalNumberPattern$J = /\d+/i;
@@ -16347,7 +16091,7 @@ var parseDayPeriodPatterns$J = {
     night: /գիշեր/i
   }
 };
-var match$1q = {
+var match$J = {
   ordinalNumber: buildMatchPatternFn({
     matchPattern: matchOrdinalNumberPattern$J,
     parsePattern: parseOrdinalNumberPattern$J,
@@ -16389,7 +16133,6 @@ var match$1q = {
     defaultParseWidth: 'any'
   })
 };
-const match$1r = match$1q;
 
 /**
  * @type {Locale}
@@ -16399,19 +16142,18 @@ const match$1r = match$1q;
  * @iso-639-2 arm
  * @author Alex Igityan [@alexigityan]{@link https://github.com/alexigityan}
  */
-var locale$1s = {
+var locale$K = {
   code: 'hy',
-  formatDistance: formatDistance$1r,
-  formatLong: formatLong$1t,
-  formatRelative: formatRelative$1r,
-  localize: localize$1r,
-  match: match$1r,
+  formatDistance: formatDistance$J,
+  formatLong: formatLong$K,
+  formatRelative: formatRelative$J,
+  localize: localize$J,
+  match: match$J,
   options: {
     weekStartsOn: 1 /* Monday */,
     firstWeekContainsDate: 1
   }
 };
-const locale$1t = locale$1s;
 
 var formatDistanceLocale$I = {
   lessThanXSeconds: {
@@ -16476,7 +16218,7 @@ var formatDistanceLocale$I = {
     other: 'hampir {{count}} tahun'
   }
 };
-var formatDistance$1o = function formatDistance(token, count, options) {
+var formatDistance$I = function formatDistance(token, count, options) {
   var result;
   var tokenValue = formatDistanceLocale$I[token];
   if (typeof tokenValue === 'string') {
@@ -16495,7 +16237,6 @@ var formatDistance$1o = function formatDistance(token, count, options) {
   }
   return result;
 };
-const formatDistance$1p = formatDistance$1o;
 
 var dateFormats$J = {
   full: 'EEEE, d MMMM yyyy',
@@ -16515,7 +16256,7 @@ var dateTimeFormats$J = {
   medium: '{{date}}, {{time}}',
   short: '{{date}}, {{time}}'
 };
-var formatLong$1q = {
+var formatLong$J = {
   date: buildFormatLongFn({
     formats: dateFormats$J,
     defaultWidth: 'full'
@@ -16529,7 +16270,6 @@ var formatLong$1q = {
     defaultWidth: 'full'
   })
 };
-const formatLong$1r = formatLong$1q;
 
 var formatRelativeLocale$I = {
   lastWeek: "eeee 'lalu pukul' p",
@@ -16539,10 +16279,9 @@ var formatRelativeLocale$I = {
   nextWeek: "eeee 'pukul' p",
   other: 'P'
 };
-var formatRelative$1o = function formatRelative(token, _date, _baseDate, _options) {
+var formatRelative$I = function formatRelative(token, _date, _baseDate, _options) {
   return formatRelativeLocale$I[token];
 };
-const formatRelative$1p = formatRelative$1o;
 
 // https://www.unicode.org/cldr/charts/32/summary/id.html
 var eraValues$I = {
@@ -16642,7 +16381,7 @@ var ordinalNumber$I = function ordinalNumber(dirtyNumber, _options) {
 
   return 'ke-' + number;
 };
-var localize$1o = {
+var localize$I = {
   ordinalNumber: ordinalNumber$I,
   era: buildLocalizeFn({
     values: eraValues$I,
@@ -16670,7 +16409,6 @@ var localize$1o = {
     defaultFormattingWidth: 'wide'
   })
 };
-const localize$1p = localize$1o;
 
 var matchOrdinalNumberPattern$I = /^ke-(\d+)?/i;
 var parseOrdinalNumberPattern$I = /\d+/i;
@@ -16725,7 +16463,7 @@ var parseDayPeriodPatterns$I = {
     night: /malam/i
   }
 };
-var match$1o = {
+var match$I = {
   ordinalNumber: buildMatchPatternFn({
     matchPattern: matchOrdinalNumberPattern$I,
     parsePattern: parseOrdinalNumberPattern$I,
@@ -16767,7 +16505,6 @@ var match$1o = {
     defaultParseWidth: 'any'
   })
 };
-const match$1p = match$1o;
 
 /**
  * @type {Locale}
@@ -16780,19 +16517,18 @@ const match$1p = match$1o;
  * @author Budi Irawan [@deerawan]{@link https://github.com/deerawan}
  * @author Try Ajitiono [@imballinst]{@link https://github.com/imballinst}
  */
-var locale$1q = {
+var locale$J = {
   code: 'id',
-  formatDistance: formatDistance$1p,
-  formatLong: formatLong$1r,
-  formatRelative: formatRelative$1p,
-  localize: localize$1p,
-  match: match$1p,
+  formatDistance: formatDistance$I,
+  formatLong: formatLong$J,
+  formatRelative: formatRelative$I,
+  localize: localize$I,
+  match: match$I,
   options: {
     weekStartsOn: 1 /* Monday */,
     firstWeekContainsDate: 1
   }
 };
-const locale$1r = locale$1q;
 
 var formatDistanceLocale$H = {
   lessThanXSeconds: {
@@ -16857,7 +16593,7 @@ var formatDistanceLocale$H = {
     other: 'næstum {{count}} ár'
   }
 };
-var formatDistance$1m = function formatDistance(token, count, options) {
+var formatDistance$H = function formatDistance(token, count, options) {
   var result;
   var tokenValue = formatDistanceLocale$H[token];
   if (typeof tokenValue === 'string') {
@@ -16876,7 +16612,6 @@ var formatDistance$1m = function formatDistance(token, count, options) {
   }
   return result;
 };
-const formatDistance$1n = formatDistance$1m;
 
 var dateFormats$I = {
   full: 'EEEE, do MMMM y',
@@ -16896,7 +16631,7 @@ var dateTimeFormats$I = {
   medium: '{{date}} {{time}}',
   short: '{{date}} {{time}}'
 };
-var formatLong$1o = {
+var formatLong$I = {
   date: buildFormatLongFn({
     formats: dateFormats$I,
     defaultWidth: 'full'
@@ -16910,7 +16645,6 @@ var formatLong$1o = {
     defaultWidth: 'full'
   })
 };
-const formatLong$1p = formatLong$1o;
 
 var formatRelativeLocale$H = {
   lastWeek: "'síðasta' dddd 'kl.' p",
@@ -16920,10 +16654,9 @@ var formatRelativeLocale$H = {
   nextWeek: "dddd 'kl.' p",
   other: 'P'
 };
-var formatRelative$1m = function formatRelative(token, _date, _baseDate, _options) {
+var formatRelative$H = function formatRelative(token, _date, _baseDate, _options) {
   return formatRelativeLocale$H[token];
 };
-const formatRelative$1n = formatRelative$1m;
 
 var eraValues$H = {
   narrow: ['f.Kr.', 'e.Kr.'],
@@ -17014,7 +16747,7 @@ var ordinalNumber$H = function ordinalNumber(dirtyNumber, _options) {
   var number = Number(dirtyNumber);
   return number + '.';
 };
-var localize$1m = {
+var localize$H = {
   ordinalNumber: ordinalNumber$H,
   era: buildLocalizeFn({
     values: eraValues$H,
@@ -17042,7 +16775,6 @@ var localize$1m = {
     defaultFormattingWidth: 'wide'
   })
 };
-const localize$1n = localize$1m;
 
 var matchOrdinalNumberPattern$H = /^(\d+)(\.)?/i;
 var parseOrdinalNumberPattern$H = /\d+(\.)?/i;
@@ -17097,7 +16829,7 @@ var parseDayPeriodPatterns$H = {
     night: /nótt/i
   }
 };
-var match$1m = {
+var match$H = {
   ordinalNumber: buildMatchPatternFn({
     matchPattern: matchOrdinalNumberPattern$H,
     parsePattern: parseOrdinalNumberPattern$H,
@@ -17139,7 +16871,6 @@ var match$1m = {
     defaultParseWidth: 'any'
   })
 };
-const match$1n = match$1m;
 
 /**
  * @type {Locale}
@@ -17150,19 +16881,18 @@ const match$1n = match$1m;
  * @author Derek Blank [@derekblank]{@link https://github.com/derekblank}
  * @author Arnór Ýmir [@lamayg]{@link https://github.com/lamayg}
  */
-var locale$1o = {
+var locale$I = {
   code: 'is',
-  formatDistance: formatDistance$1n,
-  formatLong: formatLong$1p,
-  formatRelative: formatRelative$1n,
-  localize: localize$1n,
-  match: match$1n,
+  formatDistance: formatDistance$H,
+  formatLong: formatLong$I,
+  formatRelative: formatRelative$H,
+  localize: localize$H,
+  match: match$H,
   options: {
     weekStartsOn: 1 /* Monday */,
     firstWeekContainsDate: 4
   }
 };
-const locale$1p = locale$1o;
 
 var formatDistanceLocale$G = {
   lessThanXSeconds: {
@@ -17227,7 +16957,7 @@ var formatDistanceLocale$G = {
     other: 'quasi {{count}} anni'
   }
 };
-var formatDistance$1k = function formatDistance(token, count, options) {
+var formatDistance$G = function formatDistance(token, count, options) {
   var result;
   var tokenValue = formatDistanceLocale$G[token];
   if (typeof tokenValue === 'string') {
@@ -17246,7 +16976,6 @@ var formatDistance$1k = function formatDistance(token, count, options) {
   }
   return result;
 };
-const formatDistance$1l = formatDistance$1k;
 
 var dateFormats$H = {
   full: 'EEEE d MMMM y',
@@ -17266,7 +16995,7 @@ var dateTimeFormats$H = {
   medium: '{{date}} {{time}}',
   short: '{{date}} {{time}}'
 };
-var formatLong$1m = {
+var formatLong$H = {
   date: buildFormatLongFn({
     formats: dateFormats$H,
     defaultWidth: 'full'
@@ -17280,7 +17009,6 @@ var formatLong$1m = {
     defaultWidth: 'full'
   })
 };
-const formatLong$1n = formatLong$1m;
 
 var weekdays$2 = ['domenica', 'lunedì', 'martedì', 'mercoledì', 'giovedì', 'venerdì', 'sabato'];
 function _lastWeek$4(day) {
@@ -17324,14 +17052,13 @@ var formatRelativeLocale$G = {
   },
   other: 'P'
 };
-var formatRelative$1k = function formatRelative(token, date, baseDate, options) {
+var formatRelative$G = function formatRelative(token, date, baseDate, options) {
   var format = formatRelativeLocale$G[token];
   if (typeof format === 'function') {
     return format(date, baseDate, options);
   }
   return format;
 };
-const formatRelative$1l = formatRelative$1k;
 
 var eraValues$G = {
   narrow: ['aC', 'dC'],
@@ -17422,7 +17149,7 @@ var ordinalNumber$G = function ordinalNumber(dirtyNumber, _options) {
   var number = Number(dirtyNumber);
   return String(number);
 };
-var localize$1k = {
+var localize$G = {
   ordinalNumber: ordinalNumber$G,
   era: buildLocalizeFn({
     values: eraValues$G,
@@ -17450,7 +17177,6 @@ var localize$1k = {
     defaultFormattingWidth: 'wide'
   })
 };
-const localize$1l = localize$1k;
 
 var matchOrdinalNumberPattern$G = /^(\d+)(º)?/i;
 var parseOrdinalNumberPattern$G = /\d+/i;
@@ -17505,7 +17231,7 @@ var parseDayPeriodPatterns$G = {
     night: /notte/i
   }
 };
-var match$1k = {
+var match$G = {
   ordinalNumber: buildMatchPatternFn({
     matchPattern: matchOrdinalNumberPattern$G,
     parsePattern: parseOrdinalNumberPattern$G,
@@ -17547,7 +17273,6 @@ var match$1k = {
     defaultParseWidth: 'any'
   })
 };
-const match$1l = match$1k;
 
 /**
  * @type {Locale}
@@ -17559,19 +17284,18 @@ const match$1l = match$1k;
  * @author Giovanni Polimeni [@giofilo]{@link https://github.com/giofilo}
  * @author Vincenzo Carrese [@vin-car]{@link https://github.com/vin-car}
  */
-var locale$1m = {
+var locale$H = {
   code: 'it',
-  formatDistance: formatDistance$1l,
-  formatLong: formatLong$1n,
-  formatRelative: formatRelative$1l,
-  localize: localize$1l,
-  match: match$1l,
+  formatDistance: formatDistance$G,
+  formatLong: formatLong$H,
+  formatRelative: formatRelative$G,
+  localize: localize$G,
+  match: match$G,
   options: {
     weekStartsOn: 1 /* Monday */,
     firstWeekContainsDate: 4
   }
 };
-const locale$1n = locale$1m;
 
 var dateFormats$G = {
   full: 'EEEE d MMMM y',
@@ -17591,7 +17315,7 @@ var dateTimeFormats$G = {
   medium: '{{date}} {{time}}',
   short: '{{date}} {{time}}'
 };
-var formatLong$1k = {
+var formatLong$G = {
   date: buildFormatLongFn({
     formats: dateFormats$G,
     defaultWidth: 'full'
@@ -17605,7 +17329,6 @@ var formatLong$1k = {
     defaultWidth: 'full'
   })
 };
-const formatLong$1l = formatLong$1k;
 
 /**
  * @type {Locale}
@@ -17615,19 +17338,18 @@ const formatLong$1l = formatLong$1k;
  * @iso-639-2 ita
  * @author Mike Peyer [@maic66]{@link https://github.com/maic66}
  */
-var locale$1k = {
+var locale$G = {
   code: 'it-CH',
-  formatDistance: formatDistance$1l,
-  formatLong: formatLong$1l,
-  formatRelative: formatRelative$1l,
-  localize: localize$1l,
-  match: match$1l,
+  formatDistance: formatDistance$G,
+  formatLong: formatLong$G,
+  formatRelative: formatRelative$G,
+  localize: localize$G,
+  match: match$G,
   options: {
     weekStartsOn: 1 /* Monday */,
     firstWeekContainsDate: 4
   }
 };
-const locale$1l = locale$1k;
 
 var formatDistanceLocale$F = {
   lessThanXSeconds: {
@@ -17696,7 +17418,7 @@ var formatDistanceLocale$F = {
     other: '{{count}}年近く'
   }
 };
-var formatDistance$1i = function formatDistance(token, count, options) {
+var formatDistance$F = function formatDistance(token, count, options) {
   options = options || {};
   var result;
   var tokenValue = formatDistanceLocale$F[token];
@@ -17724,7 +17446,6 @@ var formatDistance$1i = function formatDistance(token, count, options) {
   }
   return result;
 };
-const formatDistance$1j = formatDistance$1i;
 
 var dateFormats$F = {
   full: 'y年M月d日EEEE',
@@ -17744,7 +17465,7 @@ var dateTimeFormats$F = {
   medium: '{{date}} {{time}}',
   short: '{{date}} {{time}}'
 };
-var formatLong$1i = {
+var formatLong$F = {
   date: buildFormatLongFn({
     formats: dateFormats$F,
     defaultWidth: 'full'
@@ -17758,7 +17479,6 @@ var formatLong$1i = {
     defaultWidth: 'full'
   })
 };
-const formatLong$1j = formatLong$1i;
 
 var formatRelativeLocale$F = {
   lastWeek: '先週のeeeeのp',
@@ -17768,10 +17488,9 @@ var formatRelativeLocale$F = {
   nextWeek: '翌週のeeeeのp',
   other: 'P'
 };
-var formatRelative$1i = function formatRelative(token, _date, _baseDate, _options) {
+var formatRelative$F = function formatRelative(token, _date, _baseDate, _options) {
   return formatRelativeLocale$F[token];
 };
-const formatRelative$1j = formatRelative$1i;
 
 var eraValues$F = {
   narrow: ['BC', 'AC'],
@@ -17882,7 +17601,7 @@ var ordinalNumber$F = function ordinalNumber(dirtyNumber, options) {
       return "".concat(number);
   }
 };
-var localize$1i = {
+var localize$F = {
   ordinalNumber: ordinalNumber$F,
   era: buildLocalizeFn({
     values: eraValues$F,
@@ -17910,7 +17629,6 @@ var localize$1i = {
     defaultFormattingWidth: 'wide'
   })
 };
-const localize$1j = localize$1i;
 
 var matchOrdinalNumberPattern$F = /^第?\d+(年|四半期|月|週|日|時|分|秒)?/i;
 var parseOrdinalNumberPattern$F = /\d+/i;
@@ -17963,7 +17681,7 @@ var parseDayPeriodPatterns$F = {
     night: /^深夜/i
   }
 };
-var match$1i = {
+var match$F = {
   ordinalNumber: buildMatchPatternFn({
     matchPattern: matchOrdinalNumberPattern$F,
     parsePattern: parseOrdinalNumberPattern$F,
@@ -18005,7 +17723,6 @@ var match$1i = {
     defaultParseWidth: 'any'
   })
 };
-const match$1j = match$1i;
 
 /**
  * @type {Locale}
@@ -18019,19 +17736,18 @@ const match$1j = match$1i;
  * @author Terrence Lam [@skyuplam]{@link https://github.com/skyuplam}
  * @author Taiki IKeda [@so99ynoodles]{@link https://github.com/so99ynoodles}
  */
-var locale$1i = {
+var locale$F = {
   code: 'ja',
-  formatDistance: formatDistance$1j,
-  formatLong: formatLong$1j,
-  formatRelative: formatRelative$1j,
-  localize: localize$1j,
-  match: match$1j,
+  formatDistance: formatDistance$F,
+  formatLong: formatLong$F,
+  formatRelative: formatRelative$F,
+  localize: localize$F,
+  match: match$F,
   options: {
     weekStartsOn: 0 /* Sunday */,
     firstWeekContainsDate: 1
   }
 };
-const locale$1j = locale$1i;
 
 var formatDistanceLocale$E = {
   lessThanXSeconds: {
@@ -18100,7 +17816,7 @@ var formatDistanceLocale$E = {
     other: '{{count}}ねんちかく'
   }
 };
-var formatDistance$1g = function formatDistance(token, count, options) {
+var formatDistance$E = function formatDistance(token, count, options) {
   options = options || {};
   var result;
   var tokenValue = formatDistanceLocale$E[token];
@@ -18128,7 +17844,6 @@ var formatDistance$1g = function formatDistance(token, count, options) {
   }
   return result;
 };
-const formatDistance$1h = formatDistance$1g;
 
 var dateFormats$E = {
   full: 'yねんMがつdにちEEEE',
@@ -18148,7 +17863,7 @@ var dateTimeFormats$E = {
   medium: '{{date}} {{time}}',
   short: '{{date}} {{time}}'
 };
-var formatLong$1g = {
+var formatLong$E = {
   date: buildFormatLongFn({
     formats: dateFormats$E,
     defaultWidth: 'full'
@@ -18162,7 +17877,6 @@ var formatLong$1g = {
     defaultWidth: 'full'
   })
 };
-const formatLong$1h = formatLong$1g;
 
 var formatRelativeLocale$E = {
   lastWeek: 'せんしゅうのeeeeのp',
@@ -18172,10 +17886,9 @@ var formatRelativeLocale$E = {
   nextWeek: 'よくしゅうのeeeeのp',
   other: 'P'
 };
-var formatRelative$1g = function formatRelative(token, _date, _baseDate, _options) {
+var formatRelative$E = function formatRelative(token, _date, _baseDate, _options) {
   return formatRelativeLocale$E[token];
 };
-const formatRelative$1h = formatRelative$1g;
 
 var eraValues$E = {
   narrow: ['BC', 'AC'],
@@ -18286,7 +17999,7 @@ var ordinalNumber$E = function ordinalNumber(dirtyNumber, options) {
       return "".concat(number);
   }
 };
-var localize$1g = {
+var localize$E = {
   ordinalNumber: ordinalNumber$E,
   era: buildLocalizeFn({
     values: eraValues$E,
@@ -18314,7 +18027,6 @@ var localize$1g = {
     defaultFormattingWidth: 'wide'
   })
 };
-const localize$1h = localize$1g;
 
 var matchOrdinalNumberPattern$E = /^だ?い?\d+(ねん|しはんき|がつ|しゅう|にち|じ|ふん|びょう)?/i;
 var parseOrdinalNumberPattern$E = /\d+/i;
@@ -18367,7 +18079,7 @@ var parseDayPeriodPatterns$E = {
     night: /^しんや/i
   }
 };
-var match$1g = {
+var match$E = {
   ordinalNumber: buildMatchPatternFn({
     matchPattern: matchOrdinalNumberPattern$E,
     parsePattern: parseOrdinalNumberPattern$E,
@@ -18409,7 +18121,6 @@ var match$1g = {
     defaultParseWidth: 'any'
   })
 };
-const match$1h = match$1g;
 
 /**
  * @type {Locale}
@@ -18419,19 +18130,18 @@ const match$1h = match$1g;
  * @iso-639-2 jpn
  * @author Eri Hiramatsu [@Eritutteo]{@link https://github.com/Eritutteo}
  */
-var locale$1g = {
+var locale$E = {
   code: 'ja-Hira',
-  formatDistance: formatDistance$1h,
-  formatLong: formatLong$1h,
-  formatRelative: formatRelative$1h,
-  localize: localize$1h,
-  match: match$1h,
+  formatDistance: formatDistance$E,
+  formatLong: formatLong$E,
+  formatRelative: formatRelative$E,
+  localize: localize$E,
+  match: match$E,
   options: {
     weekStartsOn: 0 /* Sunday */,
     firstWeekContainsDate: 1
   }
 };
-const locale$1h = locale$1g;
 
 var formatDistanceLocale$D = {
   lessThanXSeconds: {
@@ -18515,7 +18225,7 @@ var formatDistanceLocale$D = {
     future: 'თითქმის {{count}} წელში'
   }
 };
-var formatDistance$1e = function formatDistance(token, count, options) {
+var formatDistance$D = function formatDistance(token, count, options) {
   var result;
   var tokenValue = formatDistanceLocale$D[token];
   if (typeof tokenValue === 'string') {
@@ -18529,7 +18239,6 @@ var formatDistance$1e = function formatDistance(token, count, options) {
   }
   return result;
 };
-const formatDistance$1f = formatDistance$1e;
 
 var dateFormats$D = {
   full: 'EEEE, do MMMM, y',
@@ -18549,7 +18258,7 @@ var dateTimeFormats$D = {
   medium: '{{date}}, {{time}}',
   short: '{{date}}, {{time}}'
 };
-var formatLong$1e = {
+var formatLong$D = {
   date: buildFormatLongFn({
     formats: dateFormats$D,
     defaultWidth: 'full'
@@ -18563,7 +18272,6 @@ var formatLong$1e = {
     defaultWidth: 'full'
   })
 };
-const formatLong$1f = formatLong$1e;
 
 var formatRelativeLocale$D = {
   lastWeek: "'წინა' eeee p'-ზე'",
@@ -18573,10 +18281,9 @@ var formatRelativeLocale$D = {
   nextWeek: "'შემდეგი' eeee p'-ზე'",
   other: 'P'
 };
-var formatRelative$1e = function formatRelative(token, _date, _baseDate, _options) {
+var formatRelative$D = function formatRelative(token, _date, _baseDate, _options) {
   return formatRelativeLocale$D[token];
 };
-const formatRelative$1f = formatRelative$1e;
 
 var eraValues$D = {
   narrow: ['ჩ.წ-მდე', 'ჩ.წ'],
@@ -18675,7 +18382,7 @@ var ordinalNumber$D = function ordinalNumber(dirtyNumber) {
   }
   return number + '-ე';
 };
-var localize$1e = {
+var localize$D = {
   ordinalNumber: ordinalNumber$D,
   era: buildLocalizeFn({
     values: eraValues$D,
@@ -18703,7 +18410,6 @@ var localize$1e = {
     defaultFormattingWidth: 'wide'
   })
 };
-const localize$1f = localize$1e;
 
 var matchOrdinalNumberPattern$D = /^(\d+)(-ლი|-ე)?/i;
 var parseOrdinalNumberPattern$D = /\d+/i;
@@ -18752,7 +18458,7 @@ var parseDayPeriodPatterns$D = {
     night: /ღამ/i
   }
 };
-var match$1e = {
+var match$D = {
   ordinalNumber: buildMatchPatternFn({
     matchPattern: matchOrdinalNumberPattern$D,
     parsePattern: parseOrdinalNumberPattern$D,
@@ -18794,7 +18500,6 @@ var match$1e = {
     defaultParseWidth: 'any'
   })
 };
-const match$1f = match$1e;
 
 /**
  * @type {Locale}
@@ -18805,19 +18510,18 @@ const match$1f = match$1e;
  * @author Lado Lomidze [@Landish]{@link https://github.com/Landish}
  * @author Nick Shvelidze [@shvelo]{@link https://github.com/shvelo}
  */
-var locale$1e = {
+var locale$D = {
   code: 'ka',
-  formatDistance: formatDistance$1f,
-  formatLong: formatLong$1f,
-  formatRelative: formatRelative$1f,
-  localize: localize$1f,
-  match: match$1f,
+  formatDistance: formatDistance$D,
+  formatLong: formatLong$D,
+  formatRelative: formatRelative$D,
+  localize: localize$D,
+  match: match$D,
   options: {
     weekStartsOn: 1 /* Monday */,
     firstWeekContainsDate: 1
   }
 };
-const locale$1f = locale$1e;
 
 var formatDistanceLocale$C = {
   lessThanXSeconds: {
@@ -19020,7 +18724,7 @@ function declension$4(scheme, count) {
     return scheme.pluralGenitive.replace('{{count}}', String(count));
   }
 }
-var formatDistance$1c = function formatDistance(token, count, options) {
+var formatDistance$C = function formatDistance(token, count, options) {
   var tokenValue = formatDistanceLocale$C[token];
   if (typeof tokenValue === 'function') return tokenValue(options);
   if (tokenValue.type === 'weeks') {
@@ -19044,7 +18748,6 @@ var formatDistance$1c = function formatDistance(token, count, options) {
     return declension$4(tokenValue.regular, count);
   }
 };
-const formatDistance$1d = formatDistance$1c;
 
 var dateFormats$C = {
   full: "EEEE, do MMMM y 'ж.'",
@@ -19061,7 +18764,7 @@ var timeFormats$C = {
 var dateTimeFormats$C = {
   any: '{{date}}, {{time}}'
 };
-var formatLong$1c = {
+var formatLong$C = {
   date: buildFormatLongFn({
     formats: dateFormats$C,
     defaultWidth: 'full'
@@ -19075,7 +18778,6 @@ var formatLong$1c = {
     defaultWidth: 'any'
   })
 };
-const formatLong$1d = formatLong$1c;
 
 var accusativeWeekdays$3 = ['жексенбіде', 'дүйсенбіде', 'сейсенбіде', 'сәрсенбіде', 'бейсенбіде', 'жұмада', 'сенбіде'];
 function _lastWeek$3(day) {
@@ -19112,14 +18814,13 @@ var formatRelativeLocale$C = {
   },
   other: 'P'
 };
-var formatRelative$1c = function formatRelative(token, date, baseDate, options) {
+var formatRelative$C = function formatRelative(token, date, baseDate, options) {
   var format = formatRelativeLocale$C[token];
   if (typeof format === 'function') {
     return format(date, baseDate, options);
   }
   return format;
 };
-const formatRelative$1d = formatRelative$1c;
 
 var eraValues$C = {
   narrow: ['б.з.д.', 'б.з.'],
@@ -19220,7 +18921,7 @@ var ordinalNumber$C = function ordinalNumber(dirtyNumber, _options) {
   var suffix = suffixes[number] || suffixes[mod10] || b && suffixes[b] || '';
   return number + suffix;
 };
-var localize$1c = {
+var localize$C = {
   ordinalNumber: ordinalNumber$C,
   era: buildLocalizeFn({
     values: eraValues$C,
@@ -19250,7 +18951,6 @@ var localize$1c = {
     defaultFormattingWidth: 'wide'
   })
 };
-const localize$1d = localize$1c;
 
 var matchOrdinalNumberPattern$C = /^(\d+)(-?(ші|шы))?/i;
 var parseOrdinalNumberPattern$C = /\d+/i;
@@ -19307,7 +19007,7 @@ var parseDayPeriodPatterns$C = {
     night: /түн/i
   }
 };
-var match$1c = {
+var match$C = {
   ordinalNumber: buildMatchPatternFn({
     matchPattern: matchOrdinalNumberPattern$C,
     parsePattern: parseOrdinalNumberPattern$C,
@@ -19349,7 +19049,6 @@ var match$1c = {
     defaultParseWidth: 'any'
   })
 };
-const match$1d = match$1c;
 
 /**
  * @type {Locale}
@@ -19359,19 +19058,18 @@ const match$1d = match$1c;
  * @iso-639-2 kaz
  * @author Nikita Bayev [@drugoi]{@link https://github.com/drugoi}
  */
-var locale$1c = {
+var locale$C = {
   code: 'kk',
-  formatDistance: formatDistance$1d,
-  formatLong: formatLong$1d,
-  formatRelative: formatRelative$1d,
-  localize: localize$1d,
-  match: match$1d,
+  formatDistance: formatDistance$C,
+  formatLong: formatLong$C,
+  formatRelative: formatRelative$C,
+  localize: localize$C,
+  match: match$C,
   options: {
     weekStartsOn: 1 /* Monday */,
     firstWeekContainsDate: 1
   }
 };
-const locale$1d = locale$1c;
 
 var formatDistanceLocale$B = {
   lessThanXSeconds: 'តិចជាង {{count}} វិនាទី',
@@ -19391,7 +19089,7 @@ var formatDistanceLocale$B = {
   overXYears: 'ជាង {{count}} ឆ្នាំ',
   almostXYears: 'ជិត {{count}} ឆ្នាំ'
 };
-var formatDistance$1a = function formatDistance(token, count, options) {
+var formatDistance$B = function formatDistance(token, count, options) {
   var tokenValue = formatDistanceLocale$B[token];
   var result = tokenValue;
   if (typeof count === 'number') {
@@ -19406,7 +19104,6 @@ var formatDistance$1a = function formatDistance(token, count, options) {
   }
   return result;
 };
-const formatDistance$1b = formatDistance$1a;
 
 var dateFormats$B = {
   full: 'EEEE do MMMM y',
@@ -19426,7 +19123,7 @@ var dateTimeFormats$B = {
   medium: '{{date}}, {{time}}',
   short: '{{date}}, {{time}}'
 };
-var formatLong$1a = {
+var formatLong$B = {
   date: buildFormatLongFn({
     formats: dateFormats$B,
     defaultWidth: 'full'
@@ -19440,7 +19137,6 @@ var formatLong$1a = {
     defaultWidth: 'full'
   })
 };
-const formatLong$1b = formatLong$1a;
 
 var formatRelativeLocale$B = {
   lastWeek: "'ថ្ងៃ'eeee'ស​ប្តា​ហ៍​មុនម៉ោង' p",
@@ -19450,10 +19146,9 @@ var formatRelativeLocale$B = {
   nextWeek: "'ថ្ងៃ'eeee'ស​ប្តា​ហ៍​ក្រោយម៉ោង' p",
   other: 'P'
 };
-var formatRelative$1a = function formatRelative(token, _date, _baseDate, _options) {
+var formatRelative$B = function formatRelative(token, _date, _baseDate, _options) {
   return formatRelativeLocale$B[token];
 };
-const formatRelative$1b = formatRelative$1a;
 
 var eraValues$B = {
   narrow: ['ម.គស', 'គស'],
@@ -19544,7 +19239,7 @@ var ordinalNumber$B = function ordinalNumber(dirtyNumber, _) {
   var number = Number(dirtyNumber);
   return number.toString();
 };
-var localize$1a = {
+var localize$B = {
   ordinalNumber: ordinalNumber$B,
   era: buildLocalizeFn({
     values: eraValues$B,
@@ -19572,7 +19267,6 @@ var localize$1a = {
     defaultFormattingWidth: 'wide'
   })
 };
-const localize$1b = localize$1a;
 
 var matchOrdinalNumberPattern$B = /^(\d+)(th|st|nd|rd)?/i;
 var parseOrdinalNumberPattern$B = /\d+/i;
@@ -19627,7 +19321,7 @@ var parseDayPeriodPatterns$B = {
     night: /ពេលយប់/i
   }
 };
-var match$1a = {
+var match$B = {
   ordinalNumber: buildMatchPatternFn({
     matchPattern: matchOrdinalNumberPattern$B,
     parsePattern: parseOrdinalNumberPattern$B,
@@ -19669,7 +19363,6 @@ var match$1a = {
     defaultParseWidth: 'any'
   })
 };
-const match$1b = match$1a;
 
 /**
  * @type {Locale}
@@ -19679,19 +19372,18 @@ const match$1b = match$1a;
  * @iso-639-2 khm
  * @author Seanghay Yath [@seanghay]{@link https://github.com/seanghay}
  */
-var locale$1a = {
+var locale$B = {
   code: 'km',
-  formatDistance: formatDistance$1b,
-  formatLong: formatLong$1b,
-  formatRelative: formatRelative$1b,
-  localize: localize$1b,
-  match: match$1b,
+  formatDistance: formatDistance$B,
+  formatLong: formatLong$B,
+  formatRelative: formatRelative$B,
+  localize: localize$B,
+  match: match$B,
   options: {
     weekStartsOn: 0 /* Sunday */,
     firstWeekContainsDate: 1
   }
 };
-const locale$1b = locale$1a;
 
 // note: no implementation for weeks
 
@@ -19876,7 +19568,7 @@ function getResultByTense(parentToken, options) {
   }
   return parentToken.default;
 }
-var formatDistance$18 = function formatDistance(token, count, options) {
+var formatDistance$A = function formatDistance(token, count, options) {
   var result;
   var tokenValue = formatDistanceLocale$A[token];
   if (tokenValue.one && count === 1) {
@@ -19886,7 +19578,6 @@ var formatDistance$18 = function formatDistance(token, count, options) {
   }
   return result.replace('{{count}}', String(count));
 };
-const formatDistance$19 = formatDistance$18;
 
 var dateFormats$A = {
   full: 'EEEE, MMMM d, y',
@@ -19918,7 +19609,7 @@ var dateTimeFormats$A = {
   short: '{{date}} {{time}}' // CLDR 1827
 };
 
-var formatLong$18 = {
+var formatLong$A = {
   date: buildFormatLongFn({
     formats: dateFormats$A,
     defaultWidth: 'full'
@@ -19932,7 +19623,6 @@ var formatLong$18 = {
     defaultWidth: 'full'
   })
 };
-const formatLong$19 = formatLong$18;
 
 var formatRelativeLocale$A = {
   lastWeek: "'ಕಳೆದ' eeee p 'ಕ್ಕೆ'",
@@ -19942,10 +19632,9 @@ var formatRelativeLocale$A = {
   nextWeek: "eeee p 'ಕ್ಕೆ'",
   other: 'P'
 };
-var formatRelative$18 = function formatRelative(token, _date, _baseDate, _options) {
+var formatRelative$A = function formatRelative(token, _date, _baseDate, _options) {
   return formatRelativeLocale$A[token];
 };
-const formatRelative$19 = formatRelative$18;
 
 var eraValues$A = {
   narrow: ['ಕ್ರಿ.ಪೂ', 'ಕ್ರಿ.ಶ'],
@@ -20045,7 +19734,7 @@ var ordinalNumber$A = function ordinalNumber(dirtyNumber, _options) {
   var number = Number(dirtyNumber);
   return number + 'ನೇ';
 };
-var localize$18 = {
+var localize$A = {
   ordinalNumber: ordinalNumber$A,
   era: buildLocalizeFn({
     values: eraValues$A,
@@ -20073,7 +19762,6 @@ var localize$18 = {
     defaultFormattingWidth: 'wide'
   })
 };
-const localize$19 = localize$18;
 
 var matchOrdinalNumberPattern$A = /^(\d+)(ನೇ|ನೆ)?/i;
 var parseOrdinalNumberPattern$A = /\d+/i;
@@ -20128,7 +19816,7 @@ var parseDayPeriodPatterns$A = {
     night: /ರಾತ್ರಿ/i
   }
 };
-var match$18 = {
+var match$A = {
   ordinalNumber: buildMatchPatternFn({
     matchPattern: matchOrdinalNumberPattern$A,
     parsePattern: parseOrdinalNumberPattern$A,
@@ -20170,7 +19858,6 @@ var match$18 = {
     defaultParseWidth: 'any'
   })
 };
-const match$19 = match$18;
 
 /**
  * @type {Locale}
@@ -20180,19 +19867,18 @@ const match$19 = match$18;
  * @iso-639-2 kan
  * @author Manjunatha Gouli [@developergouli]{@link https://github.com/developergouli}
  */
-var locale$18 = {
+var locale$A = {
   code: 'kn',
-  formatDistance: formatDistance$19,
-  formatLong: formatLong$19,
-  formatRelative: formatRelative$19,
-  localize: localize$19,
-  match: match$19,
+  formatDistance: formatDistance$A,
+  formatLong: formatLong$A,
+  formatRelative: formatRelative$A,
+  localize: localize$A,
+  match: match$A,
   options: {
     weekStartsOn: 1 /* Monday */,
     firstWeekContainsDate: 1
   }
 };
-const locale$19 = locale$18;
 
 var formatDistanceLocale$z = {
   lessThanXSeconds: {
@@ -20257,7 +19943,7 @@ var formatDistanceLocale$z = {
     other: '거의 {{count}}년'
   }
 };
-var formatDistance$16 = function formatDistance(token, count, options) {
+var formatDistance$z = function formatDistance(token, count, options) {
   var result;
   var tokenValue = formatDistanceLocale$z[token];
   if (typeof tokenValue === 'string') {
@@ -20276,7 +19962,6 @@ var formatDistance$16 = function formatDistance(token, count, options) {
   }
   return result;
 };
-const formatDistance$17 = formatDistance$16;
 
 var dateFormats$z = {
   full: 'y년 M월 d일 EEEE',
@@ -20296,7 +19981,7 @@ var dateTimeFormats$z = {
   medium: '{{date}} {{time}}',
   short: '{{date}} {{time}}'
 };
-var formatLong$16 = {
+var formatLong$z = {
   date: buildFormatLongFn({
     formats: dateFormats$z,
     defaultWidth: 'full'
@@ -20310,7 +19995,6 @@ var formatLong$16 = {
     defaultWidth: 'full'
   })
 };
-const formatLong$17 = formatLong$16;
 
 var formatRelativeLocale$z = {
   lastWeek: "'지난' eeee p",
@@ -20320,10 +20004,9 @@ var formatRelativeLocale$z = {
   nextWeek: "'다음' eeee p",
   other: 'P'
 };
-var formatRelative$16 = function formatRelative(token, _date, _baseDate, _options) {
+var formatRelative$z = function formatRelative(token, _date, _baseDate, _options) {
   return formatRelativeLocale$z[token];
 };
-const formatRelative$17 = formatRelative$16;
 
 var eraValues$z = {
   narrow: ['BC', 'AD'],
@@ -20423,7 +20106,7 @@ var ordinalNumber$z = function ordinalNumber(dirtyNumber, options) {
       return number + '번째';
   }
 };
-var localize$16 = {
+var localize$z = {
   ordinalNumber: ordinalNumber$z,
   era: buildLocalizeFn({
     values: eraValues$z,
@@ -20451,7 +20134,6 @@ var localize$16 = {
     defaultFormattingWidth: 'wide'
   })
 };
-const localize$17 = localize$16;
 
 var matchOrdinalNumberPattern$z = /^(\d+)(일|번째)?/i;
 var parseOrdinalNumberPattern$z = /\d+/i;
@@ -20503,7 +20185,7 @@ var parseDayPeriodPatterns$z = {
     night: /^밤/i
   }
 };
-var match$16 = {
+var match$z = {
   ordinalNumber: buildMatchPatternFn({
     matchPattern: matchOrdinalNumberPattern$z,
     parsePattern: parseOrdinalNumberPattern$z,
@@ -20545,7 +20227,6 @@ var match$16 = {
     defaultParseWidth: 'any'
   })
 };
-const match$17 = match$16;
 
 /**
  * @type {Locale}
@@ -20557,19 +20238,18 @@ const match$17 = match$16;
  * @author Lee Seoyoen [@iamssen]{@link https://github.com/iamssen}
  * @author Taiki IKeda [@so99ynoodles]{@link https://github.com/so99ynoodles}
  */
-var locale$16 = {
+var locale$z = {
   code: 'ko',
-  formatDistance: formatDistance$17,
-  formatLong: formatLong$17,
-  formatRelative: formatRelative$17,
-  localize: localize$17,
-  match: match$17,
+  formatDistance: formatDistance$z,
+  formatLong: formatLong$z,
+  formatRelative: formatRelative$z,
+  localize: localize$z,
+  match: match$z,
   options: {
     weekStartsOn: 0 /* Sunday */,
     firstWeekContainsDate: 1
   }
 };
-const locale$17 = locale$16;
 
 var formatDistanceLocale$y = {
   lessThanXSeconds: {
@@ -20750,7 +20430,7 @@ function isFinalNNeeded(nextWords) {
   // Omit other checks as they are not expected here.
   return false;
 }
-var formatDistance$14 = function formatDistance(token, count, options) {
+var formatDistance$y = function formatDistance(token, count, options) {
   var result;
   var tokenValue = formatDistanceLocale$y[token];
   var usageGroup = options !== null && options !== void 0 && options.addSuffix ? tokenValue.withPreposition : tokenValue.standalone;
@@ -20770,7 +20450,6 @@ var formatDistance$14 = function formatDistance(token, count, options) {
   }
   return result;
 };
-const formatDistance$15 = formatDistance$14;
 
 var dateFormats$y = {
   full: 'EEEE, do MMMM y',
@@ -20794,7 +20473,7 @@ var dateTimeFormats$y = {
   medium: '{{date}} {{time}}',
   short: '{{date}} {{time}}'
 };
-var formatLong$14 = {
+var formatLong$y = {
   date: buildFormatLongFn({
     formats: dateFormats$y,
     defaultWidth: 'full'
@@ -20808,7 +20487,6 @@ var formatLong$14 = {
     defaultWidth: 'full'
   })
 };
-const formatLong$15 = formatLong$14;
 
 var formatRelativeLocale$y = {
   lastWeek: function lastWeek(date) {
@@ -20827,14 +20505,13 @@ var formatRelativeLocale$y = {
   nextWeek: "eeee 'um' p",
   other: 'P'
 };
-var formatRelative$14 = function formatRelative(token, date, _baseDate, _options) {
+var formatRelative$y = function formatRelative(token, date, _baseDate, _options) {
   var format = formatRelativeLocale$y[token];
   if (typeof format === 'function') {
     return format(date);
   }
   return format;
 };
-const formatRelative$15 = formatRelative$14;
 
 var eraValues$y = {
   narrow: ['v.Chr.', 'n.Chr.'],
@@ -20925,7 +20602,7 @@ var ordinalNumber$y = function ordinalNumber(dirtyNumber, _options) {
   var number = Number(dirtyNumber);
   return number + '.';
 };
-var localize$14 = {
+var localize$y = {
   ordinalNumber: ordinalNumber$y,
   era: buildLocalizeFn({
     values: eraValues$y,
@@ -20953,7 +20630,6 @@ var localize$14 = {
     defaultFormattingWidth: 'wide'
   })
 };
-const localize$15 = localize$14;
 
 var matchOrdinalNumberPattern$y = /^(\d+)(\.)?/i;
 var parseOrdinalNumberPattern$y = /\d+/i;
@@ -21010,7 +20686,7 @@ var parseDayPeriodPatterns$y = {
   }
 };
 
-var match$14 = {
+var match$y = {
   ordinalNumber: buildMatchPatternFn({
     matchPattern: matchOrdinalNumberPattern$y,
     parsePattern: parseOrdinalNumberPattern$y,
@@ -21052,7 +20728,6 @@ var match$14 = {
     defaultParseWidth: 'any'
   })
 };
-const match$15 = match$14;
 
 /**
  * @type {Locale}
@@ -21062,19 +20737,18 @@ const match$15 = match$14;
  * @iso-639-2 ltz
  * @author Daniel Waxweiler [@dwaxweiler]{@link https://github.com/dwaxweiler}
  */
-var locale$14 = {
+var locale$y = {
   code: 'lb',
-  formatDistance: formatDistance$15,
-  formatLong: formatLong$15,
-  formatRelative: formatRelative$15,
-  localize: localize$15,
-  match: match$15,
+  formatDistance: formatDistance$y,
+  formatLong: formatLong$y,
+  formatRelative: formatRelative$y,
+  localize: localize$y,
+  match: match$y,
   options: {
     weekStartsOn: 1 /* Monday */,
     firstWeekContainsDate: 4
   }
 };
-const locale$15 = locale$14;
 
 var translations = {
   xseconds_other: 'sekundė_sekundžių_sekundes',
@@ -21188,7 +20862,7 @@ var formatDistanceLocale$x = {
     other: translate
   }
 };
-var formatDistance$12 = function formatDistance(token, count, options) {
+var formatDistance$x = function formatDistance(token, count, options) {
   var adverb = token.match(/about|over|almost|lessthan/i);
   var unit = adverb ? token.replace(adverb[0], '') : token;
   var isFuture = (options === null || options === void 0 ? void 0 : options.comparison) !== undefined && options.comparison > 0;
@@ -21214,7 +20888,6 @@ var formatDistance$12 = function formatDistance(token, count, options) {
   }
   return result;
 };
-const formatDistance$13 = formatDistance$12;
 
 var dateFormats$x = {
   full: "y 'm'. MMMM d 'd'., EEEE",
@@ -21234,7 +20907,7 @@ var dateTimeFormats$x = {
   medium: '{{date}} {{time}}',
   short: '{{date}} {{time}}'
 };
-var formatLong$12 = {
+var formatLong$x = {
   date: buildFormatLongFn({
     formats: dateFormats$x,
     defaultWidth: 'full'
@@ -21248,7 +20921,6 @@ var formatLong$12 = {
     defaultWidth: 'full'
   })
 };
-const formatLong$13 = formatLong$12;
 
 var formatRelativeLocale$x = {
   lastWeek: "'Praėjusį' eeee p",
@@ -21258,10 +20930,9 @@ var formatRelativeLocale$x = {
   nextWeek: 'eeee p',
   other: 'P'
 };
-var formatRelative$12 = function formatRelative(token, _date, _baseDate, _options) {
+var formatRelative$x = function formatRelative(token, _date, _baseDate, _options) {
   return formatRelativeLocale$x[token];
 };
-const formatRelative$13 = formatRelative$12;
 
 var eraValues$x = {
   narrow: ['pr. Kr.', 'po Kr.'],
@@ -21368,7 +21039,7 @@ var ordinalNumber$x = function ordinalNumber(dirtyNumber, _options) {
   var number = Number(dirtyNumber);
   return number + '-oji';
 };
-var localize$12 = {
+var localize$x = {
   ordinalNumber: ordinalNumber$x,
   era: buildLocalizeFn({
     values: eraValues$x,
@@ -21402,7 +21073,6 @@ var localize$12 = {
     defaultFormattingWidth: 'wide'
   })
 };
-const localize$13 = localize$12;
 
 var matchOrdinalNumberPattern$x = /^(\d+)(-oji)?/i;
 var parseOrdinalNumberPattern$x = /\d+/i;
@@ -21470,7 +21140,7 @@ var parseDayPeriodPatterns$x = {
     night: /naktis/i
   }
 };
-var match$12 = {
+var match$x = {
   ordinalNumber: buildMatchPatternFn({
     matchPattern: matchOrdinalNumberPattern$x,
     parsePattern: parseOrdinalNumberPattern$x,
@@ -21512,7 +21182,6 @@ var match$12 = {
     defaultParseWidth: 'any'
   })
 };
-const match$13 = match$12;
 
 /**
  * @type {Locale}
@@ -21523,19 +21192,18 @@ const match$13 = match$12;
  * @author Pavlo Shpak [@pshpak]{@link https://github.com/pshpak}
  * @author Eduardo Pardo [@eduardopsll]{@link https://github.com/eduardopsll}
  */
-var locale$12 = {
+var locale$x = {
   code: 'lt',
-  formatDistance: formatDistance$13,
-  formatLong: formatLong$13,
-  formatRelative: formatRelative$13,
-  localize: localize$13,
-  match: match$13,
+  formatDistance: formatDistance$x,
+  formatLong: formatLong$x,
+  formatRelative: formatRelative$x,
+  localize: localize$x,
+  match: match$x,
   options: {
     weekStartsOn: 1 /* Monday */,
     firstWeekContainsDate: 4
   }
 };
-const locale$13 = locale$12;
 
 function buildLocalizeTokenFn$2(schema) {
   return function (count, options) {
@@ -21626,7 +21294,7 @@ var formatDistanceLocale$w = {
     other: ['vairāk nekā {{count}} {{time}}', 'gads', 'gadi', 'gada', 'gadiem']
   })
 };
-var formatDistance$10 = function formatDistance(token, count, options) {
+var formatDistance$w = function formatDistance(token, count, options) {
   var result = formatDistanceLocale$w[token](count, options);
   if (options !== null && options !== void 0 && options.addSuffix) {
     if (options.comparison && options.comparison > 0) {
@@ -21637,7 +21305,6 @@ var formatDistance$10 = function formatDistance(token, count, options) {
   }
   return result;
 };
-const formatDistance$11 = formatDistance$10;
 
 var dateFormats$w = {
   full: "EEEE, y. 'gada' d. MMMM",
@@ -21657,7 +21324,7 @@ var dateTimeFormats$w = {
   medium: '{{date}}, {{time}}',
   short: '{{date}}, {{time}}'
 };
-var formatLong$10 = {
+var formatLong$w = {
   date: buildFormatLongFn({
     formats: dateFormats$w,
     defaultWidth: 'full'
@@ -21671,7 +21338,6 @@ var formatLong$10 = {
     defaultWidth: 'full'
   })
 };
-const formatLong$11 = formatLong$10;
 
 var weekdays$1 = ['svētdienā', 'pirmdienā', 'otrdienā', 'trešdienā', 'ceturtdienā', 'piektdienā', 'sestdienā'];
 var formatRelativeLocale$w = {
@@ -21694,14 +21360,13 @@ var formatRelativeLocale$w = {
   },
   other: 'P'
 };
-var formatRelative$10 = function formatRelative(token, date, baseDate, options) {
+var formatRelative$w = function formatRelative(token, date, baseDate, options) {
   var format = formatRelativeLocale$w[token];
   if (typeof format === 'function') {
     return format(date, baseDate, options);
   }
   return format;
 };
-const formatRelative$11 = formatRelative$10;
 
 var eraValues$w = {
   narrow: ['p.m.ē', 'm.ē'],
@@ -21808,7 +21473,7 @@ var ordinalNumber$w = function ordinalNumber(dirtyNumber, _options) {
   var number = Number(dirtyNumber);
   return number + '.';
 };
-var localize$10 = {
+var localize$w = {
   ordinalNumber: ordinalNumber$w,
   era: buildLocalizeFn({
     values: eraValues$w,
@@ -21842,7 +21507,6 @@ var localize$10 = {
     defaultFormattingWidth: 'wide'
   })
 };
-const localize$11 = localize$10;
 
 var matchOrdinalNumberPattern$w = /^(\d+)\./i;
 var parseOrdinalNumberPattern$w = /\d+/i;
@@ -21900,7 +21564,7 @@ var parseDayPeriodPatterns$w = {
     night: /^n/i
   }
 };
-var match$10 = {
+var match$w = {
   ordinalNumber: buildMatchPatternFn({
     matchPattern: matchOrdinalNumberPattern$w,
     parsePattern: parseOrdinalNumberPattern$w,
@@ -21942,7 +21606,6 @@ var match$10 = {
     defaultParseWidth: 'any'
   })
 };
-const match$11 = match$10;
 
 /**
  * @type {Locale}
@@ -21952,19 +21615,18 @@ const match$11 = match$10;
  * @iso-639-2 lav
  * @author Rūdolfs Puķītis [@prudolfs]{@link https://github.com/prudolfs}
  */
-var locale$10 = {
+var locale$w = {
   code: 'lv',
-  formatDistance: formatDistance$11,
-  formatLong: formatLong$11,
-  formatRelative: formatRelative$11,
-  localize: localize$11,
-  match: match$11,
+  formatDistance: formatDistance$w,
+  formatLong: formatLong$w,
+  formatRelative: formatRelative$w,
+  localize: localize$w,
+  match: match$w,
   options: {
     weekStartsOn: 1 /* Monday */,
     firstWeekContainsDate: 4
   }
 };
-const locale$11 = locale$10;
 
 var formatDistanceLocale$v = {
   lessThanXSeconds: {
@@ -22029,7 +21691,7 @@ var formatDistanceLocale$v = {
     other: 'безмалку {{count}} години'
   }
 };
-var formatDistance$_ = function formatDistance(token, count, options) {
+var formatDistance$v = function formatDistance(token, count, options) {
   var result;
   var tokenValue = formatDistanceLocale$v[token];
   if (typeof tokenValue === 'string') {
@@ -22048,7 +21710,6 @@ var formatDistance$_ = function formatDistance(token, count, options) {
   }
   return result;
 };
-const formatDistance$$ = formatDistance$_;
 
 var dateFormats$v = {
   full: 'EEEE, dd MMMM yyyy',
@@ -22065,7 +21726,7 @@ var timeFormats$v = {
 var dateTimeFormats$v = {
   any: '{{date}} {{time}}'
 };
-var formatLong$_ = {
+var formatLong$v = {
   date: buildFormatLongFn({
     formats: dateFormats$v,
     defaultWidth: 'full'
@@ -22079,7 +21740,6 @@ var formatLong$_ = {
     defaultWidth: 'any'
   })
 };
-const formatLong$$ = formatLong$_;
 
 var weekdays = ['недела', 'понеделник', 'вторник', 'среда', 'четврток', 'петок', 'сабота'];
 function _lastWeek$2(day) {
@@ -22146,14 +21806,13 @@ var formatRelativeLocale$v = {
   },
   other: 'P'
 };
-var formatRelative$_ = function formatRelative(token, date, baseDate, options) {
+var formatRelative$v = function formatRelative(token, date, baseDate, options) {
   var format = formatRelativeLocale$v[token];
   if (typeof format === 'function') {
     return format(date, baseDate, options);
   }
   return format;
 };
-const formatRelative$$ = formatRelative$_;
 
 var eraValues$v = {
   narrow: ['пр.н.е.', 'н.е.'],
@@ -22203,7 +21862,7 @@ var ordinalNumber$v = function ordinalNumber(dirtyNumber, _options) {
   }
   return number + '-ти';
 };
-var localize$_ = {
+var localize$v = {
   ordinalNumber: ordinalNumber$v,
   era: buildLocalizeFn({
     values: eraValues$v,
@@ -22229,7 +21888,6 @@ var localize$_ = {
     defaultWidth: 'wide'
   })
 };
-const localize$$ = localize$_;
 
 var matchOrdinalNumberPattern$v = /^(\d+)(-?[врмт][и])?/i;
 var parseOrdinalNumberPattern$v = /\d+/i;
@@ -22281,7 +21939,7 @@ var parseDayPeriodPatterns$v = {
     night: /ноќе/i
   }
 };
-var match$_ = {
+var match$v = {
   ordinalNumber: buildMatchPatternFn({
     matchPattern: matchOrdinalNumberPattern$v,
     parsePattern: parseOrdinalNumberPattern$v,
@@ -22323,7 +21981,6 @@ var match$_ = {
     defaultParseWidth: 'any'
   })
 };
-const match$$ = match$_;
 
 /**
  * @type {Locale}
@@ -22334,19 +21991,18 @@ const match$$ = match$_;
  * @author Petar Vlahu [@vlahupetar]{@link https://github.com/vlahupetar}
  * @author Altrim Beqiri [@altrim]{@link https://github.com/altrim}
  */
-var locale$_ = {
+var locale$v = {
   code: 'mk',
-  formatDistance: formatDistance$$,
-  formatLong: formatLong$$,
-  formatRelative: formatRelative$$,
-  localize: localize$$,
-  match: match$$,
+  formatDistance: formatDistance$v,
+  formatLong: formatLong$v,
+  formatRelative: formatRelative$v,
+  localize: localize$v,
+  match: match$v,
   options: {
     weekStartsOn: 1 /* Monday */,
     firstWeekContainsDate: 4
   }
 };
-const locale$$ = locale$_;
 
 var formatDistanceLocale$u = {
   lessThanXSeconds: {
@@ -22411,7 +22067,7 @@ var formatDistanceLocale$u = {
     other: 'бараг {{count}} жил'
   }
 };
-var formatDistance$Y = function formatDistance(token, count, options) {
+var formatDistance$u = function formatDistance(token, count, options) {
   var result;
   var tokenValue = formatDistanceLocale$u[token];
   if (typeof tokenValue === 'string') {
@@ -22467,7 +22123,6 @@ var formatDistance$Y = function formatDistance(token, count, options) {
   }
   return result;
 };
-const formatDistance$Z = formatDistance$Y;
 
 var dateFormats$u = {
   full: "y 'оны' MMMM'ын' d, EEEE 'гараг'",
@@ -22487,7 +22142,7 @@ var dateTimeFormats$u = {
   medium: '{{date}} {{time}}',
   short: '{{date}} {{time}}'
 };
-var formatLong$Y = {
+var formatLong$u = {
   date: buildFormatLongFn({
     formats: dateFormats$u,
     defaultWidth: 'full'
@@ -22501,7 +22156,6 @@ var formatLong$Y = {
     defaultWidth: 'full'
   })
 };
-const formatLong$Z = formatLong$Y;
 
 var formatRelativeLocale$u = {
   lastWeek: "'өнгөрсөн' eeee 'гарагийн' p 'цагт'",
@@ -22511,10 +22165,9 @@ var formatRelativeLocale$u = {
   nextWeek: "'ирэх' eeee 'гарагийн' p 'цагт'",
   other: 'P'
 };
-var formatRelative$Y = function formatRelative(token, _date, _baseDate, _options) {
+var formatRelative$u = function formatRelative(token, _date, _baseDate, _options) {
   return formatRelativeLocale$u[token];
 };
-const formatRelative$Z = formatRelative$Y;
 
 var eraValues$u = {
   narrow: ['НТӨ', 'НТ'],
@@ -22588,7 +22241,7 @@ var dayPeriodValues$u = {
 var ordinalNumber$u = function ordinalNumber(dirtyNumber, _options) {
   return String(dirtyNumber);
 };
-var localize$Y = {
+var localize$u = {
   ordinalNumber: ordinalNumber$u,
   era: buildLocalizeFn({
     values: eraValues$u,
@@ -22618,7 +22271,6 @@ var localize$Y = {
     defaultWidth: 'wide'
   })
 };
-const localize$Z = localize$Y;
 
 var matchOrdinalNumberPattern$u = /\d+/i;
 var parseOrdinalNumberPattern$u = /\d+/i;
@@ -22673,7 +22325,7 @@ var parseDayPeriodPatterns$u = {
     night: /шөнө/i
   }
 };
-var match$Y = {
+var match$u = {
   ordinalNumber: buildMatchPatternFn({
     matchPattern: matchOrdinalNumberPattern$u,
     parsePattern: parseOrdinalNumberPattern$u,
@@ -22715,7 +22367,6 @@ var match$Y = {
     defaultParseWidth: 'any'
   })
 };
-const match$Z = match$Y;
 
 /**
  * @type {Locale}
@@ -22725,19 +22376,18 @@ const match$Z = match$Y;
  * @iso-639-2 mon
  * @author Bilguun Ochirbat [@bilguun0203]{@link https://github.com/bilguun0203}
  */
-var locale$Y = {
+var locale$u = {
   code: 'mn',
-  formatDistance: formatDistance$Z,
-  formatLong: formatLong$Z,
-  formatRelative: formatRelative$Z,
-  localize: localize$Z,
-  match: match$Z,
+  formatDistance: formatDistance$u,
+  formatLong: formatLong$u,
+  formatRelative: formatRelative$u,
+  localize: localize$u,
+  match: match$u,
   options: {
     weekStartsOn: 1 /* Monday */,
     firstWeekContainsDate: 1
   }
 };
-const locale$Z = locale$Y;
 
 var formatDistanceLocale$t = {
   lessThanXSeconds: {
@@ -22802,7 +22452,7 @@ var formatDistanceLocale$t = {
     other: 'hampir {{count}} tahun'
   }
 };
-var formatDistance$W = function formatDistance(token, count, options) {
+var formatDistance$t = function formatDistance(token, count, options) {
   var result;
   var tokenValue = formatDistanceLocale$t[token];
   if (typeof tokenValue === 'string') {
@@ -22821,7 +22471,6 @@ var formatDistance$W = function formatDistance(token, count, options) {
   }
   return result;
 };
-const formatDistance$X = formatDistance$W;
 
 var dateFormats$t = {
   full: 'EEEE, d MMMM yyyy',
@@ -22841,7 +22490,7 @@ var dateTimeFormats$t = {
   medium: '{{date}}, {{time}}',
   short: '{{date}}, {{time}}'
 };
-var formatLong$W = {
+var formatLong$t = {
   date: buildFormatLongFn({
     formats: dateFormats$t,
     defaultWidth: 'full'
@@ -22855,7 +22504,6 @@ var formatLong$W = {
     defaultWidth: 'full'
   })
 };
-const formatLong$X = formatLong$W;
 
 var formatRelativeLocale$t = {
   lastWeek: "eeee 'lepas pada jam' p",
@@ -22865,10 +22513,9 @@ var formatRelativeLocale$t = {
   nextWeek: "eeee 'pada jam' p",
   other: 'P'
 };
-var formatRelative$W = function formatRelative(token, _date, _baseDate, _options) {
+var formatRelative$t = function formatRelative(token, _date, _baseDate, _options) {
   return formatRelativeLocale$t[token];
 };
-const formatRelative$X = formatRelative$W;
 
 // https://www.unicode.org/cldr/charts/32/summary/ms.html
 var eraValues$t = {
@@ -22965,7 +22612,7 @@ var ordinalNumber$t = function ordinalNumber(dirtyNumber, _options) {
   // Can't use "pertama", "kedua" because can't be parsed
   return 'ke-' + Number(dirtyNumber);
 };
-var localize$W = {
+var localize$t = {
   ordinalNumber: ordinalNumber$t,
   era: buildLocalizeFn({
     values: eraValues$t,
@@ -22993,7 +22640,6 @@ var localize$W = {
     defaultFormattingWidth: 'wide'
   })
 };
-const localize$X = localize$W;
 
 var matchOrdinalNumberPattern$t = /^ke-(\d+)?/i;
 var parseOrdinalNumberPattern$t = /petama|\d+/i;
@@ -23048,7 +22694,7 @@ var parseDayPeriodPatterns$t = {
     night: /m/i
   }
 };
-var match$W = {
+var match$t = {
   ordinalNumber: buildMatchPatternFn({
     matchPattern: matchOrdinalNumberPattern$t,
     parsePattern: parseOrdinalNumberPattern$t,
@@ -23090,7 +22736,6 @@ var match$W = {
     defaultParseWidth: 'any'
   })
 };
-const match$X = match$W;
 
 /**
  * @type {Locale}
@@ -23100,19 +22745,18 @@ const match$X = match$W;
  * @iso-639-2 msa
  * @author Ruban Selvarajah [@Zyten]{@link https://github.com/Zyten}
  */
-var locale$W = {
+var locale$t = {
   code: 'ms',
-  formatDistance: formatDistance$X,
-  formatLong: formatLong$X,
-  formatRelative: formatRelative$X,
-  localize: localize$X,
-  match: match$X,
+  formatDistance: formatDistance$t,
+  formatLong: formatLong$t,
+  formatRelative: formatRelative$t,
+  localize: localize$t,
+  match: match$t,
   options: {
     weekStartsOn: 1 /* Monday */,
     firstWeekContainsDate: 1
   }
 };
-const locale$X = locale$W;
 
 var formatDistanceLocale$s = {
   lessThanXSeconds: {
@@ -23181,7 +22825,7 @@ var formatDistanceLocale$s = {
     other: 'kważi {{count}} snin'
   }
 };
-var formatDistance$U = function formatDistance(token, count, options) {
+var formatDistance$s = function formatDistance(token, count, options) {
   var result;
   var tokenValue = formatDistanceLocale$s[token];
   if (typeof tokenValue === 'string') {
@@ -23202,7 +22846,6 @@ var formatDistance$U = function formatDistance(token, count, options) {
   }
   return result;
 };
-const formatDistance$V = formatDistance$U;
 
 var dateFormats$s = {
   full: 'EEEE, d MMMM yyyy',
@@ -23222,7 +22865,7 @@ var dateTimeFormats$s = {
   medium: '{{date}} {{time}}',
   short: '{{date}} {{time}}'
 };
-var formatLong$U = {
+var formatLong$s = {
   date: buildFormatLongFn({
     formats: dateFormats$s,
     defaultWidth: 'full'
@@ -23236,7 +22879,6 @@ var formatLong$U = {
     defaultWidth: 'full'
   })
 };
-const formatLong$V = formatLong$U;
 
 var formatRelativeLocale$s = {
   lastWeek: "eeee 'li għadda' 'fil-'p",
@@ -23246,10 +22888,9 @@ var formatRelativeLocale$s = {
   nextWeek: "eeee 'fil-'p",
   other: 'P'
 };
-var formatRelative$U = function formatRelative(token, _date, _baseDate, _options) {
+var formatRelative$s = function formatRelative(token, _date, _baseDate, _options) {
   return formatRelativeLocale$s[token];
 };
-const formatRelative$V = formatRelative$U;
 
 var eraValues$s = {
   narrow: ['Q', 'W'],
@@ -23340,7 +22981,7 @@ var ordinalNumber$s = function ordinalNumber(dirtyNumber, _options) {
   var number = Number(dirtyNumber);
   return number + 'º';
 };
-var localize$U = {
+var localize$s = {
   ordinalNumber: ordinalNumber$s,
   era: buildLocalizeFn({
     values: eraValues$s,
@@ -23368,7 +23009,6 @@ var localize$U = {
     defaultFormattingWidth: 'wide'
   })
 };
-const localize$V = localize$U;
 
 var matchOrdinalNumberPattern$s = /^(\d+)(º)?/i;
 var parseOrdinalNumberPattern$s = /\d+/i;
@@ -23423,7 +23063,7 @@ var parseDayPeriodPatterns$s = {
     night: /lejl/i
   }
 };
-var match$U = {
+var match$s = {
   ordinalNumber: buildMatchPatternFn({
     matchPattern: matchOrdinalNumberPattern$s,
     parsePattern: parseOrdinalNumberPattern$s,
@@ -23465,7 +23105,6 @@ var match$U = {
     defaultParseWidth: 'any'
   })
 };
-const match$V = match$U;
 
 /**
  * @type {Locale}
@@ -23476,19 +23115,18 @@ const match$V = match$U;
  * @author Andras Matzon [@amatzon](@link https://github.com/amatzon)
  * @author Bryan Borg [@bryanMt](@link https://github.com/bryanMt)
  */
-var locale$U = {
+var locale$s = {
   code: 'mt',
-  formatDistance: formatDistance$V,
-  formatLong: formatLong$V,
-  formatRelative: formatRelative$V,
-  localize: localize$V,
-  match: match$V,
+  formatDistance: formatDistance$s,
+  formatLong: formatLong$s,
+  formatRelative: formatRelative$s,
+  localize: localize$s,
+  match: match$s,
   options: {
     weekStartsOn: 1 /* Monday */,
     firstWeekContainsDate: 4
   }
 };
-const locale$V = locale$U;
 
 var formatDistanceLocale$r = {
   lessThanXSeconds: {
@@ -23553,7 +23191,7 @@ var formatDistanceLocale$r = {
     other: 'nesten {{count}} år'
   }
 };
-var formatDistance$S = function formatDistance(token, count, options) {
+var formatDistance$r = function formatDistance(token, count, options) {
   var result;
   var tokenValue = formatDistanceLocale$r[token];
   if (typeof tokenValue === 'string') {
@@ -23572,7 +23210,6 @@ var formatDistance$S = function formatDistance(token, count, options) {
   }
   return result;
 };
-const formatDistance$T = formatDistance$S;
 
 var dateFormats$r = {
   full: 'EEEE d. MMMM y',
@@ -23592,7 +23229,7 @@ var dateTimeFormats$r = {
   medium: '{{date}} {{time}}',
   short: '{{date}} {{time}}'
 };
-var formatLong$S = {
+var formatLong$r = {
   date: buildFormatLongFn({
     formats: dateFormats$r,
     defaultWidth: 'full'
@@ -23606,7 +23243,6 @@ var formatLong$S = {
     defaultWidth: 'full'
   })
 };
-const formatLong$T = formatLong$S;
 
 var formatRelativeLocale$r = {
   lastWeek: "'forrige' eeee 'kl.' p",
@@ -23616,10 +23252,9 @@ var formatRelativeLocale$r = {
   nextWeek: "EEEE 'kl.' p",
   other: 'P'
 };
-var formatRelative$S = function formatRelative(token, _date, _baseDate, _options) {
+var formatRelative$r = function formatRelative(token, _date, _baseDate, _options) {
   return formatRelativeLocale$r[token];
 };
-const formatRelative$T = formatRelative$S;
 
 var eraValues$r = {
   narrow: ['f.Kr.', 'e.Kr.'],
@@ -23678,7 +23313,7 @@ var ordinalNumber$r = function ordinalNumber(dirtyNumber, _options) {
   var number = Number(dirtyNumber);
   return number + '.';
 };
-var localize$S = {
+var localize$r = {
   ordinalNumber: ordinalNumber$r,
   era: buildLocalizeFn({
     values: eraValues$r,
@@ -23704,7 +23339,6 @@ var localize$S = {
     defaultWidth: 'wide'
   })
 };
-const localize$T = localize$S;
 
 var matchOrdinalNumberPattern$r = /^(\d+)\.?/i;
 var parseOrdinalNumberPattern$r = /\d+/i;
@@ -23758,7 +23392,7 @@ var parseDayPeriodPatterns$r = {
     night: /natt/i
   }
 };
-var match$S = {
+var match$r = {
   ordinalNumber: buildMatchPatternFn({
     matchPattern: matchOrdinalNumberPattern$r,
     parsePattern: parseOrdinalNumberPattern$r,
@@ -23800,7 +23434,6 @@ var match$S = {
     defaultParseWidth: 'any'
   })
 };
-const match$T = match$S;
 
 /**
  * @type {Locale}
@@ -23812,19 +23445,18 @@ const match$T = match$S;
  * @author Mikolaj Grzyb [@mikolajgrzyb]{@link https://github.com/mikolajgrzyb}
  * @author Dag Stuan [@dagstuan]{@link https://github.com/dagstuan}
  */
-var locale$S = {
+var locale$r = {
   code: 'nb',
-  formatDistance: formatDistance$T,
-  formatLong: formatLong$T,
-  formatRelative: formatRelative$T,
-  localize: localize$T,
-  match: match$T,
+  formatDistance: formatDistance$r,
+  formatLong: formatLong$r,
+  formatRelative: formatRelative$r,
+  localize: localize$r,
+  match: match$r,
   options: {
     weekStartsOn: 1 /* Monday */,
     firstWeekContainsDate: 4
   }
 };
-const locale$T = locale$S;
 
 var formatDistanceLocale$q = {
   lessThanXSeconds: {
@@ -23889,7 +23521,7 @@ var formatDistanceLocale$q = {
     other: 'bijna {{count}} jaar'
   }
 };
-var formatDistance$Q = function formatDistance(token, count, options) {
+var formatDistance$q = function formatDistance(token, count, options) {
   var result;
   var tokenValue = formatDistanceLocale$q[token];
   if (typeof tokenValue === 'string') {
@@ -23908,7 +23540,6 @@ var formatDistance$Q = function formatDistance(token, count, options) {
   }
   return result;
 };
-const formatDistance$R = formatDistance$Q;
 
 var dateFormats$q = {
   full: 'EEEE d MMMM y',
@@ -23928,7 +23559,7 @@ var dateTimeFormats$q = {
   medium: '{{date}}, {{time}}',
   short: '{{date}}, {{time}}'
 };
-var formatLong$Q = {
+var formatLong$q = {
   date: buildFormatLongFn({
     formats: dateFormats$q,
     defaultWidth: 'full'
@@ -23942,7 +23573,6 @@ var formatLong$Q = {
     defaultWidth: 'full'
   })
 };
-const formatLong$R = formatLong$Q;
 
 var formatRelativeLocale$q = {
   lastWeek: "'afgelopen' eeee 'om' p",
@@ -23952,10 +23582,9 @@ var formatRelativeLocale$q = {
   nextWeek: "eeee 'om' p",
   other: 'P'
 };
-var formatRelative$Q = function formatRelative(token, _date, _baseDate, _options) {
+var formatRelative$q = function formatRelative(token, _date, _baseDate, _options) {
   return formatRelativeLocale$q[token];
 };
-const formatRelative$R = formatRelative$Q;
 
 var eraValues$q = {
   narrow: ['v.C.', 'n.C.'],
@@ -24014,7 +23643,7 @@ var ordinalNumber$q = function ordinalNumber(dirtyNumber, _options) {
   var number = Number(dirtyNumber);
   return number + 'e';
 };
-var localize$Q = {
+var localize$q = {
   ordinalNumber: ordinalNumber$q,
   era: buildLocalizeFn({
     values: eraValues$q,
@@ -24040,7 +23669,6 @@ var localize$Q = {
     defaultWidth: 'wide'
   })
 };
-const localize$R = localize$Q;
 
 var matchOrdinalNumberPattern$q = /^(\d+)e?/i;
 var parseOrdinalNumberPattern$q = /\d+/i;
@@ -24094,7 +23722,7 @@ var parseDayPeriodPatterns$q = {
     night: /nacht/i
   }
 };
-var match$Q = {
+var match$q = {
   ordinalNumber: buildMatchPatternFn({
     matchPattern: matchOrdinalNumberPattern$q,
     parsePattern: parseOrdinalNumberPattern$q,
@@ -24136,7 +23764,6 @@ var match$Q = {
     defaultParseWidth: 'any'
   })
 };
-const match$R = match$Q;
 
 /**
  * @type {Locale}
@@ -24151,19 +23778,18 @@ const match$R = match$Q;
  * @author Niels Keurentjes [@curry684]{@link https://github.com/curry684}
  * @author Stefan Vermaas [@stefanvermaas]{@link https://github.com/stefanvermaas}
  */
-var locale$Q = {
+var locale$q = {
   code: 'nl',
-  formatDistance: formatDistance$R,
-  formatLong: formatLong$R,
-  formatRelative: formatRelative$R,
-  localize: localize$R,
-  match: match$R,
+  formatDistance: formatDistance$q,
+  formatLong: formatLong$q,
+  formatRelative: formatRelative$q,
+  localize: localize$q,
+  match: match$q,
   options: {
     weekStartsOn: 1 /* Monday */,
     firstWeekContainsDate: 4
   }
 };
-const locale$R = locale$Q;
 
 var formatDistanceLocale$p = {
   lessThanXSeconds: {
@@ -24228,7 +23854,7 @@ var formatDistanceLocale$p = {
     other: 'bijna {{count}} jaar'
   }
 };
-var formatDistance$O = function formatDistance(token, count, options) {
+var formatDistance$p = function formatDistance(token, count, options) {
   var result;
   var tokenValue = formatDistanceLocale$p[token];
   if (typeof tokenValue === 'string') {
@@ -24247,7 +23873,6 @@ var formatDistance$O = function formatDistance(token, count, options) {
   }
   return result;
 };
-const formatDistance$P = formatDistance$O;
 
 var dateFormats$p = {
   full: 'EEEE d MMMM y',
@@ -24267,7 +23892,7 @@ var dateTimeFormats$p = {
   medium: '{{date}}, {{time}}',
   short: '{{date}}, {{time}}'
 };
-var formatLong$O = {
+var formatLong$p = {
   date: buildFormatLongFn({
     formats: dateFormats$p,
     defaultWidth: 'full'
@@ -24281,7 +23906,6 @@ var formatLong$O = {
     defaultWidth: 'full'
   })
 };
-const formatLong$P = formatLong$O;
 
 var formatRelativeLocale$p = {
   lastWeek: "'vorige' eeee 'om' p",
@@ -24291,10 +23915,9 @@ var formatRelativeLocale$p = {
   nextWeek: "eeee 'om' p",
   other: 'P'
 };
-var formatRelative$O = function formatRelative(token, _date, _baseDate, _options) {
+var formatRelative$p = function formatRelative(token, _date, _baseDate, _options) {
   return formatRelativeLocale$p[token];
 };
-const formatRelative$P = formatRelative$O;
 
 var eraValues$p = {
   narrow: ['v.C.', 'n.C.'],
@@ -24353,7 +23976,7 @@ var ordinalNumber$p = function ordinalNumber(dirtyNumber, _options) {
   var number = Number(dirtyNumber);
   return number + 'e';
 };
-var localize$O = {
+var localize$p = {
   ordinalNumber: ordinalNumber$p,
   era: buildLocalizeFn({
     values: eraValues$p,
@@ -24379,7 +24002,6 @@ var localize$O = {
     defaultWidth: 'wide'
   })
 };
-const localize$P = localize$O;
 
 var matchOrdinalNumberPattern$p = /^(\d+)e?/i;
 var parseOrdinalNumberPattern$p = /\d+/i;
@@ -24433,7 +24055,7 @@ var parseDayPeriodPatterns$p = {
     night: /nacht/i
   }
 };
-var match$O = {
+var match$p = {
   ordinalNumber: buildMatchPatternFn({
     matchPattern: matchOrdinalNumberPattern$p,
     parsePattern: parseOrdinalNumberPattern$p,
@@ -24475,7 +24097,6 @@ var match$O = {
     defaultParseWidth: 'any'
   })
 };
-const match$P = match$O;
 
 /**
  * @type {Locale}
@@ -24488,19 +24109,18 @@ const match$P = match$O;
  * @author Lode Vanhove [@bitcrumb]{@link https://github.com/bitcrumb}
  * @author Alex Hoeing [@dcbn]{@link https://github.com/dcbn}
  */
-var locale$O = {
+var locale$p = {
   code: 'nl-BE',
-  formatDistance: formatDistance$P,
-  formatLong: formatLong$P,
-  formatRelative: formatRelative$P,
-  localize: localize$P,
-  match: match$P,
+  formatDistance: formatDistance$p,
+  formatLong: formatLong$p,
+  formatRelative: formatRelative$p,
+  localize: localize$p,
+  match: match$p,
   options: {
     weekStartsOn: 1 /* Monday */,
     firstWeekContainsDate: 4
   }
 };
-const locale$P = locale$O;
 
 var formatDistanceLocale$o = {
   lessThanXSeconds: {
@@ -24566,7 +24186,7 @@ var formatDistanceLocale$o = {
   }
 };
 var wordMapping$1 = ['null', 'ein', 'to', 'tre', 'fire', 'fem', 'seks', 'sju', 'åtte', 'ni', 'ti', 'elleve', 'tolv'];
-var formatDistance$M = function formatDistance(token, count, options) {
+var formatDistance$o = function formatDistance(token, count, options) {
   var result;
   var tokenValue = formatDistanceLocale$o[token];
   if (typeof tokenValue === 'string') {
@@ -24589,7 +24209,6 @@ var formatDistance$M = function formatDistance(token, count, options) {
   }
   return result;
 };
-const formatDistance$N = formatDistance$M;
 
 var dateFormats$o = {
   full: 'EEEE d. MMMM y',
@@ -24609,7 +24228,7 @@ var dateTimeFormats$o = {
   medium: '{{date}} {{time}}',
   short: '{{date}} {{time}}'
 };
-var formatLong$M = {
+var formatLong$o = {
   date: buildFormatLongFn({
     formats: dateFormats$o,
     defaultWidth: 'full'
@@ -24623,7 +24242,6 @@ var formatLong$M = {
     defaultWidth: 'full'
   })
 };
-const formatLong$N = formatLong$M;
 
 var formatRelativeLocale$o = {
   lastWeek: "'førre' eeee 'kl.' p",
@@ -24633,10 +24251,9 @@ var formatRelativeLocale$o = {
   nextWeek: "EEEE 'kl.' p",
   other: 'P'
 };
-var formatRelative$M = function formatRelative(token, _date, _baseDate, _options) {
+var formatRelative$o = function formatRelative(token, _date, _baseDate, _options) {
   return formatRelativeLocale$o[token];
 };
-const formatRelative$N = formatRelative$M;
 
 var eraValues$o = {
   narrow: ['f.Kr.', 'e.Kr.'],
@@ -24695,7 +24312,7 @@ var ordinalNumber$o = function ordinalNumber(dirtyNumber, _options) {
   var number = Number(dirtyNumber);
   return number + '.';
 };
-var localize$M = {
+var localize$o = {
   ordinalNumber: ordinalNumber$o,
   era: buildLocalizeFn({
     values: eraValues$o,
@@ -24721,7 +24338,6 @@ var localize$M = {
     defaultWidth: 'wide'
   })
 };
-const localize$N = localize$M;
 
 var matchOrdinalNumberPattern$o = /^(\d+)\.?/i;
 var parseOrdinalNumberPattern$o = /\d+/i;
@@ -24775,7 +24391,7 @@ var parseDayPeriodPatterns$o = {
     night: /natt/i
   }
 };
-var match$M = {
+var match$o = {
   ordinalNumber: buildMatchPatternFn({
     matchPattern: matchOrdinalNumberPattern$o,
     parsePattern: parseOrdinalNumberPattern$o,
@@ -24817,7 +24433,6 @@ var match$M = {
     defaultParseWidth: 'any'
   })
 };
-const match$N = match$M;
 
 /**
  * @type {Locale}
@@ -24827,19 +24442,18 @@ const match$N = match$M;
  * @iso-639-2 nno
  * @author Mats Byrkjeland [@draperunner]{@link https://github.com/draperunner}
  */
-var locale$M = {
+var locale$o = {
   code: 'nn',
-  formatDistance: formatDistance$N,
-  formatLong: formatLong$N,
-  formatRelative: formatRelative$N,
-  localize: localize$N,
-  match: match$N,
+  formatDistance: formatDistance$o,
+  formatLong: formatLong$o,
+  formatRelative: formatRelative$o,
+  localize: localize$o,
+  match: match$o,
   options: {
     weekStartsOn: 1 /* Monday */,
     firstWeekContainsDate: 4
   }
 };
-const locale$N = locale$M;
 
 var formatDistanceLocale$n = {
   lessThanXSeconds: {
@@ -24904,7 +24518,7 @@ var formatDistanceLocale$n = {
     other: 'gaireben {{count}} ans'
   }
 };
-var formatDistance$K = function formatDistance(token, count, options) {
+var formatDistance$n = function formatDistance(token, count, options) {
   var result;
   var tokenValue = formatDistanceLocale$n[token];
   if (typeof tokenValue === 'string') {
@@ -24923,7 +24537,6 @@ var formatDistance$K = function formatDistance(token, count, options) {
   }
   return result;
 };
-const formatDistance$L = formatDistance$K;
 
 var dateFormats$n = {
   full: "EEEE d 'de' MMMM y",
@@ -24943,7 +24556,7 @@ var dateTimeFormats$n = {
   medium: '{{date}}, {{time}}',
   short: '{{date}}, {{time}}'
 };
-var formatLong$K = {
+var formatLong$n = {
   date: buildFormatLongFn({
     formats: dateFormats$n,
     defaultWidth: 'full'
@@ -24957,7 +24570,6 @@ var formatLong$K = {
     defaultWidth: 'full'
   })
 };
-const formatLong$L = formatLong$K;
 
 var formatRelativeLocale$n = {
   lastWeek: "eeee 'passat a' p",
@@ -24967,10 +24579,9 @@ var formatRelativeLocale$n = {
   nextWeek: "eeee 'a' p",
   other: 'P'
 };
-var formatRelative$K = function formatRelative(token, _date, _baseDate, _options) {
+var formatRelative$n = function formatRelative(token, _date, _baseDate, _options) {
   return formatRelativeLocale$n[token];
 };
-const formatRelative$L = formatRelative$K;
 
 var eraValues$n = {
   narrow: ['ab. J.C.', 'apr. J.C.'],
@@ -25078,7 +24689,7 @@ var ordinalNumber$n = function ordinalNumber(dirtyNumber, options) {
   }
   return number + ordinal;
 };
-var localize$K = {
+var localize$n = {
   ordinalNumber: ordinalNumber$n,
   era: buildLocalizeFn({
     values: eraValues$n,
@@ -25106,7 +24717,6 @@ var localize$K = {
     defaultFormattingWidth: 'wide'
   })
 };
-const localize$L = localize$K;
 
 var matchOrdinalNumberPattern$n = /^(\d+)(èr|nd|en)?[a]?/i;
 var parseOrdinalNumberPattern$n = /\d+/i;
@@ -25161,7 +24771,7 @@ var parseDayPeriodPatterns$n = {
     night: /nuèch/i
   }
 };
-var match$K = {
+var match$n = {
   ordinalNumber: buildMatchPatternFn({
     matchPattern: matchOrdinalNumberPattern$n,
     parsePattern: parseOrdinalNumberPattern$n,
@@ -25203,7 +24813,6 @@ var match$K = {
     defaultParseWidth: 'any'
   })
 };
-const match$L = match$K;
 
 /**
  * @type {Locale}
@@ -25213,19 +24822,18 @@ const match$L = match$K;
  * @iso-639-2 oci
  * @author Quentin PAGÈS
  */
-var locale$K = {
+var locale$n = {
   code: 'oc',
-  formatDistance: formatDistance$L,
-  formatLong: formatLong$L,
-  formatRelative: formatRelative$L,
-  localize: localize$L,
-  match: match$L,
+  formatDistance: formatDistance$n,
+  formatLong: formatLong$n,
+  formatRelative: formatRelative$n,
+  localize: localize$n,
+  match: match$n,
   options: {
     weekStartsOn: 1 /* Monday */,
     firstWeekContainsDate: 4
   }
 };
-const locale$L = locale$K;
 
 var formatDistanceLocale$m = {
   lessThanXSeconds: {
@@ -25360,7 +24968,7 @@ function declension$3(scheme, count, time) {
   var finalText = typeof group === 'string' ? group : group[time];
   return finalText.replace('{{count}}', String(count));
 }
-var formatDistance$I = function formatDistance(token, count, options) {
+var formatDistance$m = function formatDistance(token, count, options) {
   var scheme = formatDistanceLocale$m[token];
   if (!(options !== null && options !== void 0 && options.addSuffix)) {
     return declension$3(scheme, count, 'regular');
@@ -25371,7 +24979,6 @@ var formatDistance$I = function formatDistance(token, count, options) {
     return declension$3(scheme, count, 'past') + ' temu';
   }
 };
-const formatDistance$J = formatDistance$I;
 
 var dateFormats$m = {
   full: 'EEEE, do MMMM y',
@@ -25391,7 +24998,7 @@ var dateTimeFormats$m = {
   medium: '{{date}}, {{time}}',
   short: '{{date}}, {{time}}'
 };
-var formatLong$I = {
+var formatLong$m = {
   date: buildFormatLongFn({
     formats: dateFormats$m,
     defaultWidth: 'full'
@@ -25405,7 +25012,6 @@ var formatLong$I = {
     defaultWidth: 'full'
   })
 };
-const formatLong$J = formatLong$I;
 
 var adjectivesLastWeek = {
   masculine: 'ostatni',
@@ -25452,14 +25058,13 @@ var formatRelativeLocale$m = {
   nextWeek: dayAndTimeWithAdjective,
   other: 'P'
 };
-var formatRelative$I = function formatRelative(token, date, baseDate, options) {
+var formatRelative$m = function formatRelative(token, date, baseDate, options) {
   var format = formatRelativeLocale$m[token];
   if (typeof format === 'function') {
     return format(token, date, baseDate, options);
   }
   return format;
 };
-const formatRelative$J = formatRelative$I;
 
 var eraValues$m = {
   narrow: ['p.n.e.', 'n.e.'],
@@ -25560,7 +25165,7 @@ var dayPeriodFormattingValues = {
 var ordinalNumber$m = function ordinalNumber(dirtyNumber, _options) {
   return String(dirtyNumber);
 };
-var localize$I = {
+var localize$m = {
   ordinalNumber: ordinalNumber$m,
   era: buildLocalizeFn({
     values: eraValues$m,
@@ -25592,7 +25197,6 @@ var localize$I = {
     defaultFormattingWidth: 'wide'
   })
 };
-const localize$J = localize$I;
 
 var matchOrdinalNumberPattern$m = /^(\d+)?/i;
 var parseOrdinalNumberPattern$m = /\d+/i;
@@ -25659,7 +25263,7 @@ var parseDayPeriodPatterns$m = {
     night: /noc/i
   }
 };
-var match$I = {
+var match$m = {
   ordinalNumber: buildMatchPatternFn({
     matchPattern: matchOrdinalNumberPattern$m,
     parsePattern: parseOrdinalNumberPattern$m,
@@ -25701,7 +25305,6 @@ var match$I = {
     defaultParseWidth: 'any'
   })
 };
-const match$J = match$I;
 
 /**
  * @type {Locale}
@@ -25714,19 +25317,18 @@ const match$J = match$I;
  * @author Mikolaj Grzyb [@mikolajgrzyb]{@link https://github.com/mikolajgrzyb}
  * @author Mateusz Tokarski [@mutisz]{@link https://github.com/mutisz}
  */
-var locale$I = {
+var locale$m = {
   code: 'pl',
-  formatDistance: formatDistance$J,
-  formatLong: formatLong$J,
-  formatRelative: formatRelative$J,
-  localize: localize$J,
-  match: match$J,
+  formatDistance: formatDistance$m,
+  formatLong: formatLong$m,
+  formatRelative: formatRelative$m,
+  localize: localize$m,
+  match: match$m,
   options: {
     weekStartsOn: 1 /* Monday */,
     firstWeekContainsDate: 4
   }
 };
-const locale$J = locale$I;
 
 var formatDistanceLocale$l = {
   lessThanXSeconds: {
@@ -25791,7 +25393,7 @@ var formatDistanceLocale$l = {
     other: 'quase {{count}} anos'
   }
 };
-var formatDistance$G = function formatDistance(token, count, options) {
+var formatDistance$l = function formatDistance(token, count, options) {
   var result;
   var tokenValue = formatDistanceLocale$l[token];
   if (typeof tokenValue === 'string') {
@@ -25810,7 +25412,6 @@ var formatDistance$G = function formatDistance(token, count, options) {
   }
   return result;
 };
-const formatDistance$H = formatDistance$G;
 
 var dateFormats$l = {
   full: "EEEE, d 'de' MMMM 'de' y",
@@ -25830,7 +25431,7 @@ var dateTimeFormats$l = {
   medium: '{{date}}, {{time}}',
   short: '{{date}}, {{time}}'
 };
-var formatLong$G = {
+var formatLong$l = {
   date: buildFormatLongFn({
     formats: dateFormats$l,
     defaultWidth: 'full'
@@ -25844,7 +25445,6 @@ var formatLong$G = {
     defaultWidth: 'full'
   })
 };
-const formatLong$H = formatLong$G;
 
 var formatRelativeLocale$l = {
   lastWeek: function lastWeek(date) {
@@ -25858,14 +25458,13 @@ var formatRelativeLocale$l = {
   nextWeek: "eeee 'às' p",
   other: 'P'
 };
-var formatRelative$G = function formatRelative(token, date, _baseDate, _options) {
+var formatRelative$l = function formatRelative(token, date, _baseDate, _options) {
   var format = formatRelativeLocale$l[token];
   if (typeof format === 'function') {
     return format(date);
   }
   return format;
 };
-const formatRelative$H = formatRelative$G;
 
 var eraValues$l = {
   narrow: ['aC', 'dC'],
@@ -25956,7 +25555,7 @@ var ordinalNumber$l = function ordinalNumber(dirtyNumber, _options) {
   var number = Number(dirtyNumber);
   return number + 'º';
 };
-var localize$G = {
+var localize$l = {
   ordinalNumber: ordinalNumber$l,
   era: buildLocalizeFn({
     values: eraValues$l,
@@ -25984,7 +25583,6 @@ var localize$G = {
     defaultFormattingWidth: 'wide'
   })
 };
-const localize$H = localize$G;
 
 var matchOrdinalNumberPattern$l = /^(\d+)(º|ª)?/i;
 var parseOrdinalNumberPattern$l = /\d+/i;
@@ -26040,7 +25638,7 @@ var parseDayPeriodPatterns$l = {
     night: /madrugada/i
   }
 };
-var match$G = {
+var match$l = {
   ordinalNumber: buildMatchPatternFn({
     matchPattern: matchOrdinalNumberPattern$l,
     parsePattern: parseOrdinalNumberPattern$l,
@@ -26082,7 +25680,6 @@ var match$G = {
     defaultParseWidth: 'any'
   })
 };
-const match$H = match$G;
 
 /**
  * @type {Locale}
@@ -26093,19 +25690,18 @@ const match$H = match$G;
  * @author Dário Freire [@dfreire]{@link https://github.com/dfreire}
  * @author Adrián de la Rosa [@adrm]{@link https://github.com/adrm}
  */
-var locale$G = {
+var locale$l = {
   code: 'pt',
-  formatDistance: formatDistance$H,
-  formatLong: formatLong$H,
-  formatRelative: formatRelative$H,
-  localize: localize$H,
-  match: match$H,
+  formatDistance: formatDistance$l,
+  formatLong: formatLong$l,
+  formatRelative: formatRelative$l,
+  localize: localize$l,
+  match: match$l,
   options: {
     weekStartsOn: 1 /* Monday */,
     firstWeekContainsDate: 4
   }
 };
-const locale$H = locale$G;
 
 var formatDistanceLocale$k = {
   lessThanXSeconds: {
@@ -26170,7 +25766,7 @@ var formatDistanceLocale$k = {
     other: 'quase {{count}} anos'
   }
 };
-var formatDistance$E = function formatDistance(token, count, options) {
+var formatDistance$k = function formatDistance(token, count, options) {
   var result;
   var tokenValue = formatDistanceLocale$k[token];
   if (typeof tokenValue === 'string') {
@@ -26189,7 +25785,6 @@ var formatDistance$E = function formatDistance(token, count, options) {
   }
   return result;
 };
-const formatDistance$F = formatDistance$E;
 
 var dateFormats$k = {
   full: "EEEE, d 'de' MMMM 'de' y",
@@ -26209,7 +25804,7 @@ var dateTimeFormats$k = {
   medium: '{{date}}, {{time}}',
   short: '{{date}}, {{time}}'
 };
-var formatLong$E = {
+var formatLong$k = {
   date: buildFormatLongFn({
     formats: dateFormats$k,
     defaultWidth: 'full'
@@ -26223,7 +25818,6 @@ var formatLong$E = {
     defaultWidth: 'full'
   })
 };
-const formatLong$F = formatLong$E;
 
 var formatRelativeLocale$k = {
   lastWeek: function lastWeek(date) {
@@ -26237,14 +25831,13 @@ var formatRelativeLocale$k = {
   nextWeek: "eeee 'às' p",
   other: 'P'
 };
-var formatRelative$E = function formatRelative(token, date, _baseDate, _options) {
+var formatRelative$k = function formatRelative(token, date, _baseDate, _options) {
   var format = formatRelativeLocale$k[token];
   if (typeof format === 'function') {
     return format(date);
   }
   return format;
 };
-const formatRelative$F = formatRelative$E;
 
 var eraValues$k = {
   narrow: ['AC', 'DC'],
@@ -26338,7 +25931,7 @@ var ordinalNumber$k = function ordinalNumber(dirtyNumber, options) {
   }
   return number + 'º';
 };
-var localize$E = {
+var localize$k = {
   ordinalNumber: ordinalNumber$k,
   era: buildLocalizeFn({
     values: eraValues$k,
@@ -26366,7 +25959,6 @@ var localize$E = {
     defaultFormattingWidth: 'wide'
   })
 };
-const localize$F = localize$E;
 
 var matchOrdinalNumberPattern$k = /^(\d+)[ºªo]?/i;
 var parseOrdinalNumberPattern$k = /\d+/i;
@@ -26423,7 +26015,7 @@ var parseDayPeriodPatterns$k = {
     night: /noite/i
   }
 };
-var match$E = {
+var match$k = {
   ordinalNumber: buildMatchPatternFn({
     matchPattern: matchOrdinalNumberPattern$k,
     parsePattern: parseOrdinalNumberPattern$k,
@@ -26465,7 +26057,6 @@ var match$E = {
     defaultParseWidth: 'any'
   })
 };
-const match$F = match$E;
 
 /**
  * @type {Locale}
@@ -26476,19 +26067,18 @@ const match$F = match$E;
  * @author Lucas Duailibe [@duailibe]{@link https://github.com/duailibe}
  * @author Yago Carballo [@yagocarballo]{@link https://github.com/YagoCarballo}
  */
-var locale$E = {
+var locale$k = {
   code: 'pt-BR',
-  formatDistance: formatDistance$F,
-  formatLong: formatLong$F,
-  formatRelative: formatRelative$F,
-  localize: localize$F,
-  match: match$F,
+  formatDistance: formatDistance$k,
+  formatLong: formatLong$k,
+  formatRelative: formatRelative$k,
+  localize: localize$k,
+  match: match$k,
   options: {
     weekStartsOn: 0 /* Sunday */,
     firstWeekContainsDate: 1
   }
 };
-const locale$F = locale$E;
 
 var formatDistanceLocale$j = {
   lessThanXSeconds: {
@@ -26553,7 +26143,7 @@ var formatDistanceLocale$j = {
     other: 'aproape {{count}} ani'
   }
 };
-var formatDistance$C = function formatDistance(token, count, options) {
+var formatDistance$j = function formatDistance(token, count, options) {
   var result;
   var tokenValue = formatDistanceLocale$j[token];
   if (typeof tokenValue === 'string') {
@@ -26572,7 +26162,6 @@ var formatDistance$C = function formatDistance(token, count, options) {
   }
   return result;
 };
-const formatDistance$D = formatDistance$C;
 
 var dateFormats$j = {
   full: 'EEEE, d MMMM yyyy',
@@ -26592,7 +26181,7 @@ var dateTimeFormats$j = {
   medium: '{{date}}, {{time}}',
   short: '{{date}}, {{time}}'
 };
-var formatLong$C = {
+var formatLong$j = {
   date: buildFormatLongFn({
     formats: dateFormats$j,
     defaultWidth: 'full'
@@ -26606,7 +26195,6 @@ var formatLong$C = {
     defaultWidth: 'full'
   })
 };
-const formatLong$D = formatLong$C;
 
 var formatRelativeLocale$j = {
   lastWeek: "eeee 'trecută la' p",
@@ -26616,10 +26204,9 @@ var formatRelativeLocale$j = {
   nextWeek: "eeee 'viitoare la' p",
   other: 'P'
 };
-var formatRelative$C = function formatRelative(token, _date, _baseDate, _options) {
+var formatRelative$j = function formatRelative(token, _date, _baseDate, _options) {
   return formatRelativeLocale$j[token];
 };
-const formatRelative$D = formatRelative$C;
 
 var eraValues$j = {
   narrow: ['Î', 'D'],
@@ -26709,7 +26296,7 @@ var formattingDayPeriodValues$j = {
 var ordinalNumber$j = function ordinalNumber(dirtyNumber, _options) {
   return String(dirtyNumber);
 };
-var localize$C = {
+var localize$j = {
   ordinalNumber: ordinalNumber$j,
   era: buildLocalizeFn({
     values: eraValues$j,
@@ -26737,7 +26324,6 @@ var localize$C = {
     defaultFormattingWidth: 'wide'
   })
 };
-const localize$D = localize$C;
 
 var matchOrdinalNumberPattern$j = /^(\d+)?/i;
 var parseOrdinalNumberPattern$j = /\d+/i;
@@ -26793,7 +26379,7 @@ var parseDayPeriodPatterns$j = {
     night: /noaptea/i
   }
 };
-var match$C = {
+var match$j = {
   ordinalNumber: buildMatchPatternFn({
     matchPattern: matchOrdinalNumberPattern$j,
     parsePattern: parseOrdinalNumberPattern$j,
@@ -26835,7 +26421,6 @@ var match$C = {
     defaultParseWidth: 'any'
   })
 };
-const match$D = match$C;
 
 /**
  * @type {Locale}
@@ -26847,19 +26432,18 @@ const match$D = match$C;
  * @author Adrian Ocneanu [@aocneanu]{@link https://github.com/aocneanu}
  * @author Mihai Ocneanu [@gandesc]{@link https://github.com/gandesc}
  */
-var locale$C = {
+var locale$j = {
   code: 'ro',
-  formatDistance: formatDistance$D,
-  formatLong: formatLong$D,
-  formatRelative: formatRelative$D,
-  localize: localize$D,
-  match: match$D,
+  formatDistance: formatDistance$j,
+  formatLong: formatLong$j,
+  formatRelative: formatRelative$j,
+  localize: localize$j,
+  match: match$j,
   options: {
     weekStartsOn: 1 /* Monday */,
     firstWeekContainsDate: 1
   }
 };
-const locale$D = locale$C;
 
 function declension$2(scheme, count) {
   // scheme for count=1 exists
@@ -27084,10 +26668,9 @@ var formatDistanceLocale$i = {
     }
   })
 };
-var formatDistance$A = function formatDistance(token, count, options) {
+var formatDistance$i = function formatDistance(token, count, options) {
   return formatDistanceLocale$i[token](count, options);
 };
-const formatDistance$B = formatDistance$A;
 
 var dateFormats$i = {
   full: "EEEE, d MMMM y 'г.'",
@@ -27104,7 +26687,7 @@ var timeFormats$i = {
 var dateTimeFormats$i = {
   any: '{{date}}, {{time}}'
 };
-var formatLong$A = {
+var formatLong$i = {
   date: buildFormatLongFn({
     formats: dateFormats$i,
     defaultWidth: 'full'
@@ -27118,7 +26701,6 @@ var formatLong$A = {
     defaultWidth: 'any'
   })
 };
-const formatLong$B = formatLong$A;
 
 var accusativeWeekdays$2 = ['воскресенье', 'понедельник', 'вторник', 'среду', 'четверг', 'пятницу', 'субботу'];
 function _lastWeek$1(day) {
@@ -27181,14 +26763,13 @@ var formatRelativeLocale$i = {
   },
   other: 'P'
 };
-var formatRelative$A = function formatRelative(token, date, baseDate, options) {
+var formatRelative$i = function formatRelative(token, date, baseDate, options) {
   var format = formatRelativeLocale$i[token];
   if (typeof format === 'function') {
     return format(date, baseDate, options);
   }
   return format;
 };
-const formatRelative$B = formatRelative$A;
 
 var eraValues$i = {
   narrow: ['до н.э.', 'н.э.'],
@@ -27293,7 +26874,7 @@ var ordinalNumber$i = function ordinalNumber(dirtyNumber, options) {
   }
   return number + suffix;
 };
-var localize$A = {
+var localize$i = {
   ordinalNumber: ordinalNumber$i,
   era: buildLocalizeFn({
     values: eraValues$i,
@@ -27323,7 +26904,6 @@ var localize$A = {
     defaultFormattingWidth: 'wide'
   })
 };
-const localize$B = localize$A;
 
 var matchOrdinalNumberPattern$i = /^(\d+)(-?(е|я|й|ое|ье|ая|ья|ый|ой|ий|ый))?/i;
 var parseOrdinalNumberPattern$i = /\d+/i;
@@ -27379,7 +26959,7 @@ var parseDayPeriodPatterns$i = {
     night: /^н/i
   }
 };
-var match$A = {
+var match$i = {
   ordinalNumber: buildMatchPatternFn({
     matchPattern: matchOrdinalNumberPattern$i,
     parsePattern: parseOrdinalNumberPattern$i,
@@ -27421,7 +27001,6 @@ var match$A = {
     defaultParseWidth: 'any'
   })
 };
-const match$B = match$A;
 
 /**
  * @type {Locale}
@@ -27432,19 +27011,18 @@ const match$B = match$A;
  * @author Sasha Koss [@kossnocorp]{@link https://github.com/kossnocorp}
  * @author Lesha Koss [@leshakoss]{@link https://github.com/leshakoss}
  */
-var locale$A = {
+var locale$i = {
   code: 'ru',
-  formatDistance: formatDistance$B,
-  formatLong: formatLong$B,
-  formatRelative: formatRelative$B,
-  localize: localize$B,
-  match: match$B,
+  formatDistance: formatDistance$i,
+  formatLong: formatLong$i,
+  formatRelative: formatRelative$i,
+  localize: localize$i,
+  match: match$i,
   options: {
     weekStartsOn: 1 /* Monday */,
     firstWeekContainsDate: 1
   }
 };
-const locale$B = locale$A;
 
 function declensionGroup(scheme, count) {
   if (count === 1 && scheme.one) {
@@ -27619,7 +27197,7 @@ var formatDistanceLocale$h = {
     }
   }
 };
-var formatDistance$y = function formatDistance(token, count, options) {
+var formatDistance$h = function formatDistance(token, count, options) {
   var preposition = extractPreposition(token) || '';
   var key = lowercaseFirstLetter(token.substring(preposition.length));
   var scheme = formatDistanceLocale$h[key];
@@ -27632,7 +27210,6 @@ var formatDistance$y = function formatDistance(token, count, options) {
     return prefixPreposition(preposition) + 'pred ' + suffixPreposition(preposition) + declension$1(scheme, count, 'past');
   }
 };
-const formatDistance$z = formatDistance$y;
 
 var dateFormats$h = {
   full: 'EEEE d. MMMM y',
@@ -27656,7 +27233,7 @@ var dateTimeFormats$h = {
   medium: '{{date}}, {{time}}',
   short: '{{date}} {{time}}'
 };
-var formatLong$y = {
+var formatLong$h = {
   date: buildFormatLongFn({
     formats: dateFormats$h,
     defaultWidth: 'full'
@@ -27670,7 +27247,6 @@ var formatLong$y = {
     defaultWidth: 'full'
   })
 };
-const formatLong$z = formatLong$y;
 
 // https://www.unicode.org/cldr/charts/32/summary/sk.html?hide#1308
 var accusativeWeekdays$1 = ['nedeľu', 'pondelok', 'utorok', 'stredu', 'štvrtok', 'piatok', 'sobotu'];
@@ -27726,14 +27302,13 @@ var formatRelativeLocale$h = {
   },
   other: 'P'
 };
-var formatRelative$y = function formatRelative(token, date, baseDate, options) {
+var formatRelative$h = function formatRelative(token, date, baseDate, options) {
   var format = formatRelativeLocale$h[token];
   if (typeof format === 'function') {
     return format(date, baseDate, options);
   }
   return format;
 };
-const formatRelative$z = formatRelative$y;
 
 var eraValues$h = {
   narrow: ['pred Kr.', 'po Kr.'],
@@ -27837,7 +27412,7 @@ var ordinalNumber$h = function ordinalNumber(dirtyNumber, _options) {
   var number = Number(dirtyNumber);
   return number + '.';
 };
-var localize$y = {
+var localize$h = {
   ordinalNumber: ordinalNumber$h,
   era: buildLocalizeFn({
     values: eraValues$h,
@@ -27867,7 +27442,6 @@ var localize$y = {
     defaultFormattingWidth: 'wide'
   })
 };
-const localize$z = localize$y;
 
 var matchOrdinalNumberPattern$h = /^(\d+)\.?/i;
 var parseOrdinalNumberPattern$h = /\d+/i;
@@ -27923,7 +27497,7 @@ var parseDayPeriodPatterns$h = {
     night: /^(noc|v n\.)/i
   }
 };
-var match$y = {
+var match$h = {
   ordinalNumber: buildMatchPatternFn({
     matchPattern: matchOrdinalNumberPattern$h,
     parsePattern: parseOrdinalNumberPattern$h,
@@ -27965,7 +27539,6 @@ var match$y = {
     defaultParseWidth: 'any'
   })
 };
-const match$z = match$y;
 
 /**
  * @type {Locale}
@@ -27975,19 +27548,18 @@ const match$z = match$y;
  * @iso-639-2 slk
  * @author Marek Suscak [@mareksuscak]{@link https://github.com/mareksuscak}
  */
-var locale$y = {
+var locale$h = {
   code: 'sk',
-  formatDistance: formatDistance$z,
-  formatLong: formatLong$z,
-  formatRelative: formatRelative$z,
-  localize: localize$z,
-  match: match$z,
+  formatDistance: formatDistance$h,
+  formatLong: formatLong$h,
+  formatRelative: formatRelative$h,
+  localize: localize$h,
+  match: match$h,
   options: {
     weekStartsOn: 1 /* Monday */,
     firstWeekContainsDate: 4
   }
 };
-const locale$z = locale$y;
 
 function isPluralType$1(val) {
   return val.one !== undefined;
@@ -28282,7 +27854,7 @@ function getFormFromCount(count) {
       return 'other';
   }
 }
-var formatDistance$w = function formatDistance(token, count, options) {
+var formatDistance$g = function formatDistance(token, count, options) {
   var result = '';
   var tense = 'present';
   if (options !== null && options !== void 0 && options.addSuffix) {
@@ -28307,7 +27879,6 @@ var formatDistance$w = function formatDistance(token, count, options) {
   }
   return result;
 };
-const formatDistance$x = formatDistance$w;
 
 var dateFormats$g = {
   full: 'EEEE, dd. MMMM y',
@@ -28327,7 +27898,7 @@ var dateTimeFormats$g = {
   medium: '{{date}} {{time}}',
   short: '{{date}} {{time}}'
 };
-var formatLong$w = {
+var formatLong$g = {
   date: buildFormatLongFn({
     formats: dateFormats$g,
     defaultWidth: 'full'
@@ -28341,7 +27912,6 @@ var formatLong$w = {
     defaultWidth: 'full'
   })
 };
-const formatLong$x = formatLong$w;
 
 var formatRelativeLocale$g = {
   lastWeek: function lastWeek(date) {
@@ -28375,14 +27945,13 @@ var formatRelativeLocale$g = {
   },
   other: 'P'
 };
-var formatRelative$w = function formatRelative(token, date, _baseDate, _options) {
+var formatRelative$g = function formatRelative(token, date, _baseDate, _options) {
   var format = formatRelativeLocale$g[token];
   if (typeof format === 'function') {
     return format(date);
   }
   return format;
 };
-const formatRelative$x = formatRelative$w;
 
 var eraValues$g = {
   narrow: ['pr. n. št.', 'po n. št.'],
@@ -28473,7 +28042,7 @@ var ordinalNumber$g = function ordinalNumber(dirtyNumber, _options) {
   var number = Number(dirtyNumber);
   return number + '.';
 };
-var localize$w = {
+var localize$g = {
   ordinalNumber: ordinalNumber$g,
   era: buildLocalizeFn({
     values: eraValues$g,
@@ -28501,7 +28070,6 @@ var localize$w = {
     defaultFormattingWidth: 'wide'
   })
 };
-const localize$x = localize$w;
 
 var matchOrdinalNumberPattern$g = /^(\d+)\./i;
 var parseOrdinalNumberPattern$g = /\d+/i;
@@ -28566,7 +28134,7 @@ var parseDayPeriodPatterns$g = {
     night: /(po)?no/i
   }
 };
-var match$w = {
+var match$g = {
   ordinalNumber: buildMatchPatternFn({
     matchPattern: matchOrdinalNumberPattern$g,
     parsePattern: parseOrdinalNumberPattern$g,
@@ -28608,7 +28176,6 @@ var match$w = {
     defaultParseWidth: 'any'
   })
 };
-const match$x = match$w;
 
 /**
  * @type {Locale}
@@ -28619,19 +28186,18 @@ const match$x = match$w;
  * @author Adam Stradovnik [@Neoglyph]{@link https://github.com/Neoglyph}
  * @author Mato Žgajner [@mzgajner]{@link https://github.com/mzgajner}
  */
-var locale$w = {
+var locale$g = {
   code: 'sl',
-  formatDistance: formatDistance$x,
-  formatLong: formatLong$x,
-  formatRelative: formatRelative$x,
-  localize: localize$x,
-  match: match$x,
+  formatDistance: formatDistance$g,
+  formatLong: formatLong$g,
+  formatRelative: formatRelative$g,
+  localize: localize$g,
+  match: match$g,
   options: {
     weekStartsOn: 1 /* Monday */,
     firstWeekContainsDate: 1
   }
 };
-const locale$x = locale$w;
 
 var formatDistanceLocale$f = {
   lessThanXSeconds: {
@@ -28696,7 +28262,7 @@ var formatDistanceLocale$f = {
     other: 'pothuajse {{count}} vite'
   }
 };
-var formatDistance$u = function formatDistance(token, count, options) {
+var formatDistance$f = function formatDistance(token, count, options) {
   var result;
   var tokenValue = formatDistanceLocale$f[token];
   if (typeof tokenValue === 'string') {
@@ -28715,7 +28281,6 @@ var formatDistance$u = function formatDistance(token, count, options) {
   }
   return result;
 };
-const formatDistance$v = formatDistance$u;
 
 var dateFormats$f = {
   full: 'EEEE, MMMM do, y',
@@ -28735,7 +28300,7 @@ var dateTimeFormats$f = {
   medium: '{{date}}, {{time}}',
   short: '{{date}}, {{time}}'
 };
-var formatLong$u = {
+var formatLong$f = {
   date: buildFormatLongFn({
     formats: dateFormats$f,
     defaultWidth: 'full'
@@ -28749,7 +28314,6 @@ var formatLong$u = {
     defaultWidth: 'full'
   })
 };
-const formatLong$v = formatLong$u;
 
 var formatRelativeLocale$f = {
   lastWeek: "'të' eeee 'e shkuar në' p",
@@ -28759,10 +28323,9 @@ var formatRelativeLocale$f = {
   nextWeek: "eeee 'at' p",
   other: 'P'
 };
-var formatRelative$u = function formatRelative(token, _date, _baseDate, _options) {
+var formatRelative$f = function formatRelative(token, _date, _baseDate, _options) {
   return formatRelativeLocale$f[token];
 };
-const formatRelative$v = formatRelative$u;
 
 var eraValues$f = {
   narrow: ['P', 'M'],
@@ -28861,7 +28424,7 @@ var ordinalNumber$f = function ordinalNumber(dirtyNumber, options) {
   if (number === 4) return number + 't';
   return number + '-të';
 };
-var localize$u = {
+var localize$f = {
   ordinalNumber: ordinalNumber$f,
   era: buildLocalizeFn({
     values: eraValues$f,
@@ -28889,7 +28452,6 @@ var localize$u = {
     defaultFormattingWidth: 'wide'
   })
 };
-const localize$v = localize$u;
 
 var matchOrdinalNumberPattern$f = /^(\d+)(-rë|-të|t|)?/i;
 var parseOrdinalNumberPattern$f = /\d+/i;
@@ -28944,7 +28506,7 @@ var parseDayPeriodPatterns$f = {
     night: /natë/i
   }
 };
-var match$u = {
+var match$f = {
   ordinalNumber: buildMatchPatternFn({
     matchPattern: matchOrdinalNumberPattern$f,
     parsePattern: parseOrdinalNumberPattern$f,
@@ -28986,7 +28548,6 @@ var match$u = {
     defaultParseWidth: 'any'
   })
 };
-const match$v = match$u;
 
 /**
  * @type {Locale}
@@ -28996,19 +28557,18 @@ const match$v = match$u;
  * @iso-639-2 sqi
  * @author Ardit Dine [@arditdine]{@link https://github.com/arditdine}
  */
-var locale$u = {
+var locale$f = {
   code: 'sq',
-  formatDistance: formatDistance$v,
-  formatLong: formatLong$v,
-  formatRelative: formatRelative$v,
-  localize: localize$v,
-  match: match$v,
+  formatDistance: formatDistance$f,
+  formatLong: formatLong$f,
+  formatRelative: formatRelative$f,
+  localize: localize$f,
+  match: match$f,
   options: {
     weekStartsOn: 1 /* Monday */,
     firstWeekContainsDate: 1
   }
 };
-const locale$v = locale$u;
 
 var formatDistanceLocale$e = {
   lessThanXSeconds: {
@@ -29148,7 +28708,7 @@ var formatDistanceLocale$e = {
     other: 'готово {{count}} година'
   }
 };
-var formatDistance$s = function formatDistance(token, count, options) {
+var formatDistance$e = function formatDistance(token, count, options) {
   var result;
   var tokenValue = formatDistanceLocale$e[token];
   if (typeof tokenValue === 'string') {
@@ -29180,7 +28740,6 @@ var formatDistance$s = function formatDistance(token, count, options) {
   }
   return result;
 };
-const formatDistance$t = formatDistance$s;
 
 var dateFormats$e = {
   full: 'EEEE, d. MMMM yyyy.',
@@ -29200,7 +28759,7 @@ var dateTimeFormats$e = {
   medium: '{{date}} {{time}}',
   short: '{{date}} {{time}}'
 };
-var formatLong$s = {
+var formatLong$e = {
   date: buildFormatLongFn({
     formats: dateFormats$e,
     defaultWidth: 'full'
@@ -29214,7 +28773,6 @@ var formatLong$s = {
     defaultWidth: 'full'
   })
 };
-const formatLong$t = formatLong$s;
 
 var formatRelativeLocale$e = {
   lastWeek: function lastWeek(date) {
@@ -29248,14 +28806,13 @@ var formatRelativeLocale$e = {
   },
   other: 'P'
 };
-var formatRelative$s = function formatRelative(token, date, _baseDate, _options) {
+var formatRelative$e = function formatRelative(token, date, _baseDate, _options) {
   var format = formatRelativeLocale$e[token];
   if (typeof format === 'function') {
     return format(date);
   }
   return format;
 };
-const formatRelative$t = formatRelative$s;
 
 var eraValues$e = {
   narrow: ['пр.н.е.', 'АД'],
@@ -29351,7 +28908,7 @@ var ordinalNumber$e = function ordinalNumber(dirtyNumber, _options) {
   var number = Number(dirtyNumber);
   return number + '.';
 };
-var localize$s = {
+var localize$e = {
   ordinalNumber: ordinalNumber$e,
   era: buildLocalizeFn({
     values: eraValues$e,
@@ -29381,7 +28938,6 @@ var localize$s = {
     defaultFormattingWidth: 'wide'
   })
 };
-const localize$t = localize$s;
 
 var matchOrdinalNumberPattern$e = /^(\d+)\./i;
 var parseOrdinalNumberPattern$e = /\d+/i;
@@ -29435,7 +28991,7 @@ var parseDayPeriodPatterns$e = {
     night: /(ноћу)/i
   }
 };
-var match$s = {
+var match$e = {
   ordinalNumber: buildMatchPatternFn({
     matchPattern: matchOrdinalNumberPattern$e,
     parsePattern: parseOrdinalNumberPattern$e,
@@ -29477,7 +29033,6 @@ var match$s = {
     defaultParseWidth: 'any'
   })
 };
-const match$t = match$s;
 
 /**
  * @type {Locale}
@@ -29487,19 +29042,18 @@ const match$t = match$s;
  * @iso-639-2 srp
  * @author Igor Radivojević [@rogyvoje]{@link https://github.com/rogyvoje}
  */
-var locale$s = {
+var locale$e = {
   code: 'sr',
-  formatDistance: formatDistance$t,
-  formatLong: formatLong$t,
-  formatRelative: formatRelative$t,
-  localize: localize$t,
-  match: match$t,
+  formatDistance: formatDistance$e,
+  formatLong: formatLong$e,
+  formatRelative: formatRelative$e,
+  localize: localize$e,
+  match: match$e,
   options: {
     weekStartsOn: 1 /* Monday */,
     firstWeekContainsDate: 1
   }
 };
-const locale$t = locale$s;
 
 var formatDistanceLocale$d = {
   lessThanXSeconds: {
@@ -29639,7 +29193,7 @@ var formatDistanceLocale$d = {
     other: 'gotovo {{count}} godina'
   }
 };
-var formatDistance$q = function formatDistance(token, count, options) {
+var formatDistance$d = function formatDistance(token, count, options) {
   var result;
   var tokenValue = formatDistanceLocale$d[token];
   if (typeof tokenValue === 'string') {
@@ -29671,7 +29225,6 @@ var formatDistance$q = function formatDistance(token, count, options) {
   }
   return result;
 };
-const formatDistance$r = formatDistance$q;
 
 var dateFormats$d = {
   full: 'EEEE, d. MMMM yyyy.',
@@ -29691,7 +29244,7 @@ var dateTimeFormats$d = {
   medium: '{{date}} {{time}}',
   short: '{{date}} {{time}}'
 };
-var formatLong$q = {
+var formatLong$d = {
   date: buildFormatLongFn({
     formats: dateFormats$d,
     defaultWidth: 'full'
@@ -29705,7 +29258,6 @@ var formatLong$q = {
     defaultWidth: 'full'
   })
 };
-const formatLong$r = formatLong$q;
 
 var formatRelativeLocale$d = {
   lastWeek: function lastWeek(date) {
@@ -29737,14 +29289,13 @@ var formatRelativeLocale$d = {
   },
   other: 'P'
 };
-var formatRelative$q = function formatRelative(token, date, _baseDate, _options) {
+var formatRelative$d = function formatRelative(token, date, _baseDate, _options) {
   var format = formatRelativeLocale$d[token];
   if (typeof format === 'function') {
     return format(date);
   }
   return format;
 };
-const formatRelative$r = formatRelative$q;
 
 var eraValues$d = {
   narrow: ['pr.n.e.', 'AD'],
@@ -29840,7 +29391,7 @@ var ordinalNumber$d = function ordinalNumber(dirtyNumber, _options) {
   var number = Number(dirtyNumber);
   return number + '.';
 };
-var localize$q = {
+var localize$d = {
   ordinalNumber: ordinalNumber$d,
   era: buildLocalizeFn({
     values: eraValues$d,
@@ -29870,7 +29421,6 @@ var localize$q = {
     defaultFormattingWidth: 'wide'
   })
 };
-const localize$r = localize$q;
 
 var matchOrdinalNumberPattern$d = /^(\d+)\./i;
 var parseOrdinalNumberPattern$d = /\d+/i;
@@ -29924,7 +29474,7 @@ var parseDayPeriodPatterns$d = {
     night: /(nocu|noću)/i
   }
 };
-var match$q = {
+var match$d = {
   ordinalNumber: buildMatchPatternFn({
     matchPattern: matchOrdinalNumberPattern$d,
     parsePattern: parseOrdinalNumberPattern$d,
@@ -29966,7 +29516,6 @@ var match$q = {
     defaultParseWidth: 'any'
   })
 };
-const match$r = match$q;
 
 /**
  * @type {Locale}
@@ -29976,19 +29525,18 @@ const match$r = match$q;
  * @iso-639-2 srp
  * @author Igor Radivojević [@rogyvoje]{@link https://github.com/rogyvoje}
  */
-var locale$q = {
+var locale$d = {
   code: 'sr-Latn',
-  formatDistance: formatDistance$r,
-  formatLong: formatLong$r,
-  formatRelative: formatRelative$r,
-  localize: localize$r,
-  match: match$r,
+  formatDistance: formatDistance$d,
+  formatLong: formatLong$d,
+  formatRelative: formatRelative$d,
+  localize: localize$d,
+  match: match$d,
   options: {
     weekStartsOn: 1 /* Monday */,
     firstWeekContainsDate: 1
   }
 };
-const locale$r = locale$q;
 
 var formatDistanceLocale$c = {
   lessThanXSeconds: {
@@ -30054,7 +29602,7 @@ var formatDistanceLocale$c = {
   }
 };
 var wordMapping = ['noll', 'en', 'två', 'tre', 'fyra', 'fem', 'sex', 'sju', 'åtta', 'nio', 'tio', 'elva', 'tolv'];
-var formatDistance$o = function formatDistance(token, count, options) {
+var formatDistance$c = function formatDistance(token, count, options) {
   var result;
   var tokenValue = formatDistanceLocale$c[token];
   if (typeof tokenValue === 'string') {
@@ -30077,7 +29625,6 @@ var formatDistance$o = function formatDistance(token, count, options) {
   }
   return result;
 };
-const formatDistance$p = formatDistance$o;
 
 var dateFormats$c = {
   full: 'EEEE d MMMM y',
@@ -30097,7 +29644,7 @@ var dateTimeFormats$c = {
   medium: '{{date}} {{time}}',
   short: '{{date}} {{time}}'
 };
-var formatLong$o = {
+var formatLong$c = {
   date: buildFormatLongFn({
     formats: dateFormats$c,
     defaultWidth: 'full'
@@ -30111,7 +29658,6 @@ var formatLong$o = {
     defaultWidth: 'full'
   })
 };
-const formatLong$p = formatLong$o;
 
 var formatRelativeLocale$c = {
   lastWeek: "'i' EEEE's kl.' p",
@@ -30121,10 +29667,9 @@ var formatRelativeLocale$c = {
   nextWeek: "EEEE 'kl.' p",
   other: 'P'
 };
-var formatRelative$o = function formatRelative(token, _date, _baseDate, _options) {
+var formatRelative$c = function formatRelative(token, _date, _baseDate, _options) {
   return formatRelativeLocale$c[token];
 };
-const formatRelative$p = formatRelative$o;
 
 var eraValues$c = {
   narrow: ['f.Kr.', 'e.Kr.'],
@@ -30225,7 +29770,7 @@ var ordinalNumber$c = function ordinalNumber(dirtyNumber, _options) {
   }
   return number + ':e';
 };
-var localize$o = {
+var localize$c = {
   ordinalNumber: ordinalNumber$c,
   era: buildLocalizeFn({
     values: eraValues$c,
@@ -30253,7 +29798,6 @@ var localize$o = {
     defaultFormattingWidth: 'wide'
   })
 };
-const localize$p = localize$o;
 
 var matchOrdinalNumberPattern$c = /^(\d+)(:a|:e)?/i;
 var parseOrdinalNumberPattern$c = /\d+/i;
@@ -30306,7 +29850,7 @@ var parseDayPeriodPatterns$c = {
     night: /natt/i
   }
 };
-var match$o = {
+var match$c = {
   ordinalNumber: buildMatchPatternFn({
     matchPattern: matchOrdinalNumberPattern$c,
     parsePattern: parseOrdinalNumberPattern$c,
@@ -30348,7 +29892,6 @@ var match$o = {
     defaultParseWidth: 'any'
   })
 };
-const match$p = match$o;
 
 /**
  * @type {Locale}
@@ -30360,19 +29903,18 @@ const match$p = match$o;
  * @author Alexander Nanberg [@alexandernanberg]{@link https://github.com/alexandernanberg}
  * @author Henrik Andersson [@limelights]{@link https://github.com/limelights}
  */
-var locale$o = {
+var locale$c = {
   code: 'sv',
-  formatDistance: formatDistance$p,
-  formatLong: formatLong$p,
-  formatRelative: formatRelative$p,
-  localize: localize$p,
-  match: match$p,
+  formatDistance: formatDistance$c,
+  formatLong: formatLong$c,
+  formatRelative: formatRelative$c,
+  localize: localize$c,
+  match: match$c,
   options: {
     weekStartsOn: 1 /* Monday */,
     firstWeekContainsDate: 4
   }
 };
-const locale$p = locale$o;
 
 function isPluralType(val) {
   return val.one !== undefined;
@@ -30564,7 +30106,7 @@ var formatDistanceLocale$b = {
     }
   }
 };
-var formatDistance$m = function formatDistance(token, count, options) {
+var formatDistance$b = function formatDistance(token, count, options) {
   var tense = options !== null && options !== void 0 && options.addSuffix ? options.comparison && options.comparison > 0 ? 'in' : 'ago' : 'default';
   var tokenValue = formatDistanceLocale$b[token];
   if (!isPluralType(tokenValue)) return tokenValue[tense];
@@ -30574,7 +30116,6 @@ var formatDistance$m = function formatDistance(token, count, options) {
     return tokenValue.other[tense].replace('{{count}}', String(count));
   }
 };
-const formatDistance$n = formatDistance$m;
 
 // CLDR #1846 - #1849
 var dateFormats$b = {
@@ -30597,7 +30138,7 @@ var dateTimeFormats$b = {
   medium: '{{date}}, {{time}}',
   short: '{{date}}, {{time}}'
 };
-var formatLong$m = {
+var formatLong$b = {
   date: buildFormatLongFn({
     formats: dateFormats$b,
     defaultWidth: 'full'
@@ -30611,7 +30152,6 @@ var formatLong$m = {
     defaultWidth: 'full'
   })
 };
-const formatLong$n = formatLong$m;
 
 var formatRelativeLocale$b = {
   lastWeek: "'கடந்த' eeee p 'மணிக்கு'",
@@ -30621,10 +30161,9 @@ var formatRelativeLocale$b = {
   nextWeek: "eeee p 'மணிக்கு'",
   other: 'P'
 };
-var formatRelative$m = function formatRelative(token, _date, _baseDate, _options) {
+var formatRelative$b = function formatRelative(token, _date, _baseDate, _options) {
   return formatRelativeLocale$b[token];
 };
-const formatRelative$n = formatRelative$m;
 
 var eraValues$b = {
   narrow: ['கி.மு.', 'கி.பி.'],
@@ -30767,7 +30306,7 @@ var formattingDayPeriodValues$b = {
 var ordinalNumber$b = function ordinalNumber(dirtyNumber, _options) {
   return String(dirtyNumber);
 };
-var localize$m = {
+var localize$b = {
   ordinalNumber: ordinalNumber$b,
   era: buildLocalizeFn({
     values: eraValues$b,
@@ -30795,7 +30334,6 @@ var localize$m = {
     defaultFormattingWidth: 'wide'
   })
 };
-const localize$n = localize$m;
 
 var matchOrdinalNumberPattern$b = /^(\d+)(வது)?/i;
 var parseOrdinalNumberPattern$b = /\d+/i;
@@ -30851,7 +30389,7 @@ var parseDayPeriodPatterns$b = {
     night: /இரவு/i
   }
 };
-var match$m = {
+var match$b = {
   ordinalNumber: buildMatchPatternFn({
     matchPattern: matchOrdinalNumberPattern$b,
     parsePattern: parseOrdinalNumberPattern$b,
@@ -30893,7 +30431,6 @@ var match$m = {
     defaultParseWidth: 'any'
   })
 };
-const match$n = match$m;
 
 /**
  * @type {Locale}
@@ -30903,19 +30440,18 @@ const match$n = match$m;
  * @iso-639-2 tam
  * @author Sibiraj [@sibiraj-s]{@link https://github.com/sibiraj-s}
  */
-var locale$m = {
+var locale$b = {
   code: 'ta',
-  formatDistance: formatDistance$n,
-  formatLong: formatLong$n,
-  formatRelative: formatRelative$n,
-  localize: localize$n,
-  match: match$n,
+  formatDistance: formatDistance$b,
+  formatLong: formatLong$b,
+  formatRelative: formatRelative$b,
+  localize: localize$b,
+  match: match$b,
   options: {
     weekStartsOn: 1 /* Monday */,
     firstWeekContainsDate: 4
   }
 };
-const locale$n = locale$m;
 
 // Source: https://www.unicode.org/cldr/charts/32/summary/te.html
 
@@ -31082,7 +30618,7 @@ var formatDistanceLocale$a = {
     }
   }
 };
-var formatDistance$k = function formatDistance(token, count, options) {
+var formatDistance$a = function formatDistance(token, count, options) {
   var result;
   var tokenValue = options !== null && options !== void 0 && options.addSuffix ? formatDistanceLocale$a[token].withPreposition : formatDistanceLocale$a[token].standalone;
   if (typeof tokenValue === 'string') {
@@ -31101,7 +30637,6 @@ var formatDistance$k = function formatDistance(token, count, options) {
   }
   return result;
 };
-const formatDistance$l = formatDistance$k;
 
 // CLDR #1807 - #1811
 var dateFormats$a = {
@@ -31126,7 +30661,7 @@ var dateTimeFormats$a = {
   medium: '{{date}} {{time}}',
   short: '{{date}} {{time}}'
 };
-var formatLong$k = {
+var formatLong$a = {
   date: buildFormatLongFn({
     formats: dateFormats$a,
     defaultWidth: 'full'
@@ -31140,7 +30675,6 @@ var formatLong$k = {
     defaultWidth: 'full'
   })
 };
-const formatLong$l = formatLong$k;
 
 // Source: https://www.unicode.org/cldr/charts/32/summary/te.html
 
@@ -31157,10 +30691,9 @@ var formatRelativeLocale$a = {
   // CLDR #1386
   other: 'P'
 };
-var formatRelative$k = function formatRelative(token, _date, _baseDate, _options) {
+var formatRelative$a = function formatRelative(token, _date, _baseDate, _options) {
   return formatRelativeLocale$a[token];
 };
-const formatRelative$l = formatRelative$k;
 
 // Source: https://dsal.uchicago.edu/dictionaries/brown/
 // CLDR #1605 - #1608
@@ -31261,7 +30794,7 @@ var ordinalNumber$a = function ordinalNumber(dirtyNumber, _options) {
   var number = Number(dirtyNumber);
   return number + 'వ';
 };
-var localize$k = {
+var localize$a = {
   ordinalNumber: ordinalNumber$a,
   era: buildLocalizeFn({
     values: eraValues$a,
@@ -31289,7 +30822,6 @@ var localize$k = {
     defaultFormattingWidth: 'wide'
   })
 };
-const localize$l = localize$k;
 
 var matchOrdinalNumberPattern$a = /^(\d+)(వ)?/i;
 var parseOrdinalNumberPattern$a = /\d+/i;
@@ -31344,7 +30876,7 @@ var parseDayPeriodPatterns$a = {
     night: /రాత్రి/i
   }
 };
-var match$k = {
+var match$a = {
   ordinalNumber: buildMatchPatternFn({
     matchPattern: matchOrdinalNumberPattern$a,
     parsePattern: parseOrdinalNumberPattern$a,
@@ -31386,7 +30918,6 @@ var match$k = {
     defaultParseWidth: 'any'
   })
 };
-const match$l = match$k;
 
 /**
  * @type {Locale}
@@ -31396,19 +30927,18 @@ const match$l = match$k;
  * @iso-639-2 tel
  * @author Kranthi Lakum [@kranthilakum]{@link https://github.com/kranthilakum}
  */
-var locale$k = {
+var locale$a = {
   code: 'te',
-  formatDistance: formatDistance$l,
-  formatLong: formatLong$l,
-  formatRelative: formatRelative$l,
-  localize: localize$l,
-  match: match$l,
+  formatDistance: formatDistance$a,
+  formatLong: formatLong$a,
+  formatRelative: formatRelative$a,
+  localize: localize$a,
+  match: match$a,
   options: {
     weekStartsOn: 0 /* Sunday */,
     firstWeekContainsDate: 1
   }
 };
-const locale$l = locale$k;
 
 var formatDistanceLocale$9 = {
   lessThanXSeconds: {
@@ -31473,7 +31003,7 @@ var formatDistanceLocale$9 = {
     other: 'เกือบ {{count}} ปี'
   }
 };
-var formatDistance$i = function formatDistance(token, count, options) {
+var formatDistance$9 = function formatDistance(token, count, options) {
   var result;
   var tokenValue = formatDistanceLocale$9[token];
   if (typeof tokenValue === 'string') {
@@ -31496,7 +31026,6 @@ var formatDistance$i = function formatDistance(token, count, options) {
   }
   return result;
 };
-const formatDistance$j = formatDistance$i;
 
 var dateFormats$9 = {
   full: 'วันEEEEที่ do MMMM y',
@@ -31516,7 +31045,7 @@ var dateTimeFormats$9 = {
   medium: '{{date}}, {{time}}',
   short: '{{date}}, {{time}}'
 };
-var formatLong$i = {
+var formatLong$9 = {
   date: buildFormatLongFn({
     formats: dateFormats$9,
     defaultWidth: 'full'
@@ -31530,7 +31059,6 @@ var formatLong$i = {
     defaultWidth: 'full'
   })
 };
-const formatLong$j = formatLong$i;
 
 var formatRelativeLocale$9 = {
   lastWeek: "eeee'ที่แล้วเวลา' p",
@@ -31540,10 +31068,9 @@ var formatRelativeLocale$9 = {
   nextWeek: "eeee 'เวลา' p",
   other: 'P'
 };
-var formatRelative$i = function formatRelative(token, _date, _baseDate, _options) {
+var formatRelative$9 = function formatRelative(token, _date, _baseDate, _options) {
   return formatRelativeLocale$9[token];
 };
-const formatRelative$j = formatRelative$i;
 
 var eraValues$9 = {
   narrow: ['B', 'คศ'],
@@ -31633,7 +31160,7 @@ var formattingDayPeriodValues$9 = {
 var ordinalNumber$9 = function ordinalNumber(dirtyNumber, _options) {
   return String(dirtyNumber);
 };
-var localize$i = {
+var localize$9 = {
   ordinalNumber: ordinalNumber$9,
   era: buildLocalizeFn({
     values: eraValues$9,
@@ -31661,7 +31188,6 @@ var localize$i = {
     defaultFormattingWidth: 'wide'
   })
 };
-const localize$j = localize$i;
 
 var matchOrdinalNumberPattern$9 = /^\d+/i;
 var parseOrdinalNumberPattern$9 = /\d+/i;
@@ -31715,7 +31241,7 @@ var parseDayPeriodPatterns$9 = {
     night: /กลางคืน/i
   }
 };
-var match$i = {
+var match$9 = {
   ordinalNumber: buildMatchPatternFn({
     matchPattern: matchOrdinalNumberPattern$9,
     parsePattern: parseOrdinalNumberPattern$9,
@@ -31757,7 +31283,6 @@ var match$i = {
     defaultParseWidth: 'any'
   })
 };
-const match$j = match$i;
 
 /**
  * @type {Locale}
@@ -31769,19 +31294,18 @@ const match$j = match$i;
  * @author [@hawkup]{@link https://github.com/hawkup}
  * @author  Jirawat I. [@nodtem66]{@link https://github.com/nodtem66}
  */
-var locale$i = {
+var locale$9 = {
   code: 'th',
-  formatDistance: formatDistance$j,
-  formatLong: formatLong$j,
-  formatRelative: formatRelative$j,
-  localize: localize$j,
-  match: match$j,
+  formatDistance: formatDistance$9,
+  formatLong: formatLong$9,
+  formatRelative: formatRelative$9,
+  localize: localize$9,
+  match: match$9,
   options: {
     weekStartsOn: 0 /* Sunday */,
     firstWeekContainsDate: 1
   }
 };
-const locale$j = locale$i;
 
 var formatDistanceLocale$8 = {
   lessThanXSeconds: {
@@ -31846,7 +31370,7 @@ var formatDistanceLocale$8 = {
     other: 'neredeyse {{count}} yıl'
   }
 };
-var formatDistance$g = function formatDistance(token, count, options) {
+var formatDistance$8 = function formatDistance(token, count, options) {
   var result;
   var tokenValue = formatDistanceLocale$8[token];
   if (typeof tokenValue === 'string') {
@@ -31865,7 +31389,6 @@ var formatDistance$g = function formatDistance(token, count, options) {
   }
   return result;
 };
-const formatDistance$h = formatDistance$g;
 
 var dateFormats$8 = {
   full: 'd MMMM y EEEE',
@@ -31885,7 +31408,7 @@ var dateTimeFormats$8 = {
   medium: '{{date}}, {{time}}',
   short: '{{date}}, {{time}}'
 };
-var formatLong$g = {
+var formatLong$8 = {
   date: buildFormatLongFn({
     formats: dateFormats$8,
     defaultWidth: 'full'
@@ -31899,7 +31422,6 @@ var formatLong$g = {
     defaultWidth: 'full'
   })
 };
-const formatLong$h = formatLong$g;
 
 var formatRelativeLocale$8 = {
   lastWeek: "'geçen hafta' eeee 'saat' p",
@@ -31909,10 +31431,9 @@ var formatRelativeLocale$8 = {
   nextWeek: "eeee 'saat' p",
   other: 'P'
 };
-var formatRelative$g = function formatRelative(token, _date, _baseDate, _options) {
+var formatRelative$8 = function formatRelative(token, _date, _baseDate, _options) {
   return formatRelativeLocale$8[token];
 };
-const formatRelative$h = formatRelative$g;
 
 var eraValues$8 = {
   narrow: ['MÖ', 'MS'],
@@ -32003,7 +31524,7 @@ var ordinalNumber$8 = function ordinalNumber(dirtyNumber, _options) {
   var number = Number(dirtyNumber);
   return number + '.';
 };
-var localize$g = {
+var localize$8 = {
   ordinalNumber: ordinalNumber$8,
   era: buildLocalizeFn({
     values: eraValues$8,
@@ -32031,7 +31552,6 @@ var localize$g = {
     defaultFormattingWidth: 'wide'
   })
 };
-const localize$h = localize$g;
 
 var matchOrdinalNumberPattern$8 = /^(\d+)(\.)?/i;
 var parseOrdinalNumberPattern$8 = /\d+/i;
@@ -32089,7 +31609,7 @@ var parseDayPeriodPatterns$8 = {
     night: /^ge/i
   }
 };
-var match$g = {
+var match$8 = {
   ordinalNumber: buildMatchPatternFn({
     matchPattern: matchOrdinalNumberPattern$8,
     parsePattern: parseOrdinalNumberPattern$8,
@@ -32131,7 +31651,6 @@ var match$g = {
     defaultParseWidth: 'any'
   })
 };
-const match$h = match$g;
 
 /**
  * @type {Locale}
@@ -32147,19 +31666,18 @@ const match$h = match$g;
  *
  *
  */
-var locale$g = {
+var locale$8 = {
   code: 'tr',
-  formatDistance: formatDistance$h,
-  formatLong: formatLong$h,
-  formatRelative: formatRelative$h,
-  localize: localize$h,
-  match: match$h,
+  formatDistance: formatDistance$8,
+  formatLong: formatLong$8,
+  formatRelative: formatRelative$8,
+  localize: localize$8,
+  match: match$8,
   options: {
     weekStartsOn: 1 /* Monday */,
     firstWeekContainsDate: 1
   }
 };
-const locale$h = locale$g;
 
 var formatDistanceLocale$7 = {
   lessThanXSeconds: {
@@ -32224,7 +31742,7 @@ var formatDistanceLocale$7 = {
     other: 'يىل {{count}} ئاساسەن'
   }
 };
-var formatDistance$e = function formatDistance(token, count, options) {
+var formatDistance$7 = function formatDistance(token, count, options) {
   var result;
   var tokenValue = formatDistanceLocale$7[token];
   if (typeof tokenValue === 'string') {
@@ -32243,7 +31761,6 @@ var formatDistance$e = function formatDistance(token, count, options) {
   }
   return result;
 };
-const formatDistance$f = formatDistance$e;
 
 var dateFormats$7 = {
   full: 'EEEE, MMMM do, y',
@@ -32263,7 +31780,7 @@ var dateTimeFormats$7 = {
   medium: '{{date}}, {{time}}',
   short: '{{date}}, {{time}}'
 };
-var formatLong$e = {
+var formatLong$7 = {
   date: buildFormatLongFn({
     formats: dateFormats$7,
     defaultWidth: 'full'
@@ -32277,7 +31794,6 @@ var formatLong$e = {
     defaultWidth: 'full'
   })
 };
-const formatLong$f = formatLong$e;
 
 var formatRelativeLocale$7 = {
   lastWeek: "'ئ‍ۆتكەن' eeee 'دە' p",
@@ -32287,10 +31803,9 @@ var formatRelativeLocale$7 = {
   nextWeek: "eeee 'دە' p",
   other: 'P'
 };
-var formatRelative$e = function formatRelative(token, _date, _baseDate, _options) {
+var formatRelative$7 = function formatRelative(token, _date, _baseDate, _options) {
   return formatRelativeLocale$7[token];
 };
-const formatRelative$f = formatRelative$e;
 
 var eraValues$7 = {
   narrow: ['ب', 'ك'],
@@ -32385,7 +31900,7 @@ var formattingDayPeriodValues$7 = {
 var ordinalNumber$7 = function ordinalNumber(dirtyNumber, _options) {
   return String(dirtyNumber);
 };
-var localize$e = {
+var localize$7 = {
   ordinalNumber: ordinalNumber$7,
   era: buildLocalizeFn({
     values: eraValues$7,
@@ -32413,7 +31928,6 @@ var localize$e = {
     defaultFormattingWidth: 'wide'
   })
 };
-const localize$f = localize$e;
 
 var matchOrdinalNumberPattern$7 = /^(\d+)(th|st|nd|rd)?/i;
 var parseOrdinalNumberPattern$7 = /\d+/i;
@@ -32468,7 +31982,7 @@ var parseDayPeriodPatterns$7 = {
     night: /كىچە/i
   }
 };
-var match$e = {
+var match$7 = {
   ordinalNumber: buildMatchPatternFn({
     matchPattern: matchOrdinalNumberPattern$7,
     parsePattern: parseOrdinalNumberPattern$7,
@@ -32510,7 +32024,6 @@ var match$e = {
     defaultParseWidth: 'any'
   })
 };
-const match$f = match$e;
 
 /**
  * @type {Locale}
@@ -32520,19 +32033,18 @@ const match$f = match$e;
  * @iso-639-2 uig
  * @author Abduwaly M. [@abduwaly]{@link https://github.com/abduwaly}
  */
-var locale$e = {
+var locale$7 = {
   code: 'ug',
-  formatDistance: formatDistance$f,
-  formatLong: formatLong$f,
-  formatRelative: formatRelative$f,
-  localize: localize$f,
-  match: match$f,
+  formatDistance: formatDistance$7,
+  formatLong: formatLong$7,
+  formatRelative: formatRelative$7,
+  localize: localize$7,
+  match: match$7,
   options: {
     weekStartsOn: 0 /* Sunday */,
     firstWeekContainsDate: 1
   }
 };
-const locale$f = locale$e;
 
 function declension(scheme, count) {
   // scheme for count=1 exists
@@ -32758,11 +32270,10 @@ var formatDistanceLocale$6 = {
     }
   })
 };
-var formatDistance$c = function formatDistance(token, count, options) {
+var formatDistance$6 = function formatDistance(token, count, options) {
   options = options || {};
   return formatDistanceLocale$6[token](count, options);
 };
-const formatDistance$d = formatDistance$c;
 
 var dateFormats$6 = {
   full: "EEEE, do MMMM y 'р.'",
@@ -32782,7 +32293,7 @@ var dateTimeFormats$6 = {
   medium: '{{date}}, {{time}}',
   short: '{{date}}, {{time}}'
 };
-var formatLong$c = {
+var formatLong$6 = {
   date: buildFormatLongFn({
     formats: dateFormats$6,
     defaultWidth: 'full'
@@ -32796,7 +32307,6 @@ var formatLong$c = {
     defaultWidth: 'full'
   })
 };
-const formatLong$d = formatLong$c;
 
 var accusativeWeekdays = ['неділю', 'понеділок', 'вівторок', 'середу', 'четвер', 'п’ятницю', 'суботу'];
 function lastWeek(day) {
@@ -32857,14 +32367,13 @@ var formatRelativeLocale$6 = {
   nextWeek: nextWeekFormat,
   other: 'P'
 };
-var formatRelative$c = function formatRelative(token, date, baseDate, options) {
+var formatRelative$6 = function formatRelative(token, date, baseDate, options) {
   var format = formatRelativeLocale$6[token];
   if (typeof format === 'function') {
     return format(date, baseDate, options);
   }
   return format;
 };
-const formatRelative$d = formatRelative$c;
 
 var eraValues$6 = {
   narrow: ['до н.е.', 'н.е.'],
@@ -32974,7 +32483,7 @@ var ordinalNumber$6 = function ordinalNumber(dirtyNumber, options) {
   }
   return number + suffix;
 };
-var localize$c = {
+var localize$6 = {
   ordinalNumber: ordinalNumber$6,
   era: buildLocalizeFn({
     values: eraValues$6,
@@ -33004,7 +32513,6 @@ var localize$c = {
     defaultFormattingWidth: 'wide'
   })
 };
-const localize$d = localize$c;
 
 var matchOrdinalNumberPattern$6 = /^(\d+)(-?(е|й|є|а|я))?/i;
 var parseOrdinalNumberPattern$6 = /\d+/i;
@@ -33060,7 +32568,7 @@ var parseDayPeriodPatterns$6 = {
     night: /^н/i
   }
 };
-var match$c = {
+var match$6 = {
   ordinalNumber: buildMatchPatternFn({
     matchPattern: matchOrdinalNumberPattern$6,
     parsePattern: parseOrdinalNumberPattern$6,
@@ -33102,7 +32610,6 @@ var match$c = {
     defaultParseWidth: 'any'
   })
 };
-const match$d = match$c;
 
 /**
  * @type {Locale}
@@ -33113,19 +32620,18 @@ const match$d = match$c;
  * @author Andrii Korzh [@korzhyk]{@link https://github.com/korzhyk}
  * @author Andriy Shcherbyak [@shcherbyakdev]{@link https://github.com/shcherbyakdev}
  */
-var locale$c = {
+var locale$6 = {
   code: 'uk',
-  formatDistance: formatDistance$d,
-  formatLong: formatLong$d,
-  formatRelative: formatRelative$d,
-  localize: localize$d,
-  match: match$d,
+  formatDistance: formatDistance$6,
+  formatLong: formatLong$6,
+  formatRelative: formatRelative$6,
+  localize: localize$6,
+  match: match$6,
   options: {
     weekStartsOn: 1 /* Monday */,
     firstWeekContainsDate: 1
   }
 };
-const locale$d = locale$c;
 
 var formatDistanceLocale$5 = {
   lessThanXSeconds: {
@@ -33190,7 +32696,7 @@ var formatDistanceLocale$5 = {
     other: 'deyarli {{count}} yil'
   }
 };
-var formatDistance$a = function formatDistance(token, count, options) {
+var formatDistance$5 = function formatDistance(token, count, options) {
   var result;
   var tokenValue = formatDistanceLocale$5[token];
   if (typeof tokenValue === 'string') {
@@ -33209,7 +32715,6 @@ var formatDistance$a = function formatDistance(token, count, options) {
   }
   return result;
 };
-const formatDistance$b = formatDistance$a;
 
 var dateFormats$5 = {
   full: 'EEEE, do MMMM, y',
@@ -33226,7 +32731,7 @@ var timeFormats$5 = {
 var dateTimeFormats$5 = {
   any: '{{date}}, {{time}}'
 };
-var formatLong$a = {
+var formatLong$5 = {
   date: buildFormatLongFn({
     formats: dateFormats$5,
     defaultWidth: 'full'
@@ -33240,7 +32745,6 @@ var formatLong$a = {
     defaultWidth: 'any'
   })
 };
-const formatLong$b = formatLong$a;
 
 var formatRelativeLocale$5 = {
   lastWeek: "'oldingi' eeee p 'da'",
@@ -33250,10 +32754,9 @@ var formatRelativeLocale$5 = {
   nextWeek: "eeee p 'da'",
   other: 'P'
 };
-var formatRelative$a = function formatRelative(token, _date, _baseDate, _options) {
+var formatRelative$5 = function formatRelative(token, _date, _baseDate, _options) {
   return formatRelativeLocale$5[token];
 };
-const formatRelative$b = formatRelative$a;
 
 var eraValues$5 = {
   narrow: ['M.A', 'M.'],
@@ -33348,7 +32851,7 @@ var formattingDayPeriodValues$5 = {
 var ordinalNumber$5 = function ordinalNumber(dirtyNumber, _options) {
   return String(dirtyNumber);
 };
-var localize$a = {
+var localize$5 = {
   ordinalNumber: ordinalNumber$5,
   era: buildLocalizeFn({
     values: eraValues$5,
@@ -33376,7 +32879,6 @@ var localize$a = {
     defaultFormattingWidth: 'wide'
   })
 };
-const localize$b = localize$a;
 
 var matchOrdinalNumberPattern$5 = /^(\d+)(chi)?/i;
 var parseOrdinalNumberPattern$5 = /\d+/i;
@@ -33431,7 +32933,7 @@ var parseDayPeriodPatterns$5 = {
     night: /tun/i
   }
 };
-var match$a = {
+var match$5 = {
   ordinalNumber: buildMatchPatternFn({
     matchPattern: matchOrdinalNumberPattern$5,
     parsePattern: parseOrdinalNumberPattern$5,
@@ -33473,7 +32975,6 @@ var match$a = {
     defaultParseWidth: 'any'
   })
 };
-const match$b = match$a;
 
 /**
  * @type {Locale}
@@ -33483,19 +32984,18 @@ const match$b = match$a;
  * @iso-639-2 uzb
  * @author Mukhammadali [@mukhammadali]{@link https://github.com/Mukhammadali}
  */
-var locale$a = {
+var locale$5 = {
   code: 'uz',
-  formatDistance: formatDistance$b,
-  formatLong: formatLong$b,
-  formatRelative: formatRelative$b,
-  localize: localize$b,
-  match: match$b,
+  formatDistance: formatDistance$5,
+  formatLong: formatLong$5,
+  formatRelative: formatRelative$5,
+  localize: localize$5,
+  match: match$5,
   options: {
     weekStartsOn: 1 /* Monday */,
     firstWeekContainsDate: 1
   }
 };
-const locale$b = locale$a;
 
 var formatDistanceLocale$4 = {
   lessThanXSeconds: {
@@ -33560,7 +33060,7 @@ var formatDistanceLocale$4 = {
     other: 'деярли {{count}} йил'
   }
 };
-var formatDistance$8 = function formatDistance(token, count, options) {
+var formatDistance$4 = function formatDistance(token, count, options) {
   var result;
   var tokenValue = formatDistanceLocale$4[token];
   if (typeof tokenValue === 'string') {
@@ -33579,7 +33079,6 @@ var formatDistance$8 = function formatDistance(token, count, options) {
   }
   return result;
 };
-const formatDistance$9 = formatDistance$8;
 
 var dateFormats$4 = {
   full: 'EEEE, do MMMM, y',
@@ -33596,7 +33095,7 @@ var timeFormats$4 = {
 var dateTimeFormats$4 = {
   any: '{{date}}, {{time}}'
 };
-var formatLong$8 = {
+var formatLong$4 = {
   date: buildFormatLongFn({
     formats: dateFormats$4,
     defaultWidth: 'full'
@@ -33610,7 +33109,6 @@ var formatLong$8 = {
     defaultWidth: 'any'
   })
 };
-const formatLong$9 = formatLong$8;
 
 var formatRelativeLocale$4 = {
   lastWeek: "'ўтган' eeee p 'да'",
@@ -33620,10 +33118,9 @@ var formatRelativeLocale$4 = {
   nextWeek: "eeee p 'да'",
   other: 'P'
 };
-var formatRelative$8 = function formatRelative(token, _date, _baseDate, _options) {
+var formatRelative$4 = function formatRelative(token, _date, _baseDate, _options) {
   return formatRelativeLocale$4[token];
 };
-const formatRelative$9 = formatRelative$8;
 
 var eraValues$4 = {
   narrow: ['М.А', 'М'],
@@ -33673,7 +33170,7 @@ var formattingDayPeriodValues$4 = {
 var ordinalNumber$4 = function ordinalNumber(dirtyNumber, _options) {
   return String(dirtyNumber);
 };
-var localize$8 = {
+var localize$4 = {
   ordinalNumber: ordinalNumber$4,
   era: buildLocalizeFn({
     values: eraValues$4,
@@ -33701,7 +33198,6 @@ var localize$8 = {
     defaultFormattingWidth: 'any'
   })
 };
-const localize$9 = localize$8;
 
 var matchOrdinalNumberPattern$4 = /^(\d+)(чи)?/i;
 var parseOrdinalNumberPattern$4 = /\d+/i;
@@ -33755,7 +33251,7 @@ var parseDayPeriodPatterns$4 = {
     night: /тун/i
   }
 };
-var match$8 = {
+var match$4 = {
   ordinalNumber: buildMatchPatternFn({
     matchPattern: matchOrdinalNumberPattern$4,
     parsePattern: parseOrdinalNumberPattern$4,
@@ -33797,7 +33293,6 @@ var match$8 = {
     defaultParseWidth: 'any'
   })
 };
-const match$9 = match$8;
 
 /**
  * @type {Locale}
@@ -33807,19 +33302,18 @@ const match$9 = match$8;
  * @iso-639-2 uzb
  * @author Kamronbek Shodmonov [@kamronbek28]{@link https://github.com/kamronbek28}
  */
-var locale$8 = {
+var locale$4 = {
   code: 'uz-Cyrl',
-  formatDistance: formatDistance$9,
-  formatLong: formatLong$9,
-  formatRelative: formatRelative$9,
-  localize: localize$9,
-  match: match$9,
+  formatDistance: formatDistance$4,
+  formatLong: formatLong$4,
+  formatRelative: formatRelative$4,
+  localize: localize$4,
+  match: match$4,
   options: {
     weekStartsOn: 1 /* Monday */,
     firstWeekContainsDate: 1
   }
 };
-const locale$9 = locale$8;
 
 var formatDistanceLocale$3 = {
   lessThanXSeconds: {
@@ -33884,7 +33378,7 @@ var formatDistanceLocale$3 = {
     other: 'gần {{count}} năm'
   }
 };
-var formatDistance$6 = function formatDistance(token, count, options) {
+var formatDistance$3 = function formatDistance(token, count, options) {
   var result;
   var tokenValue = formatDistanceLocale$3[token];
   if (typeof tokenValue === 'string') {
@@ -33903,7 +33397,6 @@ var formatDistance$6 = function formatDistance(token, count, options) {
   }
   return result;
 };
-const formatDistance$7 = formatDistance$6;
 
 var dateFormats$3 = {
   // thứ Sáu, ngày 25 tháng 08 năm 2017
@@ -33929,7 +33422,7 @@ var dateTimeFormats$3 = {
   medium: '{{date}} {{time}}',
   short: '{{date}} {{time}}'
 };
-var formatLong$6 = {
+var formatLong$3 = {
   date: buildFormatLongFn({
     formats: dateFormats$3,
     defaultWidth: 'full'
@@ -33943,7 +33436,6 @@ var formatLong$6 = {
     defaultWidth: 'full'
   })
 };
-const formatLong$7 = formatLong$6;
 
 var formatRelativeLocale$3 = {
   lastWeek: "eeee 'tuần trước vào lúc' p",
@@ -33953,10 +33445,9 @@ var formatRelativeLocale$3 = {
   nextWeek: "eeee 'tới vào lúc' p",
   other: 'P'
 };
-var formatRelative$6 = function formatRelative(token, _date, _baseDate, _options) {
+var formatRelative$3 = function formatRelative(token, _date, _baseDate, _options) {
   return formatRelativeLocale$3[token];
 };
-const formatRelative$7 = formatRelative$6;
 
 // Capitalization reference: http://hcmup.edu.vn/index.php?option=com_content&view=article&id=4106%3Avit-hoa-trong-vn-bn-hanh-chinh&catid=2345%3Atham-kho&Itemid=4103&lang=vi&site=134
 var eraValues$3 = {
@@ -34124,7 +33615,7 @@ var ordinalNumber$3 = function ordinalNumber(dirtyNumber, options) {
   // there are no different forms of ordinal numbers in Vietnamese
   return String(number);
 };
-var localize$6 = {
+var localize$3 = {
   ordinalNumber: ordinalNumber$3,
   era: buildLocalizeFn({
     values: eraValues$3,
@@ -34156,7 +33647,6 @@ var localize$6 = {
     defaultFormattingWidth: 'wide'
   })
 };
-const localize$7 = localize$6;
 
 var matchOrdinalNumberPattern$3 = /^(\d+)/i;
 var parseOrdinalNumberPattern$3 = /\d+/i;
@@ -34219,7 +33709,7 @@ var parseDayPeriodPatterns$3 = {
     night: /^đêm/i
   }
 };
-var match$6 = {
+var match$3 = {
   ordinalNumber: buildMatchPatternFn({
     matchPattern: matchOrdinalNumberPattern$3,
     parsePattern: parseOrdinalNumberPattern$3,
@@ -34261,7 +33751,6 @@ var match$6 = {
     defaultParseWidth: 'any'
   })
 };
-const match$7 = match$6;
 
 /**
  * @type {Locale}
@@ -34272,20 +33761,18 @@ const match$7 = match$6;
  * @author Thanh Tran [@trongthanh]{@link https://github.com/trongthanh}
  * @author Leroy Hopson [@lihop]{@link https://github.com/lihop}
  */
-var locale$6 = {
+var locale$3 = {
   code: 'vi',
-  formatDistance: formatDistance$7,
-  formatLong: formatLong$7,
-  formatRelative: formatRelative$7,
-  localize: localize$7,
-  match: match$7,
+  formatDistance: formatDistance$3,
+  formatLong: formatLong$3,
+  formatRelative: formatRelative$3,
+  localize: localize$3,
+  match: match$3,
   options: {
     weekStartsOn: 1 /* Monday */,
     firstWeekContainsDate: 1 /* First week of new year contains Jan 1st  */
   }
 };
-
-const locale$7 = locale$6;
 
 var formatDistanceLocale$2 = {
   lessThanXSeconds: {
@@ -34350,7 +33837,7 @@ var formatDistanceLocale$2 = {
     other: '将近 {{count}} 年'
   }
 };
-var formatDistance$4 = function formatDistance(token, count, options) {
+var formatDistance$2 = function formatDistance(token, count, options) {
   var result;
   var tokenValue = formatDistanceLocale$2[token];
   if (typeof tokenValue === 'string') {
@@ -34369,7 +33856,6 @@ var formatDistance$4 = function formatDistance(token, count, options) {
   }
   return result;
 };
-const formatDistance$5 = formatDistance$4;
 
 var dateFormats$2 = {
   full: "y'年'M'月'd'日' EEEE",
@@ -34389,7 +33875,7 @@ var dateTimeFormats$2 = {
   medium: '{{date}} {{time}}',
   short: '{{date}} {{time}}'
 };
-var formatLong$4 = {
+var formatLong$2 = {
   date: buildFormatLongFn({
     formats: dateFormats$2,
     defaultWidth: 'full'
@@ -34403,7 +33889,6 @@ var formatLong$4 = {
     defaultWidth: 'full'
   })
 };
-const formatLong$5 = formatLong$4;
 
 function checkWeek(date, baseDate, options) {
   var baseFormat = 'eeee p';
@@ -34426,14 +33911,13 @@ var formatRelativeLocale$2 = {
   // days after tomorrow, maybe in this week or next week
   other: 'PP p'
 };
-var formatRelative$4 = function formatRelative(token, date, baseDate, options) {
+var formatRelative$2 = function formatRelative(token, date, baseDate, options) {
   var format = formatRelativeLocale$2[token];
   if (typeof format === 'function') {
     return format(date, baseDate, options);
   }
   return format;
 };
-const formatRelative$5 = formatRelative$4;
 
 var eraValues$2 = {
   narrow: ['前', '公元'],
@@ -34535,7 +34019,7 @@ var ordinalNumber$2 = function ordinalNumber(dirtyNumber, options) {
       return '第 ' + number.toString();
   }
 };
-var localize$4 = {
+var localize$2 = {
   ordinalNumber: ordinalNumber$2,
   era: buildLocalizeFn({
     values: eraValues$2,
@@ -34563,7 +34047,6 @@ var localize$4 = {
     defaultFormattingWidth: 'wide'
   })
 };
-const localize$5 = localize$4;
 
 var matchOrdinalNumberPattern$2 = /^(第\s*)?\d+(日|时|分|秒)?/i;
 var parseOrdinalNumberPattern$2 = /\d+/i;
@@ -34616,7 +34099,7 @@ var parseDayPeriodPatterns$2 = {
     night: /^凌晨/i
   }
 };
-var match$4 = {
+var match$2 = {
   ordinalNumber: buildMatchPatternFn({
     matchPattern: matchOrdinalNumberPattern$2,
     parsePattern: parseOrdinalNumberPattern$2,
@@ -34658,7 +34141,6 @@ var match$4 = {
     defaultParseWidth: 'any'
   })
 };
-const match$5 = match$4;
 
 /**
  * @type {Locale}
@@ -34672,19 +34154,18 @@ const match$5 = match$4;
  * @author Carney Wu [@cubicwork]{@link https://github.com/cubicwork}
  * @author Terrence Lam [@skyuplam]{@link https://github.com/skyuplam}
  */
-var locale$4 = {
+var locale$2 = {
   code: 'zh-CN',
-  formatDistance: formatDistance$5,
-  formatLong: formatLong$5,
-  formatRelative: formatRelative$5,
-  localize: localize$5,
-  match: match$5,
+  formatDistance: formatDistance$2,
+  formatLong: formatLong$2,
+  formatRelative: formatRelative$2,
+  localize: localize$2,
+  match: match$2,
   options: {
     weekStartsOn: 1 /* Monday */,
     firstWeekContainsDate: 4
   }
 };
-const locale$5 = locale$4;
 
 var formatDistanceLocale$1 = {
   lessThanXSeconds: {
@@ -34749,7 +34230,7 @@ var formatDistanceLocale$1 = {
     other: '將近 {{count}} 年'
   }
 };
-var formatDistance$2 = function formatDistance(token, count, options) {
+var formatDistance$1 = function formatDistance(token, count, options) {
   var result;
   var tokenValue = formatDistanceLocale$1[token];
   if (typeof tokenValue === 'string') {
@@ -34768,7 +34249,6 @@ var formatDistance$2 = function formatDistance(token, count, options) {
   }
   return result;
 };
-const formatDistance$3 = formatDistance$2;
 
 var dateFormats$1 = {
   full: "y'年'M'月'd'日' EEEE",
@@ -34788,7 +34268,7 @@ var dateTimeFormats$1 = {
   medium: '{{date}} {{time}}',
   short: '{{date}} {{time}}'
 };
-var formatLong$2 = {
+var formatLong$1 = {
   date: buildFormatLongFn({
     formats: dateFormats$1,
     defaultWidth: 'full'
@@ -34802,7 +34282,6 @@ var formatLong$2 = {
     defaultWidth: 'full'
   })
 };
-const formatLong$3 = formatLong$2;
 
 var formatRelativeLocale$1 = {
   lastWeek: "'上個'eeee p",
@@ -34812,10 +34291,9 @@ var formatRelativeLocale$1 = {
   nextWeek: "'下個'eeee p",
   other: 'P'
 };
-var formatRelative$2 = function formatRelative(token, _date, _baseDate, _options) {
+var formatRelative$1 = function formatRelative(token, _date, _baseDate, _options) {
   return formatRelativeLocale$1[token];
 };
-const formatRelative$3 = formatRelative$2;
 
 var eraValues$1 = {
   narrow: ['前', '公元'],
@@ -34917,7 +34395,7 @@ var ordinalNumber$1 = function ordinalNumber(dirtyNumber, options) {
       return '第 ' + number;
   }
 };
-var localize$2 = {
+var localize$1 = {
   ordinalNumber: ordinalNumber$1,
   era: buildLocalizeFn({
     values: eraValues$1,
@@ -34945,7 +34423,6 @@ var localize$2 = {
     defaultFormattingWidth: 'wide'
   })
 };
-const localize$3 = localize$2;
 
 var matchOrdinalNumberPattern$1 = /^(第\s*)?\d+(日|時|分|秒)?/i;
 var parseOrdinalNumberPattern$1 = /\d+/i;
@@ -34998,7 +34475,7 @@ var parseDayPeriodPatterns$1 = {
     night: /^凌晨/i
   }
 };
-var match$2 = {
+var match$1 = {
   ordinalNumber: buildMatchPatternFn({
     matchPattern: matchOrdinalNumberPattern$1,
     parsePattern: parseOrdinalNumberPattern$1,
@@ -35040,7 +34517,6 @@ var match$2 = {
     defaultParseWidth: 'any'
   })
 };
-const match$3 = match$2;
 
 /**
  * @type {Locale}
@@ -35050,19 +34526,18 @@ const match$3 = match$2;
  * @iso-639-2 zho
  * @author Gary Ip [@gaplo]{@link https://github.com/gaplo}
  */
-var locale$2 = {
+var locale$1 = {
   code: 'zh-HK',
-  formatDistance: formatDistance$3,
-  formatLong: formatLong$3,
-  formatRelative: formatRelative$3,
-  localize: localize$3,
-  match: match$3,
+  formatDistance: formatDistance$1,
+  formatLong: formatLong$1,
+  formatRelative: formatRelative$1,
+  localize: localize$1,
+  match: match$1,
   options: {
     weekStartsOn: 0 /* Sunday */,
     firstWeekContainsDate: 1
   }
 };
-const locale$3 = locale$2;
 
 var formatDistanceLocale = {
   lessThanXSeconds: {
@@ -35146,7 +34621,6 @@ var formatDistance = function formatDistance(token, count, options) {
   }
   return result;
 };
-const formatDistance$1 = formatDistance;
 
 var dateFormats = {
   full: "y'年'M'月'd'日' EEEE",
@@ -35180,7 +34654,6 @@ var formatLong = {
     defaultWidth: 'full'
   })
 };
-const formatLong$1 = formatLong;
 
 var formatRelativeLocale = {
   lastWeek: "'上個'eeee p",
@@ -35193,7 +34666,6 @@ var formatRelativeLocale = {
 var formatRelative = function formatRelative(token, _date, _baseDate, _options) {
   return formatRelativeLocale[token];
 };
-const formatRelative$1 = formatRelative;
 
 var eraValues = {
   narrow: ['前', '公元'],
@@ -35323,7 +34795,6 @@ var localize = {
     defaultFormattingWidth: 'wide'
   })
 };
-const localize$1 = localize;
 
 var matchOrdinalNumberPattern = /^(第\s*)?\d+(日|時|分|秒)?/i;
 var parseOrdinalNumberPattern = /\d+/i;
@@ -35418,7 +34889,6 @@ var match = {
     defaultParseWidth: 'any'
   })
 };
-const match$1 = match;
 
 /**
  * @type {Locale}
@@ -35432,16 +34902,15 @@ const match$1 = match;
  */
 var locale = {
   code: 'zh-TW',
-  formatDistance: formatDistance$1,
-  formatLong: formatLong$1,
-  formatRelative: formatRelative$1,
-  localize: localize$1,
-  match: match$1,
+  formatDistance: formatDistance,
+  formatLong: formatLong,
+  formatRelative: formatRelative,
+  localize: localize,
+  match: match,
   options: {
     weekStartsOn: 1 /* Monday */,
     firstWeekContainsDate: 4
   }
 };
-const locale$1 = locale;
 
-export { locale$2U as af, locale$2S as ar, locale$2Q as arDZ, locale$2O as arEG, locale$2M as arMA, locale$2K as arSA, locale$2I as arTN, locale$2G as az, locale$2D as be, locale$2B as beTarask, locale$2z as bg, locale$2x as bn, locale$2v as bs, locale$2t as ca, locale$2r as cs, locale$2p as cy, locale$2n as da, locale$2l as de, locale$2j as deAT, locale$2h as el, locale$2f as enAU, locale$2d as enCA, locale$2b as enGB, locale$29 as enIE, locale$27 as enIN, locale$25 as enNZ, defaultLocale as enUS, locale$23 as enZA, locale$21 as eo, locale$1$ as es, locale$1Z as et, locale$1X as eu, locale$1V as faIR, locale$1T as fi, locale$1R as fr, locale$1P as frCA, locale$1N as frCH, locale$1L as fy, locale$1J as gd, locale$1H as gl, locale$1F as gu, locale$1D as he, locale$1B as hi, locale$1z as hr, locale$1x as ht, locale$1v as hu, locale$1t as hy, locale$1r as id, locale$1p as is, locale$1n as it, locale$1l as itCH, locale$1j as ja, locale$1h as jaHira, locale$1f as ka, locale$1d as kk, locale$1b as km, locale$19 as kn, locale$17 as ko, locale$15 as lb, locale$13 as lt, locale$11 as lv, locale$$ as mk, locale$Z as mn, locale$X as ms, locale$V as mt, locale$T as nb, locale$R as nl, locale$P as nlBE, locale$N as nn, locale$L as oc, locale$J as pl, locale$H as pt, locale$F as ptBR, locale$D as ro, locale$B as ru, locale$z as sk, locale$x as sl, locale$v as sq, locale$t as sr, locale$r as srLatn, locale$p as sv, locale$n as ta, locale$l as te, locale$j as th, locale$h as tr, locale$f as ug, locale$d as uk, locale$b as uz, locale$9 as uzCyrl, locale$7 as vi, locale$5 as zhCN, locale$3 as zhHK, locale$1 as zhTW };
+export { locale$1s as af, locale$1r as ar, locale$1q as arDZ, locale$1p as arEG, locale$1o as arMA, locale$1n as arSA, locale$1m as arTN, locale$1l as az, locale$1j as be, locale$1i as beTarask, locale$1h as bg, locale$1g as bn, locale$1f as bs, locale$1e as ca, locale$1d as cs, locale$1c as cy, locale$1b as da, locale$1a as de, locale$19 as deAT, locale$18 as el, locale$17 as enAU, locale$16 as enCA, locale$15 as enGB, locale$14 as enIE, locale$13 as enIN, locale$12 as enNZ, locale$1k as enUS, locale$11 as enZA, locale$10 as eo, locale$$ as es, locale$_ as et, locale$Z as eu, locale$Y as faIR, locale$X as fi, locale$W as fr, locale$V as frCA, locale$U as frCH, locale$T as fy, locale$S as gd, locale$R as gl, locale$Q as gu, locale$P as he, locale$O as hi, locale$N as hr, locale$M as ht, locale$L as hu, locale$K as hy, locale$J as id, locale$I as is, locale$H as it, locale$G as itCH, locale$F as ja, locale$E as jaHira, locale$D as ka, locale$C as kk, locale$B as km, locale$A as kn, locale$z as ko, locale$y as lb, locale$x as lt, locale$w as lv, locale$v as mk, locale$u as mn, locale$t as ms, locale$s as mt, locale$r as nb, locale$q as nl, locale$p as nlBE, locale$o as nn, locale$n as oc, locale$m as pl, locale$l as pt, locale$k as ptBR, locale$j as ro, locale$i as ru, locale$h as sk, locale$g as sl, locale$f as sq, locale$e as sr, locale$d as srLatn, locale$c as sv, locale$b as ta, locale$a as te, locale$9 as th, locale$8 as tr, locale$7 as ug, locale$6 as uk, locale$5 as uz, locale$4 as uzCyrl, locale$3 as vi, locale$2 as zhCN, locale$1 as zhHK, locale as zhTW };

@@ -10,32 +10,41 @@ Category: common
 Audit: 2020
 */
 
-/** @type LanguageFn */
-function shell(hljs) {
-  return {
-    name: 'Shell Session',
-    aliases: [
-      'console',
-      'shellsession'
-    ],
-    contains: [
-      {
-        className: 'meta.prompt',
-        // We cannot add \s (spaces) in the regular expression otherwise it will be too broad and produce unexpected result.
-        // For instance, in the following example, it would match "echo /path/to/home >" as a prompt:
-        // echo /path/to/home > t.exe
-        begin: /^\s{0,3}[/~\w\d[\]()@-]*[>%$#][ ]?/,
-        starts: {
-          end: /[^\\](?=\s*$)/,
-          subLanguage: 'bash'
-        }
-      }
-    ]
-  };
+var shell_1;
+var hasRequiredShell;
+
+function requireShell () {
+	if (hasRequiredShell) return shell_1;
+	hasRequiredShell = 1;
+	/** @type LanguageFn */
+	function shell(hljs) {
+	  return {
+	    name: 'Shell Session',
+	    aliases: [
+	      'console',
+	      'shellsession'
+	    ],
+	    contains: [
+	      {
+	        className: 'meta.prompt',
+	        // We cannot add \s (spaces) in the regular expression otherwise it will be too broad and produce unexpected result.
+	        // For instance, in the following example, it would match "echo /path/to/home >" as a prompt:
+	        // echo /path/to/home > t.exe
+	        begin: /^\s{0,3}[/~\w\d[\]()@-]*[>%$#][ ]?/,
+	        starts: {
+	          end: /[^\\](?=\s*$)/,
+	          subLanguage: 'bash'
+	        }
+	      }
+	    ]
+	  };
+	}
+
+	shell_1 = shell;
+	return shell_1;
 }
 
-var shell_1 = shell;
+var shellExports = requireShell();
+const shell = /*@__PURE__*/getDefaultExportFromCjs(shellExports);
 
-const shell$1 = /*@__PURE__*/getDefaultExportFromCjs(shell_1);
-
-export { shell$1 as default };
+export { shell as default };

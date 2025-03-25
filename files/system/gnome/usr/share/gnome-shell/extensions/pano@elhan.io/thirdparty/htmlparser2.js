@@ -3067,7 +3067,7 @@ function filter(test, node, recurse = true, limit = Infinity) {
 function find(test, nodes, recurse, limit) {
     const result = [];
     /** Stack of the arrays we are looking at. */
-    const nodeStack = [nodes];
+    const nodeStack = [Array.isArray(nodes) ? nodes : [nodes]];
     /** Stack of the indices within the arrays. */
     const indexStack = [0];
     for (;;) {
@@ -3121,20 +3121,17 @@ function findOneChild(test, nodes) {
  * @returns The first node that passes `test`.
  */
 function findOne(test, nodes, recurse = true) {
-    let elem = null;
-    for (let i = 0; i < nodes.length && !elem; i++) {
-        const node = nodes[i];
-        if (!isTag(node)) {
-            continue;
+    const searchedNodes = Array.isArray(nodes) ? nodes : [nodes];
+    for (let i = 0; i < searchedNodes.length; i++) {
+        const node = searchedNodes[i];
+        if (isTag(node) && test(node)) {
+            return node;
         }
-        else if (test(node)) {
-            elem = node;
-        }
-        else if (recurse && node.children.length > 0) {
-            elem = findOne(test, node.children, true);
+        if (recurse && hasChildren(node) && node.children.length > 0) {
+            return findOne(test, node.children, true);
         }
     }
-    return elem;
+    return null;
 }
 /**
  * Checks if a tree of nodes contains at least one node passing a test.
@@ -3145,8 +3142,8 @@ function findOne(test, nodes, recurse = true) {
  * @returns Whether a tree of nodes contains at least one node passing the test.
  */
 function existsOne(test, nodes) {
-    return nodes.some((checked) => isTag(checked) &&
-        (test(checked) || existsOne(test, checked.children)));
+    return (Array.isArray(nodes) ? nodes : [nodes]).some((node) => (isTag(node) && test(node)) ||
+        (hasChildren(node) && existsOne(test, node.children)));
 }
 /**
  * Search an array of nodes and their children for elements passing a test function.
@@ -3160,7 +3157,7 @@ function existsOne(test, nodes) {
  */
 function findAll(test, nodes) {
     const result = [];
-    const nodeStack = [nodes];
+    const nodeStack = [Array.isArray(nodes) ? nodes : [nodes]];
     const indexStack = [0];
     for (;;) {
         if (indexStack[0] >= nodeStack[0].length) {
@@ -3174,11 +3171,9 @@ function findAll(test, nodes) {
             continue;
         }
         const elem = nodeStack[0][indexStack[0]++];
-        if (!isTag(elem))
-            continue;
-        if (test(elem))
+        if (isTag(elem) && test(elem))
             result.push(elem);
-        if (elem.children.length > 0) {
+        if (hasChildren(elem) && elem.children.length > 0) {
             indexStack.unshift(0);
             nodeStack.unshift(elem.children);
         }
@@ -3307,6 +3302,19 @@ function getElementById(id, nodes, recurse = true) {
  */
 function getElementsByTagName(tagName, nodes, recurse = true, limit = Infinity) {
     return filter(Checks["tag_name"](tagName), nodes, recurse, limit);
+}
+/**
+ * Returns all nodes with the supplied `className`.
+ *
+ * @category Legacy Query Functions
+ * @param className Class name to search for.
+ * @param nodes Nodes to search through.
+ * @param recurse Also consider child nodes.
+ * @param limit Maximum number of nodes to return.
+ * @returns All nodes with the supplied `className`.
+ */
+function getElementsByClassName(className, nodes, recurse = true, limit = Infinity) {
+    return filter(getAttribCheck("class", className), nodes, recurse, limit);
 }
 /**
  * Returns all nodes with the supplied `type`.
@@ -3654,6 +3662,7 @@ const index = /*#__PURE__*/Object.freeze({
     getChildren: getChildren,
     getElementById: getElementById,
     getElements: getElements,
+    getElementsByClassName: getElementsByClassName,
     getElementsByTagName: getElementsByTagName,
     getElementsByTagType: getElementsByTagType,
     getFeed: getFeed,

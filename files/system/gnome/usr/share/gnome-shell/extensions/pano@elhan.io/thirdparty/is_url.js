@@ -2,53 +2,62 @@ function getDefaultExportFromCjs (x) {
 	return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, 'default') ? x['default'] : x;
 }
 
-/**
- * Expose `isUrl`.
- */
+var isUrl_1;
+var hasRequiredIsUrl;
 
-var isUrl_1 = isUrl;
+function requireIsUrl () {
+	if (hasRequiredIsUrl) return isUrl_1;
+	hasRequiredIsUrl = 1;
+	/**
+	 * Expose `isUrl`.
+	 */
 
-/**
- * RegExps.
- * A URL must match #1 and then at least one of #2/#3.
- * Use two levels of REs to avoid REDOS.
- */
+	isUrl_1 = isUrl;
 
-var protocolAndDomainRE = /^(?:\w+:)?\/\/(\S+)$/;
+	/**
+	 * RegExps.
+	 * A URL must match #1 and then at least one of #2/#3.
+	 * Use two levels of REs to avoid REDOS.
+	 */
 
-var localhostDomainRE = /^localhost[\:?\d]*(?:[^\:?\d]\S*)?$/;
-var nonLocalhostDomainRE = /^[^\s\.]+\.\S{2,}$/;
+	var protocolAndDomainRE = /^(?:\w+:)?\/\/(\S+)$/;
 
-/**
- * Loosely validate a URL `string`.
- *
- * @param {String} string
- * @return {Boolean}
- */
+	var localhostDomainRE = /^localhost[\:?\d]*(?:[^\:?\d]\S*)?$/;
+	var nonLocalhostDomainRE = /^[^\s\.]+\.\S{2,}$/;
 
-function isUrl(string){
-  if (typeof string !== 'string') {
-    return false;
-  }
+	/**
+	 * Loosely validate a URL `string`.
+	 *
+	 * @param {String} string
+	 * @return {Boolean}
+	 */
 
-  var match = string.match(protocolAndDomainRE);
-  if (!match) {
-    return false;
-  }
+	function isUrl(string){
+	  if (typeof string !== 'string') {
+	    return false;
+	  }
 
-  var everythingAfterProtocol = match[1];
-  if (!everythingAfterProtocol) {
-    return false;
-  }
+	  var match = string.match(protocolAndDomainRE);
+	  if (!match) {
+	    return false;
+	  }
 
-  if (localhostDomainRE.test(everythingAfterProtocol) ||
-      nonLocalhostDomainRE.test(everythingAfterProtocol)) {
-    return true;
-  }
+	  var everythingAfterProtocol = match[1];
+	  if (!everythingAfterProtocol) {
+	    return false;
+	  }
 
-  return false;
+	  if (localhostDomainRE.test(everythingAfterProtocol) ||
+	      nonLocalhostDomainRE.test(everythingAfterProtocol)) {
+	    return true;
+	  }
+
+	  return false;
+	}
+	return isUrl_1;
 }
 
-const index = /*@__PURE__*/getDefaultExportFromCjs(isUrl_1);
+var isUrlExports = requireIsUrl();
+const index = /*@__PURE__*/getDefaultExportFromCjs(isUrlExports);
 
 export { index as default };

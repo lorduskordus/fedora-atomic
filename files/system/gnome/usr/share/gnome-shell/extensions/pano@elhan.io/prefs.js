@@ -1,11 +1,12 @@
-import Gdk from 'gi://Gdk';
 import { ExtensionPreferences } from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
+import Gdk from 'gi://Gdk';
 import Gtk from 'gi://Gtk';
 import Adw from 'gi://Adw';
 import Gio from 'gi://Gio';
 import Pango from 'gi://Pango';
 import GObject from 'gi://GObject';
 import GLib from 'gi://GLib';
+import { PACKAGE_VERSION } from 'resource:///org/gnome/Shell/Extensions/js/misc/config.js';
 
 function __decorate(decorators, target, key, desc) {
     let c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -241,7 +242,6 @@ function registerGObjectClass(target) {
     if (Object.prototype.hasOwnProperty.call(target, 'metaInfo')) {
         // eslint-disable-next-line
         // @ts-ignore
-        // eslint-disable-next-line
         return GObject.registerClass(target.metaInfo, target);
     }
     else {
@@ -314,7 +314,7 @@ const deleteDirectory = async (file) => {
         }
         await Promise.all(branches);
     }
-    catch (e) {
+    catch (_err) {
     }
     finally {
         return deleteFile(file);
@@ -363,6 +363,7 @@ function gettext(ext) {
 }
 
 let FloatingStyleGroup = class FloatingStyleGroup extends Adw.ExpanderRow {
+    settings;
     constructor(ext) {
         const _ = gettext(ext);
         super({
@@ -384,6 +385,7 @@ FloatingStyleGroup = __decorate([
 ], FloatingStyleGroup);
 
 let CommonStyleGroup = class CommonStyleGroup extends Adw.PreferencesGroup {
+    settings;
     constructor(ext) {
         const _ = gettext(ext);
         super({
@@ -431,6 +433,7 @@ function getPanoItemTypes(ext) {
 const ICON_PACKS = ['default', 'legacy'];
 
 let ItemExpanderRow = class ItemExpanderRow extends Adw.ExpanderRow {
+    extensionSettings;
     constructor(ext, title, subtitle, iconName) {
         super({
             title,
@@ -451,6 +454,7 @@ ItemExpanderRow = __decorate([
 ], ItemExpanderRow);
 
 let CodeItemStyleRow = class CodeItemStyleRow extends ItemExpanderRow {
+    settings;
     constructor(ext) {
         const _ = gettext(ext);
         super(ext, _('Code Item Style'), _('Change the style of the code item'), getPanoItemTypes(ext).CODE.iconName);
@@ -472,6 +476,7 @@ CodeItemStyleRow = __decorate([
 ], CodeItemStyleRow);
 
 let ColorItemStyleRow = class ColorItemStyleRow extends ItemExpanderRow {
+    settings;
     constructor(ext) {
         const _ = gettext(ext);
         super(ext, _('Color Item Style'), _('Change the style of the color item'), getPanoItemTypes(ext).COLOR.iconName);
@@ -489,6 +494,7 @@ ColorItemStyleRow = __decorate([
 ], ColorItemStyleRow);
 
 let EmojiItemStyleRow = class EmojiItemStyleRow extends ItemExpanderRow {
+    settings;
     constructor(ext) {
         const _ = gettext(ext);
         super(ext, _('Emoji Item Style'), _('Change the style of the emoji item'), getPanoItemTypes(ext).EMOJI.iconName);
@@ -508,6 +514,7 @@ EmojiItemStyleRow = __decorate([
 ], EmojiItemStyleRow);
 
 let FileItemStyleRow = class FileItemStyleRow extends ItemExpanderRow {
+    settings;
     constructor(ext) {
         const _ = gettext(ext);
         super(ext, _('File Item Style'), _('Change the style of the file item'), getPanoItemTypes(ext).FILE.iconName);
@@ -541,6 +548,7 @@ FileItemStyleRow = __decorate([
 ], FileItemStyleRow);
 
 let ImageItemStyleRow = class ImageItemStyleRow extends ItemExpanderRow {
+    settings;
     constructor(ext) {
         const _ = gettext(ext);
         super(ext, _('Image Item Style'), _('Change the style of the image item'), getPanoItemTypes(ext).IMAGE.iconName);
@@ -556,6 +564,7 @@ ImageItemStyleRow = __decorate([
 ], ImageItemStyleRow);
 
 let LinkItemStyleRow = class LinkItemStyleRow extends ItemExpanderRow {
+    settings;
     constructor(ext) {
         const _ = gettext(ext);
         super(ext, _('Link Item Style'), _('Change the style of the link item'), getPanoItemTypes(ext).LINK.iconName);
@@ -585,6 +594,7 @@ LinkItemStyleRow = __decorate([
 ], LinkItemStyleRow);
 
 let TextItemStyleRow = class TextItemStyleRow extends ItemExpanderRow {
+    settings;
     constructor(ext) {
         const _ = gettext(ext);
         super(ext, _('Text Item Style'), _('Change the style of the text item'), getPanoItemTypes(ext).TEXT.iconName);
@@ -672,7 +682,7 @@ let ClearHistoryRow = class ClearHistoryRow extends Adw.ActionRow {
                     try {
                         Gio.DBus.session.call_sync('org.gnome.Shell', '/io/elhan/Pano', 'io.elhan.Pano', 'stop', null, null, Gio.DBusCallFlags.NONE, -1, null);
                     }
-                    catch (err) {
+                    catch (_err) {
                         isDbusRunning = false;
                         debug$1('Extension is not enabled. Clearing db file without stopping the extension.');
                     }
@@ -692,6 +702,7 @@ ClearHistoryRow = __decorate([
 ], ClearHistoryRow);
 
 let SessionOnlyModeRow = class SessionOnlyModeRow extends Adw.ActionRow {
+    settings;
     constructor(ext) {
         const _ = gettext(ext);
         super({
@@ -731,6 +742,9 @@ DangerZonePage = __decorate([
 ], DangerZonePage);
 
 let ExclusionGroup = class ExclusionGroup extends Adw.PreferencesGroup {
+    exclusionRow;
+    exclusionButton;
+    settings;
     constructor(ext) {
         const _ = gettext(ext);
         super({
@@ -830,6 +844,8 @@ ExclusionGroup = __decorate([
 
 const debug = logger('prefs:general:dbLocation');
 let DBLocationRow = class DBLocationRow extends Adw.ActionRow {
+    fileChooser;
+    settings;
     constructor(ext) {
         const _ = gettext(ext);
         super({
@@ -860,7 +876,7 @@ let DBLocationRow = class DBLocationRow extends Adw.ActionRow {
                     try {
                         Gio.DBus.session.call_sync('org.gnome.Shell', '/io/elhan/Pano', 'io.elhan.Pano', 'stop', null, null, Gio.DBusCallFlags.NONE, -1, null);
                     }
-                    catch (err) {
+                    catch (_err) {
                         isDbusRunning = false;
                         debug('Extension is not enabled. Moving db file without stopping the extension.');
                     }
@@ -907,6 +923,7 @@ DBLocationRow = __decorate([
 ], DBLocationRow);
 
 let HistoryLengthRow = class HistoryLengthRow extends Adw.ActionRow {
+    settings;
     constructor(ext) {
         const _ = gettext(ext);
         super({
@@ -940,6 +957,7 @@ function getAcceleratorName(keyval, keycode, mask, key) {
 }
 
 let IncognitoShortcutRow = class IncognitoShortcutRow extends Adw.ActionRow {
+    settings;
     constructor(ext) {
         const _ = gettext(ext);
         super({
@@ -1038,6 +1056,7 @@ const isValidBinding$1 = (mask, keycode, keyval) => {
 };
 
 let KeepSearchEntryRow = class KeepSearchEntryRow extends Adw.ActionRow {
+    settings;
     constructor(ext) {
         const _ = gettext(ext);
         super({
@@ -1060,6 +1079,7 @@ KeepSearchEntryRow = __decorate([
 ], KeepSearchEntryRow);
 
 let LinkPreviewsRow = class LinkPreviewsRow extends Adw.ActionRow {
+    settings;
     constructor(ext) {
         const _ = gettext(ext);
         super({
@@ -1082,6 +1102,7 @@ LinkPreviewsRow = __decorate([
 ], LinkPreviewsRow);
 
 let OpenLinksInBrowserRow = class OpenLinksInBrowserRow extends Adw.ActionRow {
+    settings;
     constructor(ext) {
         const _ = gettext(ext);
         super({
@@ -1104,6 +1125,7 @@ OpenLinksInBrowserRow = __decorate([
 ], OpenLinksInBrowserRow);
 
 let PasteOnSelectRow = class PasteOnSelectRow extends Adw.ActionRow {
+    settings;
     constructor(ext) {
         const _ = gettext(ext);
         super({
@@ -1126,6 +1148,7 @@ PasteOnSelectRow = __decorate([
 ], PasteOnSelectRow);
 
 let PlayAudioOnCopyRow = class PlayAudioOnCopyRow extends Adw.ActionRow {
+    settings;
     constructor(ext) {
         const _ = gettext(ext);
         super({
@@ -1148,6 +1171,7 @@ PlayAudioOnCopyRow = __decorate([
 ], PlayAudioOnCopyRow);
 
 let RemoveOnMiddleClickRow = class RemoveOnMiddleClickRow extends Adw.ActionRow {
+    settings;
     constructor(ext) {
         const _ = gettext(ext);
         super({
@@ -1170,6 +1194,7 @@ RemoveOnMiddleClickRow = __decorate([
 ], RemoveOnMiddleClickRow);
 
 let SendNotificationOnCopyRow = class SendNotificationOnCopyRow extends Adw.ActionRow {
+    settings;
     constructor(ext) {
         const _ = gettext(ext);
         super({
@@ -1192,6 +1217,7 @@ SendNotificationOnCopyRow = __decorate([
 ], SendNotificationOnCopyRow);
 
 let ShortcutRow = class ShortcutRow extends Adw.ActionRow {
+    settings;
     constructor(ext) {
         const _ = gettext(ext);
         super({
@@ -1290,6 +1316,7 @@ const isValidBinding = (mask, keycode, keyval) => {
 };
 
 let ShowIndicatorRow = class ShowIndicatorRow extends Adw.ActionRow {
+    settings;
     constructor(ext) {
         const _ = gettext(ext);
         super({
@@ -1312,6 +1339,7 @@ ShowIndicatorRow = __decorate([
 ], ShowIndicatorRow);
 
 let SyncPrimaryRow = class SyncPrimaryRow extends Adw.ActionRow {
+    settings;
     constructor(ext) {
         const _ = gettext(ext);
         super({
@@ -1334,6 +1362,7 @@ SyncPrimaryRow = __decorate([
 ], SyncPrimaryRow);
 
 let WatchExclusionsRow = class WatchExclusionsRow extends Adw.ActionRow {
+    settings;
     constructor(ext) {
         const _ = gettext(ext);
         super({
@@ -1356,6 +1385,7 @@ WatchExclusionsRow = __decorate([
 ], WatchExclusionsRow);
 
 let WiggleIndicatorRow = class WiggleIndicatorRow extends Adw.ActionRow {
+    settings;
     constructor(ext) {
         const _ = gettext(ext);
         super({
@@ -1419,6 +1449,35 @@ GeneralPage = __decorate([
     registerGObjectClass
 ], GeneralPage);
 
+// compatibility functions to check if a specific gnome-shell is used
+function isGnomeVersion(version) {
+    const [major, _minor, _patch, ..._rest] = PACKAGE_VERSION.split('.').map((num) => {
+        const result = parseInt(num);
+        if (isNaN(result)) {
+            return undefined;
+        }
+        return result;
+    });
+    if (major === undefined) {
+        return PACKAGE_VERSION.includes(version.toString());
+    }
+    return major === version;
+}
+function isOneGnomeVersion(versions) {
+    for (const version of versions) {
+        const isVersion = isGnomeVersion(version);
+        if (isVersion) {
+            return true;
+        }
+    }
+    return false;
+}
+// compatibility check functions for gnome-shell 47
+// this check if it is gnome 47 or higher, which includes all supported versions above and inclusive gnome 47
+function isGnome47OrHigher() {
+    return isOneGnomeVersion([47, 48]);
+}
+
 class PanoExtensionPreferences extends ExtensionPreferences {
     fillPreferencesWindow(window) {
         window.add(new GeneralPage(this));
@@ -1429,6 +1488,14 @@ class PanoExtensionPreferences extends ExtensionPreferences {
         if (display) {
             Gtk.IconTheme.get_for_display(display).add_search_path(`${this.path}/icons/`);
         }
+        /**
+         * gnome 47 explicitly states, that we need to return a Promise, so we check the version at runtime and decide what to return, to support older versions of gnome shell, that don't expected a promise here
+         * @see https://gitlab.gnome.org/GNOME/gnome-shell/-/blob/main/js/extensions/prefs.js#L34
+         */
+        if (isGnome47OrHigher()) {
+            return Promise.resolve();
+        }
+        return;
     }
 }
 

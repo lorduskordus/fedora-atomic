@@ -312,7 +312,7 @@ var roundingMap = {
 
 var defaultRoundingMethod = 'trunc';
 function getRoundingMethod(method) {
-  return method ? roundingMap[method] : roundingMap[defaultRoundingMethod];
+  return roundingMap[defaultRoundingMethod];
 }
 
 /**
@@ -342,7 +342,7 @@ function getRoundingMethod(method) {
 function differenceInSeconds(dateLeft, dateRight, options) {
   requiredArgs(2, arguments);
   var diff = differenceInMilliseconds(dateLeft, dateRight) / 1000;
-  return getRoundingMethod(options === null || options === void 0 ? void 0 : options.roundingMethod)(diff);
+  return getRoundingMethod()(diff);
 }
 
 var formatDistanceLocale = {
@@ -470,7 +470,6 @@ var formatLong = {
     defaultWidth: 'full'
   })
 };
-const formatLong$1 = formatLong;
 
 var formatRelativeLocale = {
   lastWeek: "'last' eeee 'at' p",
@@ -483,7 +482,6 @@ var formatRelativeLocale = {
 var formatRelative = function formatRelative(token, _date, _baseDate, _options) {
   return formatRelativeLocale[token];
 };
-const formatRelative$1 = formatRelative;
 
 function buildLocalizeFn(args) {
   return function (dirtyIndex, options) {
@@ -645,7 +643,6 @@ var localize = {
     defaultFormattingWidth: 'wide'
   })
 };
-const localize$1 = localize;
 
 function buildMatchFn(args) {
   return function (string) {
@@ -803,7 +800,6 @@ var match = {
     defaultParseWidth: 'any'
   })
 };
-const match$1 = match;
 
 /**
  * @type {Locale}
@@ -817,10 +813,10 @@ const match$1 = match;
 var locale = {
   code: 'en-US',
   formatDistance: formatDistance$1,
-  formatLong: formatLong$1,
-  formatRelative: formatRelative$1,
-  localize: localize$1,
-  match: match$1,
+  formatLong: formatLong,
+  formatRelative: formatRelative,
+  localize: localize,
+  match: match,
   options: {
     weekStartsOn: 0 /* Sunday */,
     firstWeekContainsDate: 1
