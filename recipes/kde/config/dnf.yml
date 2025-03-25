@@ -1,0 +1,19 @@
+type: dnf
+source: ghcr.io/blue-build/modules/dnf:dnf-module
+remove:
+  packages:
+    - kate
+    - kate-plugins
+    - kate-krunner-plugin
+    - kfind
+    - kcharselect
+repos:
+  copr:
+    # Includes Koi
+    - birkch/Koi
+install:
+  packages:
+    - Koi
+    - merkuro # KDE Calendar
+    - kdepim-addons # KDE Calendar system integration
+    - kdepim-runtime # Needed for adding accounts in the KDE Calendar

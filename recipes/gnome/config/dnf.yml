@@ -1,0 +1,44 @@
+type: dnf
+source: ghcr.io/blue-build/modules/dnf:dnf-module
+remove:
+  packages:
+    - gnome-shell-extension-apps-menu
+    - gnome-shell-extension-background-logo
+    - gnome-shell-extension-launch-new-instance
+    - gnome-shell-extension-window-list
+
+    - gnome-classic-session
+    - gnome-tour
+    - gnome-system-monitor
+repos:
+  copr:
+    # Includes nautilus-admin
+    - tomaszgasior/mushrooms
+    # Includes morewaita-icon-theme
+    - dusansimic/themes
+    # Includes triple buffering patch
+    - trixieua/mutter-patched
+replace:
+  - from-repo: copr:copr.fedorainfracloud.org:trixieua:mutter-patched
+    packages:
+      - gnome-shell
+      - mutter
+      - mutter-common
+install:
+  packages:
+    #- gnome-shell-extension-dash-to-panel # Temporarily replace with gnome-extensions module
+    - gnome-shell-extension-dash-to-dock
+    - gnome-shell-extension-appindicator
+    - gnome-shell-extension-gsconnect
+    - gnome-shell-extension-blur-my-shell
+    - gnome-shell-extension-user-theme
+    - gnome-shell-extension-caffeine
+    # Needed for Pano clipboard
+    - libgda
+    - libgda-sqlite
+
+    - nautilus-admin
+    - morewaita-icon-theme
+    - firewall-config
+    - dconf-editor
+    - gnome-text-editor

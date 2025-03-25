@@ -1,6 +1,6 @@
 modules:
 
-  - from-file: common/config/rpm-ostree.yml
+  - from-file: common/config/dnf.yml
   - from-file: common/config/default-flatpaks.yml
   - from-file: common/config/files.yml
   - from-file: common/config/justfiles.yml

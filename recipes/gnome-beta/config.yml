@@ -1,6 +1,6 @@
 modules:
 
-  - from-file: gnome-beta/config/rpm-ostree.yml
+  - from-file: gnome-beta/config/dnf.yml
   - from-file: gnome/config/default-flatpaks.yml
   - from-file: gnome/config/files.yml
   - from-file: gnome/config/justfiles.yml

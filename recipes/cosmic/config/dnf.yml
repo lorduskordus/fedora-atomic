@@ -1,0 +1,8 @@
+type: dnf
+source: ghcr.io/blue-build/modules/dnf:dnf-module
+repos:
+  copr:
+    - wiiznokes/cosmic-applets-unofficial
+install:
+  packages:
+    - cosmic-ext-applet-clipboard-manager
