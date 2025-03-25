@@ -1,13 +1,9 @@
 modules:
 
   - type: rpm-ostree
-    repos:
-      # Includes bibata-cursor-themes
-      - https://copr.fedorainfracloud.org/coprs/peterwu/rendezvous/repo/fedora-%OS_VERSION%/peterwu-rendezvous-fedora-%OS_VERSION%.repo
     install:
       - adw-gtk3-theme
       - rsms-inter-fonts
-      - bibata-cursor-themes
 
       - nm-connection-editor-desktop
       - micro
