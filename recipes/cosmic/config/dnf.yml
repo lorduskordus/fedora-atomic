@@ -6,3 +6,4 @@ repos:
 install:
   packages:
     - cosmic-ext-applet-clipboard-manager
+    - cosmic-ext-applet-external-monitor-brightness
