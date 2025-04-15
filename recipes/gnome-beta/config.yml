@@ -1,9 +1,0 @@
-modules:
-
-  - from-file: gnome-beta/config/dnf.yml
-  - from-file: gnome/config/default-flatpaks.yml
-  - from-file: gnome/config/files.yml
-  - from-file: gnome/config/justfiles.yml
-  - from-file: gnome/config/hide-app-launchers.yml
-  - from-file: gnome/config/gnome-extensions.yml
-  - from-file: gnome/config/bling.yml
