@@ -1,0 +1,9 @@
+modules:
+
+  - type: containerfile
+    containerfiles:
+      - kernel-main
+
+  - type: script
+    scripts:
+      - kernel/post-install.sh

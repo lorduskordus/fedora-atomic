@@ -1,12 +1,15 @@
 name: fedora-base-cosmic
 description: Custom Fedora COSMIC image based on uBlue, built with BlueBuild. (Base)
 
-base-image: ghcr.io/lorduskordus/fedora-core-cosmic
-image-version: coreos
+base-image: ghcr.io/ublue-os/cosmic-atomic-main
+image-version: 42
 alt-tags:
   - coreos
 
 modules:
+
+  # Kernel
+  - from-file: kernel/coreos.yml
 
   # Common
   - from-file: common/config.yml

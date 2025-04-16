@@ -1,0 +1,9 @@
+modules:
+
+  - type: containerfile
+    containerfiles:
+      - kernel-coreos
+
+  - type: script
+    scripts:
+      - kernel/post-install.sh
