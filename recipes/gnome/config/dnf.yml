@@ -16,14 +16,6 @@ repos:
     - tomaszgasior/mushrooms
     # Includes morewaita-icon-theme
     - dusansimic/themes
-    # Includes triple buffering patch
-    - trixieua/mutter-patched
-replace:
-  - from-repo: copr:copr.fedorainfracloud.org:trixieua:mutter-patched
-    packages:
-      - gnome-shell
-      - mutter
-      - mutter-common
 install:
   packages:
     #- gnome-shell-extension-dash-to-panel # Temporarily replace with gnome-extensions module
