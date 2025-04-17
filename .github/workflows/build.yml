@@ -2,16 +2,14 @@ name: bluebuild
 
 on:
   schedule:
-    - cron: "25 05 * * *" # build at 05:25 UTC every day 
-                          # (30 minutes after lorduskordus/fedora-core images start building)
+    - cron: "35 04 * * *" # 04:35 UTC daily (30 minutes after ublue-os/main)
   push:
-    paths-ignore: # don't rebuild if only documentation has changed
+    paths-ignore:
       - "**.md"
   pull_request:
-  workflow_dispatch: # allow manually triggering builds
+  workflow_dispatch:
 
 concurrency:
-  # only run one build at a time
   group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
   cancel-in-progress: true
 
@@ -24,7 +22,7 @@ jobs:
       packages: write
       id-token: write
     strategy:
-      fail-fast: false # stop GH from cancelling all matrix builds if one fails
+      fail-fast: false
       matrix:
         recipe:
           #- cosmic/recipe-coreos.yml
