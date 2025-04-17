@@ -15,6 +15,7 @@ import GdkPixbuf from 'gi://GdkPixbuf';
 import * as animationUtils from 'resource:///org/gnome/shell/misc/animationUtils.js';
 import { MonitorConstraint } from 'resource:///org/gnome/shell/ui/layout.js';
 import * as main from 'resource:///org/gnome/shell/ui/main.js';
+import { PACKAGE_VERSION } from 'resource:///org/gnome/shell/misc/config.js';
 import { Source, Notification } from 'resource:///org/gnome/shell/ui/messageTray.js';
 import Meta from 'gi://Meta';
 import { Lightbox } from 'resource:///org/gnome/shell/ui/lightbox.js';
@@ -23,11 +24,11 @@ import Pango from 'gi://Pango';
 import Graphene from 'gi://Graphene';
 import formatDistanceToNow from './thirdparty/date_fns_formatDistanceToNow.js';
 import * as dateLocale from './thirdparty/date_fns_locale.js';
-import colorString from './thirdparty/color_string.js';
 import PrismJS from './thirdparty/prismjs.js';
+import prettyBytes from './thirdparty/pretty_bytes.js';
 import Soup from 'gi://Soup';
 import * as htmlparser2 from './thirdparty/htmlparser2.js';
-import Graphemer from './thirdparty/graphemer.js';
+import convert from './thirdparty/hex_color_converter.js';
 import hljs from './thirdparty/highlight_js_lib_core.js';
 import bash from './thirdparty/highlight_js_lib_languages_bash.js';
 import c from './thirdparty/highlight_js_lib_languages_c.js';
@@ -55,7 +56,7 @@ import swift from './thirdparty/highlight_js_lib_languages_swift.js';
 import typescript from './thirdparty/highlight_js_lib_languages_typescript.js';
 import yaml from './thirdparty/highlight_js_lib_languages_yaml.js';
 import isUrl from './thirdparty/is_url.js';
-import prettyBytes from './thirdparty/pretty_bytes.js';
+import { validateHTMLColorHex, validateHTMLColorRgb, validateHTMLColorName } from './thirdparty/validate_color.js';
 
 function _mergeNamespaces(n, m) {
     for (let i = 0; i < m.length; i++) {
@@ -346,6 +347,14 @@ function getPanoItemTypes(ext) {
 }
 const ICON_PACKS = ['default', 'legacy'];
 
+// compatibility functions to check if a specific gnome-shell is used
+PACKAGE_VERSION.split('.').reduce((acc, str) => {
+    const result = parseInt(str);
+    if (isNaN(result)) {
+        return acc;
+    }
+    return [...acc, result];
+}, []);
 // compatibility check functions for gnome-shell 45 / 46
 function hasGnome45LikeNotifications() {
     return Source.prototype.addNotification === undefined;
@@ -421,19 +430,18 @@ function metaSupportsUnredirectForDisplay() {
     return (Meta.enable_unredirect_for_display !==
         undefined);
 }
+const MetaCursorPointer = (() => {
+    const pointer = Meta.Cursor.POINTER;
+    if (pointer !== undefined && pointer !== null) {
+        return pointer;
+    }
+    return Meta.Cursor.POINTING_HAND;
+})();
 function orientationCompatibility(vertical) {
     if (stOrientationIsSupported()) {
         return { orientation: vertical ? Clutter.Orientation.VERTICAL : Clutter.Orientation.HORIZONTAL };
     }
     return { vertical: vertical };
-}
-function setOrientationCompatibility(container, vertical) {
-    if (stOrientationIsSupported()) {
-        container.vertical = vertical;
-    }
-    else {
-        container.orientation = vertical ? Clutter.Orientation.VERTICAL : Clutter.Orientation.HORIZONTAL;
-    }
 }
 const global$2 = Shell.Global.get();
 function setUnredirectForDisplay(enable) {
@@ -486,7 +494,6 @@ const notify = (ext, text, body, iconOrPixbuf, pixelFormat) => {
 };
 const wiggle = (actor, { offset, duration, wiggleCount }) => animationUtils.wiggle(actor, { offset, duration, wiggleCount });
 const wm = main.wm;
-const getPointer = () => global$1.get_pointer();
 const getMonitors = () => main.layoutManager.monitors;
 const getMonitorIndexForPointer = () => {
     const [x, y] = global$1.get_pointer();
@@ -530,7 +537,6 @@ const WINDOW_POSITIONS = {
     RIGHT: 1,
     BOTTOM: 2,
     LEFT: 3,
-    POINTER: 4,
 };
 const getAlignment = (position) => {
     switch (position) {
@@ -542,30 +548,12 @@ const getAlignment = (position) => {
             return [Clutter.ActorAlign.FILL, Clutter.ActorAlign.END];
         case WINDOW_POSITIONS.LEFT:
             return [Clutter.ActorAlign.START, Clutter.ActorAlign.FILL];
-        case WINDOW_POSITIONS.POINTER:
-            return [Clutter.ActorAlign.START, Clutter.ActorAlign.START];
     }
     return [Clutter.ActorAlign.FILL, Clutter.ActorAlign.END];
 };
 const isVertical = (position) => {
-    return (position === WINDOW_POSITIONS.LEFT || position === WINDOW_POSITIONS.RIGHT || position === WINDOW_POSITIONS.POINTER);
+    return position === WINDOW_POSITIONS.LEFT || position === WINDOW_POSITIONS.RIGHT;
 };
-const HEADER_STYLES = {
-    HIDDEN: 0,
-    VISIBLE: 1,
-    COMPACT: 2,
-};
-const getHeaderHeight = (style) => {
-    switch (style) {
-        case HEADER_STYLES.VISIBLE:
-            return 48;
-        case HEADER_STYLES.COMPACT:
-            return 32;
-        default:
-            return 0;
-    }
-};
-const isVisible = (style) => style !== HEADER_STYLES.HIDDEN;
 
 const debug$7 = logger('settings-menu');
 let SettingsMenu = class SettingsMenu extends Button {
@@ -1060,44 +1048,56 @@ const db = new Database();
 const langs = GLib.get_language_names_with_category('LC_MESSAGES').map((l) => l.replaceAll('_', '').replaceAll('-', '').split('.')[0]);
 const localeKey = Object.keys(dateLocale).find((key) => langs.includes(key));
 let PanoItemHeader = class PanoItemHeader extends St.BoxLayout {
+    static metaInfo = {
+        GTypeName: 'PanoItemHeader',
+        Signals: {
+            'on-remove': {},
+            'on-favorite': {},
+        },
+    };
     dateUpdateIntervalId;
+    favoriteButton;
     settings;
-    icon;
     titleLabel;
     dateLabel;
+    actionContainer;
     titleContainer;
-    hasCustomIcon = false;
+    iconContainer;
+    itemType;
     constructor(ext, itemType, date) {
         super({
-            styleClass: 'pano-item-header',
+            styleClass: `pano-item-header pano-item-header-${itemType.classSuffix}`,
             ...orientationCompatibility(false),
         });
-        this.settings = getCurrentExtensionSettings(ext);
-        this.icon = new St.Icon({
-            styleClass: 'pano-item-title-icon',
-            gicon: Gio.icon_new_for_string(`${ext.path}/icons/hicolor/scalable/actions/${ICON_PACKS[this.settings.get_uint('icon-pack')]}-${itemType.iconPath}`),
-        });
-        this.settings.connect('changed::icon-pack', () => {
-            if (this.hasCustomIcon)
-                return;
-            this.icon.set_gicon(Gio.icon_new_for_string(`${ext.path}/icons/hicolor/scalable/actions/${ICON_PACKS[this.settings.get_uint('icon-pack')]}-${itemType.iconPath}`));
-        });
+        this.itemType = itemType;
         this.titleContainer = new St.BoxLayout({
             styleClass: 'pano-item-title-container',
             ...orientationCompatibility(true),
             xExpand: true,
-            xAlign: Clutter.ActorAlign.FILL,
-            yAlign: Clutter.ActorAlign.CENTER,
+        });
+        this.iconContainer = new St.BoxLayout({
+            styleClass: 'pano-icon-container',
+        });
+        this.settings = getCurrentExtensionSettings(ext);
+        const themeContext = St.ThemeContext.get_for_stage(Shell.Global.get().get_stage());
+        this.set_height(56 * themeContext.scaleFactor);
+        themeContext.connect('notify::scale-factor', () => {
+            this.set_height(56 * themeContext.scaleFactor);
+        });
+        const icon = new St.Icon({
+            styleClass: 'pano-item-title-icon',
+            gicon: Gio.icon_new_for_string(`${ext.path}/icons/hicolor/scalable/actions/${ICON_PACKS[this.settings.get_uint('icon-pack')]}-${itemType.iconPath}`),
+        });
+        this.iconContainer.add_child(icon);
+        this.settings.connect('changed::icon-pack', () => {
+            icon.set_gicon(Gio.icon_new_for_string(`${ext.path}/icons/hicolor/scalable/actions/${ICON_PACKS[this.settings.get_uint('icon-pack')]}-${itemType.iconPath}`));
         });
         this.titleLabel = new St.Label({
             text: itemType.title,
             styleClass: 'pano-item-title',
-            visible: this.settings.get_uint('header-style') !== HEADER_STYLES.COMPACT,
             xExpand: true,
-            yExpand: false,
-            xAlign: Clutter.ActorAlign.FILL,
-            yAlign: Clutter.ActorAlign.CENTER,
         });
+        this.titleContainer.add_child(this.titleLabel);
         const options = {
             addSuffix: true,
         };
@@ -1111,33 +1111,51 @@ let PanoItemHeader = class PanoItemHeader extends St.BoxLayout {
             text: formatDistanceToNow(date, options),
             styleClass: 'pano-item-date',
             xExpand: true,
-            yExpand: false,
+            yExpand: true,
             xAlign: Clutter.ActorAlign.FILL,
-            yAlign: Clutter.ActorAlign.END,
+            yAlign: Clutter.ActorAlign.CENTER,
         });
         this.dateUpdateIntervalId = GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, 60, () => {
             this.dateLabel.set_text(formatDistanceToNow(date, options));
             return GLib.SOURCE_CONTINUE;
         });
-        this.titleContainer.add_child(this.titleLabel);
         this.titleContainer.add_child(this.dateLabel);
-        this.add_child(this.icon);
+        this.actionContainer = new St.BoxLayout({
+            styleClass: 'pano-item-actions',
+            xExpand: true,
+            yExpand: true,
+            xAlign: Clutter.ActorAlign.END,
+            yAlign: Clutter.ActorAlign.START,
+        });
+        const favoriteIcon = new St.Icon({
+            styleClass: 'pano-item-action-button-icon',
+            iconName: 'starred-symbolic',
+        });
+        this.favoriteButton = new St.Button({
+            styleClass: 'pano-item-action-button pano-item-favorite-button',
+            child: favoriteIcon,
+        });
+        this.favoriteButton.connect('clicked', () => {
+            this.emit('on-favorite');
+            return Clutter.EVENT_PROPAGATE;
+        });
+        const removeIcon = new St.Icon({
+            styleClass: 'pano-item-action-button-icon pano-item-action-button-remove-icon',
+            iconName: 'window-close-symbolic',
+        });
+        const removeButton = new St.Button({
+            styleClass: 'pano-item-action-button pano-item-remove-button',
+            child: removeIcon,
+        });
+        removeButton.connect('clicked', () => {
+            this.emit('on-remove');
+            return Clutter.EVENT_PROPAGATE;
+        });
+        this.actionContainer.add_child(this.favoriteButton);
+        this.actionContainer.add_child(removeButton);
+        this.add_child(this.iconContainer);
         this.add_child(this.titleContainer);
-        const themeContext = St.ThemeContext.get_for_stage(Shell.Global.get().get_stage());
-        const size = getHeaderHeight(this.settings.get_uint('header-style'));
-        this.set_height(size * themeContext.scaleFactor);
-        this.icon.set_width(size * themeContext.scaleFactor);
-        themeContext.connect('notify::scale-factor', () => {
-            const size = getHeaderHeight(this.settings.get_uint('header-style'));
-            this.set_height(size * themeContext.scaleFactor);
-            this.icon.set_width(size * themeContext.scaleFactor);
-        });
-        this.settings.connect('changed::header-style', () => {
-            const size = getHeaderHeight(this.settings.get_uint('header-style'));
-            this.set_height(size * themeContext.scaleFactor);
-            this.icon.set_width(size * themeContext.scaleFactor);
-            this.titleLabel.visible = this.settings.get_uint('header-style') !== HEADER_STYLES.COMPACT;
-        });
+        this.add_child(this.actionContainer);
         this.setStyle();
         this.settings.connect('changed::item-title-font-family', this.setStyle.bind(this));
         this.settings.connect('changed::item-title-font-size', this.setStyle.bind(this));
@@ -1152,9 +1170,13 @@ let PanoItemHeader = class PanoItemHeader extends St.BoxLayout {
         this.titleLabel.set_style(`font-family: ${itemTitleFontFamily}; font-size: ${itemTitleFontSize}px;`);
         this.dateLabel.set_style(`font-family: ${itemDateFontFamily}; font-size: ${itemDateFontSize}px;`);
     }
-    setIcon(icon) {
-        this.hasCustomIcon = true;
-        this.icon.set_gicon(icon);
+    setFavorite(isFavorite) {
+        if (isFavorite) {
+            this.favoriteButton.add_style_pseudo_class('active');
+        }
+        else {
+            this.favoriteButton.remove_style_pseudo_class('active');
+        }
     }
     destroy() {
         if (this.dateUpdateIntervalId) {
@@ -1168,131 +1190,7 @@ PanoItemHeader = __decorate([
     registerGObjectClass
 ], PanoItemHeader);
 
-// Calculate luminance and determine whether the color is dark or light
-function isDark(color) {
-    const [r, g, b, _] = colorString.get.rgb(color) ?? [0, 0, 0, 0];
-    function calculateChannel(c) {
-        c /= 255.0;
-        return c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
-    }
-    const L = 0.2126 * calculateChannel(r) + 0.7152 * calculateChannel(g) + 0.0722 * calculateChannel(b);
-    return L < 0.179;
-}
-function mixColor(color1, color2) {
-    const [r1, g1, b1, _] = colorString.get.rgb(color1);
-    const [r2, g2, b2, a] = colorString.get.rgb(color2);
-    const r = r1 * (1 - a) + r2 * a;
-    const g = g1 * (1 - a) + g2 * a;
-    const b = b1 * (1 - a) + b2 * a;
-    return colorString.to.rgb(r, g, b);
-}
-function getItemBackgroundColor(settings, headerColor, bodyColor) {
-    const windowColor = settings.get_boolean('is-in-incognito')
-        ? settings.get_string('incognito-window-background-color')
-        : settings.get_string('window-background-color');
-    // rgba(0, 0, 0, 0.1) is the box-shadow color
-    if (isVisible(settings.get_uint('header-style'))) {
-        return mixColor(mixColor(windowColor, 'rgba(0, 0, 0, 0.1)'), headerColor);
-    }
-    else if (bodyColor === null) {
-        return windowColor;
-    }
-    else {
-        return mixColor(mixColor(windowColor, 'rgba(0, 0, 0, 0.1)'), bodyColor);
-    }
-}
-
-let PanoItemOverlay = class PanoItemOverlay extends St.BoxLayout {
-    static metaInfo = {
-        GTypeName: 'PanoItemOverlay',
-        Signals: { 'on-remove': {}, 'on-favorite': {} },
-    };
-    isVisible = false;
-    isFavorite = false;
-    favoriteButton;
-    favoriteIcon;
-    actionContainer;
-    constructor() {
-        super({
-            styleClass: 'pano-item-overlay',
-            ...orientationCompatibility(false),
-            yAlign: Clutter.ActorAlign.FILL,
-            xAlign: Clutter.ActorAlign.FILL,
-            xExpand: true,
-            yExpand: true,
-        });
-        this.actionContainer = new St.BoxLayout({
-            styleClass: 'pano-item-actions',
-            xExpand: true,
-            yExpand: true,
-            xAlign: Clutter.ActorAlign.END,
-            yAlign: Clutter.ActorAlign.START,
-        });
-        const favoriteIcon = new St.Icon({ styleClass: 'pano-item-action-button-icon', iconName: 'view-pin-symbolic' });
-        this.favoriteButton = new St.Button({
-            styleClass: 'pano-item-action-button pano-item-favorite-button',
-            child: favoriteIcon,
-        });
-        this.favoriteButton.connect('clicked', () => {
-            this.emit('on-favorite');
-            return Clutter.EVENT_PROPAGATE;
-        });
-        const removeIcon = new St.Icon({
-            styleClass: 'pano-item-action-button-icon pano-item-action-button-remove-icon',
-            iconName: 'user-trash-symbolic',
-        });
-        const removeButton = new St.Button({
-            styleClass: 'pano-item-action-button pano-item-remove-button',
-            child: removeIcon,
-        });
-        removeButton.connect('clicked', () => {
-            this.emit('on-remove');
-            return Clutter.EVENT_PROPAGATE;
-        });
-        this.actionContainer.add_child(this.favoriteButton);
-        this.actionContainer.add_child(removeButton);
-        this.favoriteIcon = new St.Icon({
-            styleClass: 'pano-favorite-icon',
-            iconName: 'view-pin-symbolic',
-            xExpand: true,
-            yExpand: true,
-            xAlign: Clutter.ActorAlign.END,
-            yAlign: Clutter.ActorAlign.START,
-        });
-        this.add_child(this.actionContainer);
-        this.add_child(this.favoriteIcon);
-    }
-    setControlsBackground(color) {
-        this.actionContainer.set_style(`background-color: ${color}`);
-        this.favoriteIcon.set_style(`background-color: ${color};`);
-        const buttonColor = isDark(color) ? 'rgba(255, 255, 255, 0.15)' : 'rgba(0, 0, 0, 0.15)';
-        for (const child of this.actionContainer.get_children()) {
-            if (child instanceof St.Button) {
-                child.set_style(`background-color: ${buttonColor}`);
-            }
-        }
-    }
-    setVisibility(isVisible) {
-        this.isVisible = isVisible;
-        this.actionContainer.visible = isVisible;
-        this.favoriteIcon.visible = !isVisible && this.isFavorite;
-    }
-    setFavorite(isFavorite) {
-        this.isFavorite = isFavorite;
-        this.favoriteIcon.visible = !this.isVisible && isFavorite;
-        if (isFavorite) {
-            this.favoriteButton.add_style_pseudo_class('active');
-        }
-        else {
-            this.favoriteButton.remove_style_pseudo_class('active');
-        }
-    }
-};
-PanoItemOverlay = __decorate([
-    registerGObjectClass
-], PanoItemOverlay);
-
-let PanoItem = class PanoItem extends St.Widget {
+let PanoItem = class PanoItem extends St.BoxLayout {
     static metaInfo = {
         GTypeName: 'PanoItem',
         Signals: {
@@ -1307,38 +1205,45 @@ let PanoItem = class PanoItem extends St.Widget {
             },
         },
     };
-    timeoutId;
-    container;
     header;
+    timeoutId;
     body;
-    overlay;
     clipboardManager;
     dbItem;
     settings;
-    hovered = false;
-    selected = false;
-    showControlsOnHover;
+    selected = null;
     constructor(ext, clipboardManager, dbItem) {
         super({
             name: 'pano-item',
-            styleClass: 'pano-item',
-            layoutManager: new Clutter.BinLayout(),
             visible: true,
             pivotPoint: Graphene.Point.alloc().init(0.5, 0.5),
             reactive: true,
+            styleClass: 'pano-item',
+            ...orientationCompatibility(true),
             trackHover: true,
-            xExpand: false,
-            yExpand: false,
         });
         this.clipboardManager = clipboardManager;
         this.dbItem = dbItem;
         this.settings = getCurrentExtensionSettings(ext);
         this.connect('key-focus-in', () => this.setSelected(true));
         this.connect('key-focus-out', () => this.setSelected(false));
-        this.connect('enter-event', () => this.setHovered(true));
-        this.connect('leave-event', () => this.setHovered(false));
+        this.connect('enter-event', () => {
+            Shell.Global.get().display.set_cursor(MetaCursorPointer);
+            if (!this.selected) {
+                this.set_style(`border: 4px solid ${this.settings.get_string('hovered-item-border-color')}`);
+            }
+        });
+        this.connect('leave-event', () => {
+            Shell.Global.get().display.set_cursor(Meta.Cursor.DEFAULT);
+            if (!this.selected) {
+                this.set_style('');
+            }
+        });
         this.connect('activated', () => {
             this.get_parent()?.get_parent()?.get_parent()?.hide();
+            if (this.dbItem.itemType === 'LINK' && this.settings.get_boolean('open-links-in-browser')) {
+                return;
+            }
             if (this.settings.get_boolean('paste-on-select') && this.clipboardManager.isTracking) {
                 // See https://github.com/SUPERCILEX/gnome-clipboard-history/blob/master/extension.js#L606
                 this.timeoutId = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 250, () => {
@@ -1355,18 +1260,21 @@ let PanoItem = class PanoItem extends St.Widget {
                 });
             }
         });
-        const itemType = getPanoItemTypes(ext)[this.dbItem.itemType];
-        this.add_style_class_name(`pano-item-${itemType.classSuffix}`);
-        this.container = new St.BoxLayout({
-            styleClass: 'pano-item-container',
-            clipToAllocation: true,
-            ...orientationCompatibility(true),
-            xAlign: Clutter.ActorAlign.FILL,
-            yAlign: Clutter.ActorAlign.FILL,
-            xExpand: true,
-            yExpand: true,
+        this.header = new PanoItemHeader(ext, getPanoItemTypes(ext)[dbItem.itemType], dbItem.copyDate);
+        this.header.setFavorite(this.dbItem.isFavorite);
+        this.header.connect('on-remove', () => {
+            this.emit('on-remove', JSON.stringify(this.dbItem));
+            return Clutter.EVENT_PROPAGATE;
         });
-        this.header = new PanoItemHeader(ext, itemType, this.dbItem.copyDate);
+        this.header.connect('on-favorite', () => {
+            this.dbItem = { ...this.dbItem, isFavorite: !this.dbItem.isFavorite };
+            this.emit('on-favorite', JSON.stringify(this.dbItem));
+            return Clutter.EVENT_PROPAGATE;
+        });
+        this.connect('on-favorite', () => {
+            this.header.setFavorite(this.dbItem.isFavorite);
+            return Clutter.EVENT_PROPAGATE;
+        });
         this.body = new St.BoxLayout({
             styleClass: 'pano-item-body',
             clipToAllocation: true,
@@ -1376,50 +1284,19 @@ let PanoItem = class PanoItem extends St.Widget {
             xExpand: true,
             yExpand: true,
         });
-        this.container.add_child(this.header);
-        this.container.add_child(this.body);
-        this.overlay = new PanoItemOverlay();
-        this.overlay.setFavorite(this.dbItem.isFavorite);
-        this.overlay.connect('on-remove', () => {
-            this.emit('on-remove', JSON.stringify(this.dbItem));
-            return Clutter.EVENT_PROPAGATE;
-        });
-        this.overlay.connect('on-favorite', () => {
-            this.dbItem = { ...this.dbItem, isFavorite: !this.dbItem.isFavorite };
-            this.emit('on-favorite', JSON.stringify(this.dbItem));
-            return Clutter.EVENT_PROPAGATE;
-        });
-        this.connect('on-favorite', () => {
-            this.overlay.setFavorite(this.dbItem.isFavorite);
-            return Clutter.EVENT_PROPAGATE;
-        });
-        this.add_child(this.container);
-        this.add_child(this.overlay);
+        this.add_child(this.header);
+        this.add_child(this.body);
         const themeContext = St.ThemeContext.get_for_stage(Shell.Global.get().get_stage());
-        if (this.settings.get_boolean('compact-mode')) {
-            this.add_style_class_name('compact');
-        }
-        themeContext.connect('notify::scale-factor', this.setBodyDimensions.bind(this));
-        this.settings.connect('changed::item-width', this.setBodyDimensions.bind(this));
-        this.settings.connect('changed::item-height', this.setBodyDimensions.bind(this));
-        this.settings.connect('changed::header-style', this.setBodyDimensions.bind(this));
-        this.settings.connect('changed::compact-mode', () => {
-            if (this.settings.get_boolean('compact-mode')) {
-                this.add_style_class_name('compact');
-            }
-            else {
-                this.remove_style_class_name('compact');
-            }
+        themeContext.connect('notify::scale-factor', () => {
             this.setBodyDimensions();
         });
-        this.settings.connect('changed::window-position', this.setBodyDimensions.bind(this));
-        this.setBodyDimensions();
-        this.showControlsOnHover = this.settings.get_boolean('show-controls-on-hover');
-        this.overlay.setVisibility(!this.showControlsOnHover);
-        this.settings.connect('changed::show-controls-on-hover', () => {
-            this.showControlsOnHover = this.settings.get_boolean('show-controls-on-hover');
-            this.overlay.setVisibility(!this.showControlsOnHover);
+        this.settings.connect('changed::item-size', () => {
+            this.setBodyDimensions();
         });
+        this.settings.connect('changed::window-position', () => {
+            this.setBodyDimensions();
+        });
+        this.setBodyDimensions();
     }
     setBodyDimensions() {
         const pos = this.settings.get_uint('window-position');
@@ -1432,79 +1309,43 @@ let PanoItem = class PanoItem extends St.Widget {
             this.set_y_align(Clutter.ActorAlign.FILL);
         }
         const { scaleFactor } = St.ThemeContext.get_for_stage(Shell.Global.get().get_stage());
-        const mult = this.settings.get_boolean('compact-mode') ? 0.5 : 1;
-        const header = getHeaderHeight(this.settings.get_uint('header-style'));
-        const height = Math.floor(this.settings.get_int('item-height') * mult) + header;
-        this.set_height(height * scaleFactor);
-        this.container.set_width((this.settings.get_int('item-width') - 2) * scaleFactor);
-        // -2*4 for the border
-        this.container.set_height((height - 8) * scaleFactor);
-        this.body.set_height((height - 10 - header) * scaleFactor);
-        this.overlay.set_height((height - 8) * scaleFactor);
-        this.header.visible = isVisible(this.settings.get_uint('header-style'));
+        this.body.set_height(this.settings.get_int('item-size') * scaleFactor - this.header.get_height());
+        this.body.set_width(this.settings.get_int('item-size') * scaleFactor);
     }
     setSelected(selected) {
         if (selected) {
+            const activeItemBorderColor = this.settings.get_string('active-item-border-color');
+            this.set_style(`border: 4px solid ${activeItemBorderColor} !important;`);
             this.grab_key_focus();
         }
-        this.selected = selected;
-        this.updateActive();
-    }
-    setHovered(hovered) {
-        Shell.Global.get().display.set_cursor(hovered ? Meta.Cursor.POINTING_HAND : Meta.Cursor.DEFAULT);
-        this.hovered = hovered;
-        this.updateActive();
-    }
-    updateActive() {
-        if (this.hovered || this.selected) {
-            this.add_style_class_name('active');
-            this.set_style(`border: 4px solid ${this.settings.get_string('active-item-border-color')};`);
-        }
         else {
-            this.remove_style_class_name('active');
             this.set_style('');
         }
-    }
-    // The style-changed event is used here instead of the enter and leave events because those events
-    // retrigger when the pointer hovers over the buttons in the controls.
-    vfunc_style_changed() {
-        if (this.showControlsOnHover) {
-            this.overlay.setVisibility(this.hover || this.selected);
-        }
+        this.selected = selected;
     }
     vfunc_key_press_event(event) {
-        switch (event.get_key_symbol()) {
-            case Clutter.KEY_Return:
-            case Clutter.KEY_ISO_Enter:
-            case Clutter.KEY_KP_Enter:
-                this.emit('activated');
-                return Clutter.EVENT_STOP;
-            case Clutter.KEY_Delete:
-            case Clutter.KEY_KP_Delete:
-                this.emit('on-remove', JSON.stringify(this.dbItem));
-                return Clutter.EVENT_STOP;
-            case Clutter.KEY_S:
-            case Clutter.KEY_s:
-                if (event.has_control_modifier()) {
-                    this.dbItem = { ...this.dbItem, isFavorite: !this.dbItem.isFavorite };
-                    this.emit('on-favorite', JSON.stringify(this.dbItem));
-                    return Clutter.EVENT_STOP;
-                }
-                break;
+        if (event.get_key_symbol() === Clutter.KEY_Return ||
+            event.get_key_symbol() === Clutter.KEY_ISO_Enter ||
+            event.get_key_symbol() === Clutter.KEY_KP_Enter) {
+            this.emit('activated');
+            return Clutter.EVENT_STOP;
+        }
+        if (event.get_key_symbol() === Clutter.KEY_Delete || event.get_key_symbol() === Clutter.KEY_KP_Delete) {
+            this.emit('on-remove', JSON.stringify(this.dbItem));
+            return Clutter.EVENT_STOP;
+        }
+        if ((event.get_key_symbol() === Clutter.KEY_S || event.get_key_symbol() === Clutter.KEY_s) &&
+            event.get_state() === Clutter.ModifierType.CONTROL_MASK) {
+            this.dbItem = { ...this.dbItem, isFavorite: !this.dbItem.isFavorite };
+            this.emit('on-favorite', JSON.stringify(this.dbItem));
+            return Clutter.EVENT_STOP;
         }
         return Clutter.EVENT_PROPAGATE;
     }
     vfunc_button_release_event(event) {
-        switch (event.get_button()) {
-            case Clutter.BUTTON_PRIMARY:
-                this.emit('activated');
-                return Clutter.EVENT_STOP;
-            // Delete item on middle click
-            case Clutter.BUTTON_MIDDLE:
-                if (this.settings.get_boolean('remove-on-middle-click')) {
-                    this.emit('on-remove', JSON.stringify(this.dbItem));
-                    return Clutter.EVENT_STOP;
-                }
+        if (event.get_button() === 1) {
+            this.emit('activated');
+            return Clutter.EVENT_STOP;
         }
         return Clutter.EVENT_PROPAGATE;
     }
@@ -1682,11 +1523,7 @@ let ClipboardManager = class ClipboardManager extends GObject.Object {
         this.isTracking = false;
         this.lastCopiedContent = null;
     }
-    setContent(clipboardContent, update = true) {
-        if (!update) {
-            this.lastCopiedContent = clipboardContent;
-        }
-        const content = clipboardContent.content;
+    setContent({ content }) {
         const syncPrimary = this.settings.get_boolean('sync-primary');
         if (content.type === ContentType.TEXT) {
             if (syncPrimary) {
@@ -1881,11 +1718,6 @@ let CodePanoItem = class CodePanoItem extends PanoItem {
         this.connect('activated', this.setClipboardContent.bind(this));
         this.setStyle();
         this.codeItemSettings.connect('changed', this.setStyle.bind(this));
-        // Settings for controls
-        this.settings.connect('changed::is-in-incognito', this.setStyle.bind(this));
-        this.settings.connect('changed::incognito-window-background-color', this.setStyle.bind(this));
-        this.settings.connect('changed::window-background-color', this.setStyle.bind(this));
-        this.settings.connect('changed::header-style', this.setStyle.bind(this));
     }
     setStyle() {
         const headerBgColor = this.codeItemSettings.get_string('header-bg-color');
@@ -1894,7 +1726,6 @@ let CodePanoItem = class CodePanoItem extends PanoItem {
         const bodyFontFamily = this.codeItemSettings.get_string('body-font-family');
         const bodyFontSize = this.codeItemSettings.get_int('body-font-size');
         const characterLength = this.codeItemSettings.get_int('char-length');
-        this.overlay.setControlsBackground(getItemBackgroundColor(this.settings, headerBgColor, bodyBgColor));
         this.header.set_style(`background-color: ${headerBgColor}; color: ${headerColor};`);
         this.body.set_style(`background-color: ${bodyBgColor}`);
         this.label.set_style(`font-size: ${bodyFontSize}px; font-family: ${bodyFontFamily};`);
@@ -1913,67 +1744,54 @@ CodePanoItem = __decorate([
 
 let ColorPanoItem = class ColorPanoItem extends PanoItem {
     colorItemSettings;
-    colorContainer;
-    icon;
     label;
     constructor(ext, clipboardManager, dbItem) {
         super(ext, clipboardManager, dbItem);
+        this.body.add_style_class_name('pano-item-body-color');
         this.colorItemSettings = this.settings.get_child('color-item');
-        const color = colorString.to.rgb(colorString.get.rgb(this.dbItem.content) || [0, 0, 0]);
-        this.body.set_style(`background-color: ${color};`);
-        this.colorContainer = new St.BoxLayout({
-            ...orientationCompatibility(true),
+        const colorContainer = new St.BoxLayout({
+            ...orientationCompatibility(false),
             xExpand: true,
             yExpand: true,
-            yAlign: Clutter.ActorAlign.CENTER,
+            yAlign: Clutter.ActorAlign.FILL,
             xAlign: Clutter.ActorAlign.FILL,
             styleClass: 'color-container',
-        });
-        this.icon = new St.Icon({
-            xAlign: Clutter.ActorAlign.CENTER,
-            yAlign: Clutter.ActorAlign.CENTER,
-            styleClass: 'color-icon',
-            gicon: Gio.icon_new_for_string(`${ext.path}/icons/hicolor/scalable/actions/blend-tool-symbolic.svg`),
+            style: `background-color: ${this.dbItem.content};`,
         });
         this.label = new St.Label({
             xAlign: Clutter.ActorAlign.CENTER,
             yAlign: Clutter.ActorAlign.CENTER,
+            xExpand: true,
+            yExpand: true,
             text: this.dbItem.content,
             styleClass: 'color-label',
         });
-        this.colorContainer.add_child(this.icon);
-        this.colorContainer.add_child(this.label);
-        this.colorContainer.add_constraint(new Clutter.AlignConstraint({ source: this, alignAxis: Clutter.AlignAxis.Y_AXIS, factor: 0.005 }));
-        this.body.add_child(this.colorContainer);
+        colorContainer.add_child(this.label);
+        colorContainer.add_constraint(new Clutter.AlignConstraint({
+            source: this,
+            alignAxis: Clutter.AlignAxis.Y_AXIS,
+            factor: 0.005,
+        }));
+        this.body.add_child(colorContainer);
         this.connect('activated', this.setClipboardContent.bind(this));
-        this.setCompactMode();
-        this.settings.connect('changed::compact-mode', this.setCompactMode.bind(this));
         this.setStyle();
         this.colorItemSettings.connect('changed', this.setStyle.bind(this));
-        // Settings for controls
-        this.settings.connect('changed::is-in-incognito', this.setStyle.bind(this));
-        this.settings.connect('changed::incognito-window-background-color', this.setStyle.bind(this));
-        this.settings.connect('changed::window-background-color', this.setStyle.bind(this));
-        this.settings.connect('changed::header-style', this.setStyle.bind(this));
-    }
-    setCompactMode() {
-        setOrientationCompatibility(this.colorContainer, !this.settings.get_boolean('compact-mode'));
     }
     setStyle() {
         const headerBgColor = this.colorItemSettings.get_string('header-bg-color');
         const headerColor = this.colorItemSettings.get_string('header-color');
+        const metadataBgColor = this.colorItemSettings.get_string('metadata-bg-color');
+        const metadataColor = this.colorItemSettings.get_string('metadata-color');
         const metadataFontFamily = this.colorItemSettings.get_string('metadata-font-family');
         const metadataFontSize = this.colorItemSettings.get_int('metadata-font-size');
-        const dark = isDark(this.dbItem.content);
-        const iconColor = dark ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0, 0, 0, 0.3)';
-        const textColor = dark ? '#ffffff' : '#000000';
-        this.overlay.setControlsBackground(getItemBackgroundColor(this.settings, headerBgColor, null));
         this.header.set_style(`background-color: ${headerBgColor}; color: ${headerColor};`);
-        this.icon.set_style(`color: ${iconColor};`);
-        this.label.set_style(`color: ${textColor}; font-family: ${metadataFontFamily}; font-size: ${metadataFontSize}px;`);
+        this.label.set_style(`background-color: ${metadataBgColor}; color: ${metadataColor}; font-family: ${metadataFontFamily}; font-size: ${metadataFontSize}px;`);
     }
     setClipboardContent() {
-        this.clipboardManager.setContent(new ClipboardContent({ type: ContentType.TEXT, value: this.dbItem.content }));
+        this.clipboardManager.setContent(new ClipboardContent({
+            type: ContentType.TEXT,
+            value: this.dbItem.content,
+        }));
     }
 };
 ColorPanoItem = __decorate([
@@ -1985,7 +1803,16 @@ let EmojiPanoItem = class EmojiPanoItem extends PanoItem {
     label;
     constructor(ext, clipboardManager, dbItem) {
         super(ext, clipboardManager, dbItem);
+        this.body.add_style_class_name('pano-item-body-emoji');
         this.emojiItemSettings = this.settings.get_child('emoji-item');
+        const emojiContainer = new St.BoxLayout({
+            ...orientationCompatibility(false),
+            xExpand: true,
+            yExpand: true,
+            yAlign: Clutter.ActorAlign.FILL,
+            xAlign: Clutter.ActorAlign.FILL,
+            styleClass: 'emoji-container',
+        });
         this.label = new St.Label({
             xAlign: Clutter.ActorAlign.CENTER,
             yAlign: Clutter.ActorAlign.CENTER,
@@ -1994,426 +1821,207 @@ let EmojiPanoItem = class EmojiPanoItem extends PanoItem {
             text: this.dbItem.content,
             styleClass: 'pano-item-body-emoji-content',
         });
-        this.label.clutterText.lineAlignment = Pango.Alignment.CENTER;
-        this.label.clutterText.ellipsize = Pango.EllipsizeMode.NONE;
-        this.body.add_child(this.label);
+        this.label.clutterText.lineWrap = true;
+        this.label.clutterText.lineWrapMode = Pango.WrapMode.WORD_CHAR;
+        this.label.clutterText.ellipsize = Pango.EllipsizeMode.END;
+        emojiContainer.add_child(this.label);
+        this.body.add_child(emojiContainer);
         this.connect('activated', this.setClipboardContent.bind(this));
         this.setStyle();
         this.emojiItemSettings.connect('changed', this.setStyle.bind(this));
-        this.settings.connect('changed::compact-mode', this.setStyle.bind(this));
-        this.settings.connect('changed::item-height', this.setStyle.bind(this));
-        // Settings for controls
-        this.settings.connect('changed::is-in-incognito', this.setStyle.bind(this));
-        this.settings.connect('changed::incognito-window-background-color', this.setStyle.bind(this));
-        this.settings.connect('changed::window-background-color', this.setStyle.bind(this));
-        this.settings.connect('changed::header-style', this.setStyle.bind(this));
     }
     setStyle() {
         const headerBgColor = this.emojiItemSettings.get_string('header-bg-color');
         const headerColor = this.emojiItemSettings.get_string('header-color');
         const bodyBgColor = this.emojiItemSettings.get_string('body-bg-color');
         const emojiSize = this.emojiItemSettings.get_int('emoji-size');
-        this.overlay.setControlsBackground(getItemBackgroundColor(this.settings, headerBgColor, bodyBgColor));
         this.header.set_style(`background-color: ${headerBgColor}; color: ${headerColor};`);
         this.body.set_style(`background-color: ${bodyBgColor};`);
-        this.label.set_style(`font-size: ${Math.min(emojiSize, this.body.height - 24)}px;`);
+        this.label.set_style(`font-size: ${emojiSize}px;`);
     }
     setClipboardContent() {
-        this.clipboardManager.setContent(new ClipboardContent({ type: ContentType.TEXT, value: this.dbItem.content }));
+        this.clipboardManager.setContent(new ClipboardContent({
+            type: ContentType.TEXT,
+            value: this.dbItem.content,
+        }));
     }
 };
 EmojiPanoItem = __decorate([
     registerGObjectClass
 ], EmojiPanoItem);
 
-let FilePanoItem_1;
-let PreviewType;
-(function (PreviewType) {
-    PreviewType["NONE"] = "none";
-    PreviewType["FILES"] = "files";
-    PreviewType["IMAGE"] = "image";
-    PreviewType["TEXT"] = "text";
-})(PreviewType || (PreviewType = {}));
-let FilePanoItem = FilePanoItem_1 = class FilePanoItem extends PanoItem {
+let FilePanoItem = class FilePanoItem extends PanoItem {
     fileList;
     operation;
     fileItemSettings;
-    titleContainer;
-    icon;
-    preview = null;
-    previewType = PreviewType.NONE;
-    pasteContent = false;
     constructor(ext, clipboardManager, dbItem) {
         super(ext, clipboardManager, dbItem);
-        const _ = gettext(ext);
         this.fileList = JSON.parse(this.dbItem.content);
         this.operation = this.dbItem.metaData || 'copy';
+        this.body.add_style_class_name('pano-item-body-file');
         this.fileItemSettings = this.settings.get_child('file-item');
-        this.titleContainer = new St.BoxLayout({
-            styleClass: 'title-container',
-            ...orientationCompatibility(false),
+        const container = new St.BoxLayout({
+            styleClass: 'copied-files-container',
+            ...orientationCompatibility(true),
             xExpand: true,
             yExpand: false,
             yAlign: Clutter.ActorAlign.FILL,
         });
-        this.icon = new St.Icon({
-            gicon: Gio.icon_new_for_string(this.operation === FileOperation.CUT
-                ? 'edit-cut-symbolic'
-                : `${ext.path}/icons/hicolor/scalable/actions/paper-filled-symbolic.svg`),
-            xAlign: Clutter.ActorAlign.START,
-            yAlign: Clutter.ActorAlign.START,
-            styleClass: 'title-icon',
-        });
-        this.header.setIcon(this.icon.gicon);
-        const label = new St.Label({
-            styleClass: 'title-label',
-            xAlign: Clutter.ActorAlign.FILL,
-            yAlign: Clutter.ActorAlign.CENTER,
-            xExpand: true,
-        });
-        label.clutterText.lineWrap = true;
-        label.clutterText.ellipsize = Pango.EllipsizeMode.MIDDLE;
-        this.titleContainer.add_child(this.icon);
-        const homeDir = GLib.get_home_dir();
-        if (this.fileList.length === 1) {
-            const items = this.fileList[0].split('://').filter((c) => !!c);
-            label.text = decodeURIComponent(items[items.length - 1]).replace(homeDir, '~');
-            this.titleContainer.add_child(label);
-            this.body.add_child(this.titleContainer);
-            // Try to create file preview
-            const file = Gio.File.new_for_uri(this.fileList[0]);
-            if (file.query_exists(null)) {
-                // Read first 64 bytes of the file to guess the content type for files without an extension
-                let data = null;
-                let fileStream = null;
-                try {
-                    if (file.query_file_type(Gio.FileQueryInfoFlags.NONE, null) === Gio.FileType.REGULAR) {
-                        fileStream = file.read(null);
-                        data = fileStream.read_bytes(64, null).toArray();
-                    }
-                }
-                finally {
-                    fileStream?.close(null);
-                }
-                const contentType = Gio.content_type_guess(this.fileList[0], data)[0];
-                if (Gio.content_type_is_a(contentType, 'text/plain')) {
-                    // Text
-                    const text = FilePanoItem_1.getFileContents(file, 32);
-                    if (text !== null) {
-                        this.preview = new St.Label({
-                            text: text,
-                            styleClass: 'copied-file-preview copied-file-preview-text',
-                            xExpand: true,
-                            yExpand: true,
-                            xAlign: Clutter.ActorAlign.FILL,
-                            yAlign: Clutter.ActorAlign.FILL,
-                            minHeight: 0,
-                        });
-                        this.preview.clutterText.lineWrap = false;
-                        this.preview.clutterText.ellipsize = Pango.EllipsizeMode.END;
-                        this.previewType = PreviewType.TEXT;
-                        const pasteFileContentIcon = new St.Icon({
-                            iconName: 'preferences-desktop-font-symbolic',
-                            styleClass: 'pano-item-action-button-icon',
-                        });
-                        const pasteFileContentButton = new St.Button({
-                            styleClass: 'pano-item-action-button pano-item-paste-content-button',
-                            child: pasteFileContentIcon,
-                        });
-                        pasteFileContentButton.connect('clicked', () => {
-                            this.pasteContent = true;
-                            this.emit('activated');
-                            return Clutter.EVENT_STOP;
-                        });
-                        this.overlay.actionContainer.insert_child_at_index(pasteFileContentButton, 0);
-                    }
-                }
-                else if (Gio.content_type_is_a(contentType, 'image/*')) {
-                    // Images
-                    this.preview = new St.BoxLayout({
-                        styleClass: 'copied-file-preview copied-file-preview-image',
-                        xExpand: true,
-                        yExpand: true,
-                        xAlign: Clutter.ActorAlign.FILL,
-                        yAlign: Clutter.ActorAlign.FILL,
-                        style: `background-image: url(${this.fileList[0]}); background-size: cover;`,
-                    });
-                    this.previewType = PreviewType.IMAGE;
-                }
-                else {
-                    // Other files that might have a thumbnail available i.e. videos or pdf files
-                    const thumbnail = FilePanoItem_1.getThumbnail(homeDir, this.fileList[0]);
-                    if (thumbnail !== null) {
-                        this.preview = new St.BoxLayout({
-                            styleClass: 'copied-file-preview copied-file-preview-image',
-                            xExpand: true,
-                            yExpand: true,
-                            xAlign: Clutter.ActorAlign.FILL,
-                            yAlign: Clutter.ActorAlign.FILL,
-                            style: `background-image: url(${thumbnail.get_uri()}); background-size: cover;`,
-                        });
-                        this.previewType = PreviewType.IMAGE;
-                    }
-                }
-                if (this.preview) {
-                    this.preview.visible = this.settings.get_boolean('compact-mode');
-                    this.body.add_child(this.preview);
-                }
-                else {
-                    this.add_style_class_name('no-preview');
-                }
-            }
-            else {
-                this.add_style_class_name('no-preview');
-            }
-        }
-        else {
-            // Check for the common parent directory for all files
-            const commonDirectory = this.fileList
-                .map((f) => {
-                const items = f.split('://').filter((c) => !!c);
-                return decodeURIComponent(items[items.length - 1]).split('/');
-            })
-                .reduce((prev, cur) => {
-                for (let i = 0; i < Math.min(prev.length, cur.length); i++) {
-                    if (prev[i] !== cur[i]) {
-                        return prev.slice(0, i);
-                    }
-                }
-                // Two files are the same
-                if (prev.length === cur.length) {
-                    return prev.slice(0, prev.length - 1);
-                }
-                // One file/directory is inside of the other directory
-                return prev.length < cur.length ? prev : cur;
-            })
-                .join('/');
-            label.text = `${commonDirectory.replace(homeDir, '~')}`;
-            const labelContainer = new St.BoxLayout({
-                ...orientationCompatibility(true),
+        this.fileList
+            .map((f) => {
+            const items = f.split('://').filter((c) => !!c);
+            return decodeURIComponent(items[items.length - 1]);
+        })
+            .forEach((uri) => {
+            const bl = new St.BoxLayout({
+                ...orientationCompatibility(false),
+                styleClass: 'copied-file-name',
                 xExpand: true,
-                yExpand: false,
                 xAlign: Clutter.ActorAlign.FILL,
-                yAlign: Clutter.ActorAlign.FILL,
-            });
-            labelContainer.add_child(label);
-            labelContainer.add_child(new St.Label({
-                text: `${this.fileList.length} ${_('items')}`,
-                styleClass: 'copied-files-count',
-                yAlign: Clutter.ActorAlign.FILL,
-            }));
-            this.titleContainer.add_child(labelContainer);
-            this.body.add_child(this.titleContainer);
-            this.preview = new St.BoxLayout({
-                styleClass: 'copied-file-preview copied-file-preview-files',
                 clipToAllocation: true,
-                ...orientationCompatibility(true),
-                xExpand: true,
-                yExpand: false,
                 yAlign: Clutter.ActorAlign.FILL,
-                minHeight: 0,
             });
-            this.previewType = PreviewType.FILES;
-            this.fileList
-                .map((f) => {
-                const items = f.split('://').filter((c) => !!c);
-                return decodeURIComponent(items[items.length - 1]);
-            })
-                .forEach((uri) => {
-                const uriLabel = new St.Label({
-                    text: uri.substring(commonDirectory.length + 1).replace(homeDir, '~'),
-                    styleClass: 'copied-file-name',
-                    xAlign: Clutter.ActorAlign.FILL,
-                    xExpand: true,
-                });
-                uriLabel.clutterText.ellipsize = Pango.EllipsizeMode.MIDDLE;
-                this.preview.add_child(uriLabel);
+            bl.add_child(new St.Icon({
+                iconName: this.operation === FileOperation.CUT ? 'edit-cut-symbolic' : 'edit-copy-symbolic',
+                xAlign: Clutter.ActorAlign.START,
+                iconSize: 14,
+                styleClass: 'file-icon',
+            }));
+            const uriLabel = new St.Label({
+                text: uri,
+                styleClass: 'pano-item-body-file-name-label',
+                xAlign: Clutter.ActorAlign.FILL,
+                xExpand: true,
             });
-            this.body.add_child(this.preview);
-        }
+            uriLabel.clutterText.ellipsize = Pango.EllipsizeMode.MIDDLE;
+            bl.add_child(uriLabel);
+            container.add_child(bl);
+        });
+        this.body.add_child(container);
         this.connect('activated', this.setClipboardContent.bind(this));
         this.setStyle();
-        this.settings.connect('changed::compact-mode', this.setStyle.bind(this));
-        this.settings.connect('changed::header-style', this.setStyle.bind(this));
         this.fileItemSettings.connect('changed', this.setStyle.bind(this));
-        // Settings for controls
-        this.settings.connect('changed::is-in-incognito', this.setStyle.bind(this));
-        this.settings.connect('changed::incognito-window-background-color', this.setStyle.bind(this));
-        this.settings.connect('changed::window-background-color', this.setStyle.bind(this));
     }
     setStyle() {
-        const compactMode = this.settings.get_boolean('compact-mode');
-        const headerStyle = this.settings.get_uint('header-style');
         const headerBgColor = this.fileItemSettings.get_string('header-bg-color');
         const headerColor = this.fileItemSettings.get_string('header-color');
         const bodyBgColor = this.fileItemSettings.get_string('body-bg-color');
-        const titleColor = this.fileItemSettings.get_string('title-color');
-        const titleFontFamily = this.fileItemSettings.get_string('title-font-family');
-        const titleFontSize = this.fileItemSettings.get_int('title-font-size');
-        const filesPreviewBgColor = this.fileItemSettings.get_string('files-preview-bg-color');
-        const filesPreviewColor = this.fileItemSettings.get_string('files-preview-color');
-        const filesPreviewFontFamily = this.fileItemSettings.get_string('files-preview-font-family');
-        const filesPreviewFontSize = this.fileItemSettings.get_int('files-preview-font-size');
-        const textPreviewBgColor = this.fileItemSettings.get_string('text-preview-bg-color');
-        const textPreviewColor = this.fileItemSettings.get_string('text-preview-color');
-        const textPreviewFontFamily = this.fileItemSettings.get_string('text-preview-font-family');
-        const textPreviewFontSize = this.fileItemSettings.get_int('text-preview-font-size');
-        this.overlay.setControlsBackground(getItemBackgroundColor(this.settings, headerBgColor, bodyBgColor));
+        const bodyColor = this.fileItemSettings.get_string('body-color');
+        const bodyFontFamily = this.fileItemSettings.get_string('body-font-family');
+        const bodyFontSize = this.fileItemSettings.get_int('body-font-size');
         this.header.set_style(`background-color: ${headerBgColor}; color: ${headerColor};`);
-        this.body.set_style(`background-color: ${bodyBgColor};`);
-        this.titleContainer.set_style(`color: ${titleColor}; font-family: ${titleFontFamily}; font-size: ${titleFontSize}px;`);
-        setOrientationCompatibility(this.titleContainer, this.preview === null && !compactMode);
-        // Switch title and icon
-        if (compactMode !== (this.titleContainer.firstChild !== this.icon)) {
-            const children = this.titleContainer.get_children();
-            this.titleContainer.remove_all_children();
-            this.titleContainer.add_child(children[1]);
-            this.titleContainer.add_child(children[0]);
-        }
-        this.icon.visible = !isVisible(headerStyle);
-        if (this.preview) {
-            this.preview.visible = !compactMode;
-            if (this.previewType === PreviewType.FILES) {
-                this.preview.set_style(`background-color: ${filesPreviewBgColor}; color: ${filesPreviewColor}; font-family: ${filesPreviewFontFamily}; font-size: ${filesPreviewFontSize}px;`);
-            }
-            else if (this.previewType === PreviewType.TEXT) {
-                this.preview.set_style(`background-color: ${textPreviewBgColor}; color: ${textPreviewColor}; font-family: ${textPreviewFontFamily}; font-size: ${textPreviewFontSize}px;`);
-            }
-        }
+        this.body.set_style(`background-color: ${bodyBgColor}; color: ${bodyColor}; font-family: ${bodyFontFamily}; font-size: ${bodyFontSize}px;`);
     }
     setClipboardContent() {
-        if (this.pasteContent) {
-            const file = Gio.File.new_for_uri(this.fileList[0]);
-            const text = FilePanoItem_1.getFileContents(file);
-            if (text !== null) {
-                this.clipboardManager.setContent(new ClipboardContent({ type: ContentType.TEXT, value: text }), false);
-                return;
-            }
-            this.pasteContent = false;
-        }
-        this.clipboardManager.setContent(new ClipboardContent({ type: ContentType.FILE, value: { fileList: this.fileList, operation: this.operation } }));
-    }
-    vfunc_key_press_event(event) {
-        if (this.previewType === PreviewType.TEXT &&
-            (event.get_key_symbol() === Clutter.KEY_Return ||
-                event.get_key_symbol() === Clutter.KEY_ISO_Enter ||
-                event.get_key_symbol() === Clutter.KEY_KP_Enter) &&
-            event.has_control_modifier()) {
-            this.pasteContent = true;
-            this.emit('activated');
-            return Clutter.EVENT_STOP;
-        }
-        return super.vfunc_key_press_event(event);
-    }
-    vfunc_button_release_event(event) {
-        if (this.previewType === PreviewType.TEXT &&
-            event.get_button() === Clutter.BUTTON_PRIMARY &&
-            event.has_control_modifier()) {
-            this.pasteContent = true;
-            this.emit('activated');
-            return Clutter.EVENT_STOP;
-        }
-        return super.vfunc_button_release_event(event);
-    }
-    static getFileContents(file, n = null) {
-        if (!file.query_exists(null)) {
-            return null;
-        }
-        if (n !== null) {
-            let fileStream;
-            try {
-                fileStream = file.read(null);
-                const stream = new Gio.DataInputStream({ baseStream: fileStream });
-                let text = '';
-                for (let i = 0; i < n; i++) {
-                    const line = stream.read_line_utf8(null)[0];
-                    if (line !== null) {
-                        if (i > 0)
-                            text += '\n';
-                        text += line;
-                    }
-                    else {
-                        break;
-                    }
-                }
-                return text;
-            }
-            catch (e) {
-                console.error(e);
-            }
-            finally {
-                fileStream?.close(null);
-            }
-        }
-        else {
-            try {
-                const [success, text, _] = file.load_contents(null);
-                if (success) {
-                    return new TextDecoder().decode(text);
-                }
-                else {
-                    throw new Error('failed to load file contents');
-                }
-            }
-            catch (e) {
-                console.error(e);
-            }
-        }
-        return null;
-    }
-    static getThumbnail(homeDir, file) {
-        const md5 = GLib.compute_checksum_for_string(GLib.ChecksumType.MD5, file, file.length);
-        try {
-            const thumbnailDir = Gio.File.new_for_path(`${homeDir}/.cache/thumbnails`);
-            const enumerator = thumbnailDir.enumerate_children('standard::*', 0, null);
-            let f = null;
-            while ((f = enumerator.next_file(null)) !== null) {
-                if (f.get_file_type() == Gio.FileType.DIRECTORY) {
-                    const thumbnailFile = thumbnailDir.get_child(f.get_name()).get_child(`${md5}.png`);
-                    if (thumbnailFile.query_exists(null)) {
-                        return thumbnailFile;
-                    }
-                }
-            }
-        }
-        catch {
-            // ignore
-        }
-        return null;
+        this.clipboardManager.setContent(new ClipboardContent({
+            type: ContentType.FILE,
+            value: { fileList: this.fileList, operation: this.operation },
+        }));
     }
 };
-FilePanoItem = FilePanoItem_1 = __decorate([
+FilePanoItem = __decorate([
     registerGObjectClass
 ], FilePanoItem);
 
 const NO_IMAGE_FOUND_FILE_NAME = 'no-image-found.svg';
 let ImagePanoItem = class ImagePanoItem extends PanoItem {
     imageItemSettings;
+    metaContainer;
+    resolutionTitle;
+    resolutionValue;
+    sizeLabel;
+    sizeValue;
     ext;
     constructor(ext, clipboardManager, dbItem) {
         super(ext, clipboardManager, dbItem);
         this.ext = ext;
+        this.body.add_style_class_name('pano-item-body-image');
         this.imageItemSettings = this.settings.get_child('image-item');
+        const { width, height, size } = JSON.parse(dbItem.metaData || '{}');
+        this.metaContainer = new St.BoxLayout({
+            styleClass: 'pano-item-body-meta-container',
+            ...orientationCompatibility(true),
+            xExpand: true,
+            yExpand: true,
+            yAlign: Clutter.ActorAlign.END,
+            xAlign: Clutter.ActorAlign.FILL,
+        });
+        const resolutionContainer = new St.BoxLayout({
+            ...orientationCompatibility(false),
+            xExpand: true,
+            yAlign: Clutter.ActorAlign.FILL,
+            xAlign: Clutter.ActorAlign.FILL,
+            styleClass: 'pano-item-body-image-resolution-container',
+        });
+        this.resolutionTitle = new St.Label({
+            text: 'Resolution',
+            xAlign: Clutter.ActorAlign.START,
+            xExpand: true,
+            styleClass: 'pano-item-body-image-meta-title',
+        });
+        this.resolutionValue = new St.Label({
+            text: `${width} x ${height}`,
+            xAlign: Clutter.ActorAlign.END,
+            xExpand: false,
+            styleClass: 'pano-item-body-image-meta-value',
+        });
+        resolutionContainer.add_child(this.resolutionTitle);
+        resolutionContainer.add_child(this.resolutionValue);
+        const sizeContainer = new St.BoxLayout({
+            ...orientationCompatibility(false),
+            xExpand: true,
+            yAlign: Clutter.ActorAlign.FILL,
+            xAlign: Clutter.ActorAlign.FILL,
+            styleClass: 'pano-item-body-image-size-container',
+        });
+        this.sizeLabel = new St.Label({
+            text: 'Size',
+            xAlign: Clutter.ActorAlign.START,
+            xExpand: true,
+            styleClass: 'pano-item-body-image-meta-title',
+        });
+        this.sizeValue = new St.Label({
+            text: prettyBytes(size),
+            xAlign: Clutter.ActorAlign.END,
+            xExpand: false,
+            styleClass: 'pano-item-body-image-meta-value',
+        });
+        sizeContainer.add_child(this.sizeLabel);
+        sizeContainer.add_child(this.sizeValue);
+        this.metaContainer.add_child(resolutionContainer);
+        this.metaContainer.add_child(sizeContainer);
+        this.metaContainer.add_constraint(new Clutter.AlignConstraint({
+            source: this,
+            alignAxis: Clutter.AlignAxis.Y_AXIS,
+            factor: 0.001,
+        }));
+        this.body.add_child(this.metaContainer);
         this.connect('activated', this.setClipboardContent.bind(this));
         this.setStyle();
         this.imageItemSettings.connect('changed', this.setStyle.bind(this));
-        // Settings for controls
-        this.settings.connect('changed::is-in-incognito', this.setStyle.bind(this));
-        this.settings.connect('changed::incognito-window-background-color', this.setStyle.bind(this));
-        this.settings.connect('changed::window-background-color', this.setStyle.bind(this));
-        this.settings.connect('changed::header-style', this.setStyle.bind(this));
     }
     setStyle() {
         const headerBgColor = this.imageItemSettings.get_string('header-bg-color');
         const headerColor = this.imageItemSettings.get_string('header-color');
+        const bodyBgColor = this.imageItemSettings.get_string('body-bg-color');
+        const metadataBgColor = this.imageItemSettings.get_string('metadata-bg-color');
+        const metadataColor = this.imageItemSettings.get_string('metadata-color');
+        const metadataFontFamily = this.imageItemSettings.get_string('metadata-font-family');
+        const metadataFontSize = this.imageItemSettings.get_int('metadata-font-size');
         let imageFilePath = `file://${getImagesPath(this.ext)}/${this.dbItem.content}.png`;
+        let backgroundSize = 'contain';
         const imageFile = Gio.File.new_for_uri(imageFilePath);
         if (!imageFile.query_exists(null)) {
             imageFilePath = `file://${this.ext.path}/images/${NO_IMAGE_FOUND_FILE_NAME}`;
+            backgroundSize = 'cover';
         }
-        this.overlay.setControlsBackground(getItemBackgroundColor(this.settings, headerBgColor, null));
+        this.body.set_style(`background-color: ${bodyBgColor}; background-image: url(${imageFilePath}); background-size: ${backgroundSize};`);
         this.header.set_style(`background-color: ${headerBgColor}; color: ${headerColor};`);
-        this.body.set_style(`background-image: url(${imageFilePath}); background-size: cover;`);
+        this.resolutionTitle.set_style(`color: ${metadataColor}; font-family: ${metadataFontFamily}; font-size: ${metadataFontSize}px;`);
+        this.resolutionValue.set_style(`color: ${metadataColor}; font-family: ${metadataFontFamily}; font-size: ${metadataFontSize}px; font-weight: bold;`);
+        this.sizeLabel.set_style(`color: ${metadataColor}; font-family: ${metadataFontFamily}; font-size: ${metadataFontSize}px;`);
+        this.sizeValue.set_style(`color: ${metadataColor}; font-family: ${metadataFontFamily}; font-size: ${metadataFontSize}px; font-weight: bold;`);
+        this.metaContainer.set_style(`background-color: ${metadataBgColor};`);
     }
     setClipboardContent() {
         const imageFile = Gio.File.new_for_path(`${getImagesPath(this.ext)}/${this.dbItem.content}.png`);
@@ -2425,7 +2033,10 @@ let ImagePanoItem = class ImagePanoItem extends PanoItem {
         if (!data) {
             return;
         }
-        this.clipboardManager.setContent(new ClipboardContent({ type: ContentType.IMAGE, value: data }));
+        this.clipboardManager.setContent(new ClipboardContent({
+            type: ContentType.IMAGE,
+            value: data,
+        }));
     }
 };
 ImagePanoItem = __decorate([
@@ -2436,7 +2047,6 @@ const DEFAULT_LINK_PREVIEW_IMAGE_NAME = 'link-preview.svg';
 let LinkPanoItem = class LinkPanoItem extends PanoItem {
     linkItemSettings;
     metaContainer;
-    imageContainer;
     titleLabel;
     descriptionLabel;
     linkLabel;
@@ -2459,11 +2069,33 @@ let LinkPanoItem = class LinkPanoItem extends PanoItem {
         else {
             descriptionText = decodeURI(description);
         }
+        this.body.add_style_class_name('pano-item-body-link');
+        this.metaContainer = new St.BoxLayout({
+            styleClass: 'pano-item-body-meta-container',
+            ...orientationCompatibility(true),
+            xExpand: true,
+            yExpand: false,
+            yAlign: Clutter.ActorAlign.END,
+            xAlign: Clutter.ActorAlign.FILL,
+        });
+        this.titleLabel = new St.Label({
+            text: titleText,
+            styleClass: 'link-title-label',
+        });
+        this.descriptionLabel = new St.Label({
+            text: descriptionText,
+            styleClass: 'link-description-label',
+        });
+        this.descriptionLabel.clutterText.singleLineMode = true;
+        this.linkLabel = new St.Label({
+            text: this.dbItem.content,
+            styleClass: 'link-label',
+        });
         let imageFilePath = `file:///${ext.path}/images/${DEFAULT_LINK_PREVIEW_IMAGE_NAME}`;
         if (image && Gio.File.new_for_uri(`file://${getCachePath(ext)}/${image}.png`).query_exists(null)) {
             imageFilePath = `file://${getCachePath(ext)}/${image}.png`;
         }
-        this.imageContainer = new St.BoxLayout({
+        const imageContainer = new St.BoxLayout({
             ...orientationCompatibility(true),
             xExpand: true,
             yExpand: true,
@@ -2472,31 +2104,18 @@ let LinkPanoItem = class LinkPanoItem extends PanoItem {
             styleClass: 'image-container',
             style: `background-image: url(${imageFilePath});`,
         });
-        this.metaContainer = new St.BoxLayout({
-            styleClass: 'meta-container',
-            ...orientationCompatibility(true),
-            xExpand: true,
-            yExpand: false,
-            yAlign: Clutter.ActorAlign.END,
-            xAlign: Clutter.ActorAlign.FILL,
-        });
-        this.titleLabel = new St.Label({ text: titleText, styleClass: 'link-title-label' });
-        this.descriptionLabel = new St.Label({ text: descriptionText, styleClass: 'link-description-label' });
-        this.descriptionLabel.clutterText.singleLineMode = true;
-        this.linkLabel = new St.Label({ text: this.dbItem.content, styleClass: 'link-label' });
         this.metaContainer.add_child(this.titleLabel);
         this.metaContainer.add_child(this.descriptionLabel);
         this.metaContainer.add_child(this.linkLabel);
-        this.body.add_child(this.imageContainer);
+        this.body.add_child(imageContainer);
         this.body.add_child(this.metaContainer);
         this.connect('activated', this.setClipboardContent.bind(this));
-        this.setCompactMode();
-        this.settings.connect('changed::compact-mode', () => {
-            this.setCompactMode();
-            this.setStyle();
+        this.setStyle();
+        this.linkItemSettings.connect('changed', this.setStyle.bind(this));
+        const openLinkIcon = new St.Icon({
+            iconName: 'web-browser-symbolic',
+            styleClass: 'pano-item-action-button-icon',
         });
-        this.settings.connect('changed::header-style', this.setCompactMode.bind(this));
-        const openLinkIcon = new St.Icon({ iconName: 'web-browser-symbolic', styleClass: 'pano-item-action-button-icon' });
         const openLinkButton = new St.Button({
             styleClass: 'pano-item-action-button pano-item-open-link-button',
             child: openLinkIcon,
@@ -2507,41 +2126,21 @@ let LinkPanoItem = class LinkPanoItem extends PanoItem {
             return Clutter.EVENT_PROPAGATE;
         });
         if (this.settings.get_boolean('open-links-in-browser')) {
-            this.overlay.actionContainer.insert_child_at_index(openLinkButton, 0);
+            this.header.actionContainer.insert_child_at_index(openLinkButton, 0);
         }
         this.settings.connect('changed::open-links-in-browser', () => {
-            if (this.overlay.actionContainer.get_child_at_index(0) === openLinkButton) {
-                this.overlay.actionContainer.remove_child(openLinkButton);
+            if (this.header.actionContainer.get_child_at_index(0) === openLinkButton) {
+                this.header.actionContainer.remove_child(openLinkButton);
             }
             if (this.settings.get_boolean('open-links-in-browser')) {
-                this.overlay.actionContainer.insert_child_at_index(openLinkButton, 0);
+                this.header.actionContainer.insert_child_at_index(openLinkButton, 0);
             }
         });
-        this.setStyle();
-        this.linkItemSettings.connect('changed', this.setStyle.bind(this));
-        // Settings for controls
-        this.settings.connect('changed::is-in-incognito', this.setStyle.bind(this));
-        this.settings.connect('changed::incognito-window-background-color', this.setStyle.bind(this));
-        this.settings.connect('changed::window-background-color', this.setStyle.bind(this));
-        this.settings.connect('changed::header-style', this.setStyle.bind(this));
-    }
-    setCompactMode() {
-        if (this.settings.get_boolean('compact-mode')) {
-            setOrientationCompatibility(this.body, false);
-            this.imageContainer.width = this.settings.get_int('item-width') * 0.3;
-            this.metaContainer.yAlign = Clutter.ActorAlign.CENTER;
-        }
-        else {
-            setOrientationCompatibility(this.body, true);
-            this.imageContainer.width = -1;
-            this.metaContainer.yAlign = Clutter.ActorAlign.END;
-        }
-        this.metaContainer.yExpand = isVisible(this.settings.get_uint('header-style'));
     }
     setStyle() {
-        const compactMode = this.settings.get_boolean('compact-mode');
         const headerBgColor = this.linkItemSettings.get_string('header-bg-color');
         const headerColor = this.linkItemSettings.get_string('header-color');
+        const bodyBgColor = this.linkItemSettings.get_string('body-bg-color');
         const metadataBgColor = this.linkItemSettings.get_string('metadata-bg-color');
         const metadataTitleColor = this.linkItemSettings.get_string('metadata-title-color');
         const metadataDescriptionColor = this.linkItemSettings.get_string('metadata-description-color');
@@ -2552,35 +2151,38 @@ let LinkPanoItem = class LinkPanoItem extends PanoItem {
         const metadataTitleFontSize = this.linkItemSettings.get_int('metadata-title-font-size');
         const metadataDescriptionFontSize = this.linkItemSettings.get_int('metadata-description-font-size');
         const metadataLinkFontSize = this.linkItemSettings.get_int('metadata-link-font-size');
-        this.overlay.setControlsBackground(getItemBackgroundColor(this.settings, headerBgColor, compactMode ? metadataBgColor : null));
         this.header.set_style(`background-color: ${headerBgColor}; color: ${headerColor};`);
-        this.body.set_style(`background-color: ${metadataBgColor};`);
+        this.body.set_style(`background-color: ${bodyBgColor};`);
+        this.metaContainer.set_style(`background-color: ${metadataBgColor};`);
         this.titleLabel.set_style(`color: ${metadataTitleColor}; font-family: ${metadataTitleFontFamily}; font-size: ${metadataTitleFontSize}px;`);
         this.descriptionLabel.set_style(`color: ${metadataDescriptionColor}; font-family: ${metadataDescriptionFontFamily}; font-size: ${metadataDescriptionFontSize}px;`);
         this.linkLabel.set_style(`color: ${metadataLinkColor}; font-family: ${metadataLinkFontFamily}; font-size: ${metadataLinkFontSize}px;`);
     }
     setClipboardContent() {
-        this.clipboardManager.setContent(new ClipboardContent({ type: ContentType.TEXT, value: this.dbItem.content }));
+        this.clipboardManager.setContent(new ClipboardContent({
+            type: ContentType.TEXT,
+            value: this.dbItem.content,
+        }));
     }
     vfunc_key_press_event(event) {
+        super.vfunc_key_press_event(event);
         if (this.settings.get_boolean('open-links-in-browser') &&
-            event.has_control_modifier() &&
+            event.get_state() === Clutter.ModifierType.CONTROL_MASK &&
             (event.get_key_symbol() === Clutter.KEY_Return ||
                 event.get_key_symbol() === Clutter.KEY_ISO_Enter ||
                 event.get_key_symbol() === Clutter.KEY_KP_Enter)) {
             openLinkInBrowser(this.dbItem.content);
-            return Clutter.EVENT_STOP;
         }
-        return super.vfunc_key_press_event(event);
+        return Clutter.EVENT_PROPAGATE;
     }
     vfunc_button_release_event(event) {
-        if (event.get_button() === Clutter.BUTTON_PRIMARY &&
-            event.has_control_modifier() &&
+        super.vfunc_button_release_event(event);
+        if (event.get_button() === 1 &&
+            event.get_state() === Clutter.ModifierType.CONTROL_MASK &&
             this.settings.get_boolean('open-links-in-browser')) {
             openLinkInBrowser(this.dbItem.content);
-            return Clutter.EVENT_STOP;
         }
-        return super.vfunc_button_release_event(event);
+        return Clutter.EVENT_PROPAGATE;
     }
 };
 LinkPanoItem = __decorate([
@@ -2603,11 +2205,6 @@ let TextPanoItem = class TextPanoItem extends PanoItem {
         this.connect('activated', this.setClipboardContent.bind(this));
         this.setStyle();
         this.textItemSettings.connect('changed', this.setStyle.bind(this));
-        // Settings for controls
-        this.settings.connect('changed::is-in-incognito', this.setStyle.bind(this));
-        this.settings.connect('changed::incognito-window-background-color', this.setStyle.bind(this));
-        this.settings.connect('changed::window-background-color', this.setStyle.bind(this));
-        this.settings.connect('changed::header-style', this.setStyle.bind(this));
     }
     setStyle() {
         const headerBgColor = this.textItemSettings.get_string('header-bg-color');
@@ -2617,8 +2214,6 @@ let TextPanoItem = class TextPanoItem extends PanoItem {
         const bodyFontFamily = this.textItemSettings.get_string('body-font-family');
         const bodyFontSize = this.textItemSettings.get_int('body-font-size');
         const characterLength = this.textItemSettings.get_int('char-length');
-        // Set overlay styles
-        this.overlay.setControlsBackground(getItemBackgroundColor(this.settings, headerBgColor, bodyBgColor));
         // Set header styles
         this.header.set_style(`background-color: ${headerBgColor}; color: ${headerColor};`);
         // Set body styles
@@ -2939,7 +2534,9 @@ const findOrCreateDbItem = async (ext, clip) => {
                 }
                 return linkDbItem;
             }
-            if (colorString.get.rgb(trimmedValue) !== null) {
+            if (validateHTMLColorHex(trimmedValue) ||
+                validateHTMLColorRgb(trimmedValue) ||
+                validateHTMLColorName(trimmedValue)) {
                 return db.save({
                     content: trimmedValue,
                     copyDate: new Date(),
@@ -2951,8 +2548,7 @@ const findOrCreateDbItem = async (ext, clip) => {
             }
             const highlightResult = hljs.highlightAuto(trimmedValue.slice(0, 2000), SUPPORTED_LANGUAGES);
             if (highlightResult.relevance < 10) {
-                // Check if the text is a single grapheme
-                if (Graphemer.nextBreak(trimmedValue, 0) == trimmedValue.length) {
+                if (/^\p{Extended_Pictographic}*$/u.test(trimmedValue)) {
                     return db.save({
                         content: trimmedValue,
                         copyDate: new Date(),
@@ -3052,6 +2648,14 @@ const createPanoItemFromDb = (ext, clipboardManager, dbItem) => {
     });
     return panoItem;
 };
+function converter(color) {
+    try {
+        return convert(color);
+    }
+    catch (_err) {
+        return null;
+    }
+}
 const removeItemResources = (ext, dbItem) => {
     db.delete(dbItem.id);
     if (dbItem.itemType === 'LINK') {
@@ -3091,10 +2695,19 @@ const sendNotification = (ext, dbItem) => {
     else if (dbItem.itemType === 'COLOR') {
         // Create pixbuf from color
         const pixbuf = GdkPixbuf.Pixbuf.new(GdkPixbuf.Colorspace.RGB, true, 8, 1, 1);
-        // Parse the color
-        const color = colorString.get.rgb(dbItem.content);
+        let color = null;
+        // check if content has alpha
+        if (dbItem.content.includes('rgba')) {
+            color = converter(dbItem.content);
+        }
+        else if (validateHTMLColorRgb(dbItem.content)) {
+            color = `${converter(dbItem.content)}ff`;
+        }
+        else if (validateHTMLColorHex(dbItem.content)) {
+            color = `${dbItem.content}ff`;
+        }
         if (color) {
-            pixbuf.fill((color[0] << 24) | (color[1] << 16) | (color[2] << 8) | color[3]);
+            pixbuf.fill(parseInt(color.replace('#', '0x'), 16));
             notify(ext, _('Color Copied'), dbItem.content, pixbuf);
         }
     }
@@ -3113,9 +2726,15 @@ let PanoScrollView = class PanoScrollView extends St.ScrollView {
             'scroll-focus-out': {},
             'scroll-update-list': {},
             'scroll-alt-press': {},
-            'scroll-tab-press': { param_types: [GObject.TYPE_BOOLEAN], accumulator: 0 },
+            'scroll-tab-press': {
+                param_types: [GObject.TYPE_BOOLEAN],
+                accumulator: 0,
+            },
             'scroll-backspace-press': {},
-            'scroll-key-press': { param_types: [GObject.TYPE_STRING], accumulator: 0 },
+            'scroll-key-press': {
+                param_types: [GObject.TYPE_STRING],
+                accumulator: 0,
+            },
         },
     };
     list;
@@ -3129,20 +2748,24 @@ let PanoScrollView = class PanoScrollView extends St.ScrollView {
     clipboardChangedSignalId = null;
     clipboardManager;
     constructor(ext, clipboardManager, searchBox) {
-        super({ overlayScrollbars: true, xExpand: true, yExpand: true });
+        super({
+            overlayScrollbars: true,
+            xExpand: true,
+            yExpand: true,
+        });
         this.ext = ext;
         this.clipboardManager = clipboardManager;
         this.searchBox = searchBox;
         this.settings = getCurrentExtensionSettings(this.ext);
         this.setScrollbarPolicy();
         this.list = new St.BoxLayout({
-            ...orientationCompatibility(isVertical(this.settings.get_uint('window-position'))),
+            vertical: isVertical(this.settings.get_uint('window-position')),
             xExpand: true,
             yExpand: true,
         });
         this.settings.connect('changed::window-position', () => {
             this.setScrollbarPolicy();
-            setOrientationCompatibility(this.list, isVertical(this.settings.get_uint('window-position')));
+            this.list.set_vertical(isVertical(this.settings.get_uint('window-position')));
         });
         scrollViewAddChild(this, this.list);
         const shouldFocusOut = (symbol) => {
@@ -3165,6 +2788,9 @@ let PanoScrollView = class PanoScrollView extends St.ScrollView {
             if (event.has_control_modifier() && event.get_key_symbol() >= 49 && event.get_key_symbol() <= 57) {
                 this.selectItemByIndex(event.get_key_symbol() - 49);
                 return Clutter.EVENT_STOP;
+            }
+            if (event.get_state()) {
+                return Clutter.EVENT_PROPAGATE;
             }
             if (shouldFocusOut(event.get_key_symbol())) {
                 this.emit('scroll-focus-out');
@@ -3221,24 +2847,6 @@ let PanoScrollView = class PanoScrollView extends St.ScrollView {
             this.set_policy(St.PolicyType.EXTERNAL, St.PolicyType.NEVER);
         }
     }
-    /**
-     * Removes first and last child pseudo classes quicker than the shell updates them.
-     * This ensures that there are no jumpy transitions between items when removing/filtering items.
-     */
-    removePseudoClasses() {
-        const visibleItems = this.getVisibleItems();
-        visibleItems[0]?.remove_style_pseudo_class('first-child');
-        visibleItems[visibleItems.length - 1]?.remove_style_pseudo_class('last-child');
-    }
-    /**
-     * Adds first and last child pseudo classes quicker than the shell updates them.
-     * This ensures that there are no jumpy transitions between items when removing/filtering items.
-     */
-    setPseudoClasses() {
-        const visibleItems = this.getVisibleItems();
-        visibleItems[0]?.add_style_pseudo_class('first-child');
-        visibleItems[visibleItems.length - 1]?.add_style_pseudo_class('last-child');
-    }
     prependItem(panoItem) {
         const existingItem = this.getItem(panoItem);
         if (existingItem) {
@@ -3277,12 +2885,14 @@ let PanoScrollView = class PanoScrollView extends St.ScrollView {
             if (this.getVisibleItems().length === 0) {
                 this.emit('scroll-focus-out');
             }
+            else {
+                this.focusOnClosest();
+            }
         });
     }
     removeItem(item) {
         item.hide();
         this.list.remove_child(item);
-        this.setPseudoClasses();
     }
     getItem(panoItem) {
         return this.getItems().find((item) => item.dbItem.id === panoItem.dbItem.id);
@@ -3334,13 +2944,11 @@ let PanoScrollView = class PanoScrollView extends St.ScrollView {
         return false;
     }
     filter(text, itemType, showFavorites) {
-        this.removePseudoClasses();
         this.currentFilter = text;
         this.currentItemTypeFilter = itemType;
         this.showFavorites = showFavorites;
         if (!text && !itemType && null === showFavorites) {
             this.getItems().forEach((i) => i.show());
-            this.setPseudoClasses();
             return;
         }
         const builder = new ClipboardQueryBuilder();
@@ -3355,7 +2963,6 @@ let PanoScrollView = class PanoScrollView extends St.ScrollView {
         }
         const result = db.query(builder.build()).map((dbItem) => dbItem.id);
         this.getItems().forEach((item) => (result.indexOf(item.dbItem.id) >= 0 ? item.show() : item.hide()));
-        this.setPseudoClasses();
     }
     focusOnClosest() {
         const lastFocus = this.currentFocus;
@@ -3439,7 +3046,10 @@ let PanoScrollView = class PanoScrollView extends St.ScrollView {
         if (!Number.isFinite(value)) {
             return;
         }
-        adjustment.ease(value, { duration: 150, mode: Clutter.AnimationMode.EASE_OUT_QUAD });
+        adjustment.ease(value, {
+            duration: 150,
+            mode: Clutter.AnimationMode.EASE_OUT_QUAD,
+        });
     }
     selectFirstItem() {
         const visibleItems = this.getVisibleItems();
@@ -3490,7 +3100,10 @@ let PanoScrollView = class PanoScrollView extends St.ScrollView {
             value += adjustment.stepIncrement * 2;
         }
         adjustment.remove_transition('value');
-        adjustment.ease(value, { duration: 150, mode: Clutter.AnimationMode.EASE_OUT_QUAD });
+        adjustment.ease(value, {
+            duration: 150,
+            mode: Clutter.AnimationMode.EASE_OUT_QUAD,
+        });
         return Clutter.EVENT_STOP;
     }
     destroy() {
@@ -3531,8 +3144,7 @@ let SearchBox = class SearchBox extends St.BoxLayout {
     ext;
     constructor(ext) {
         super({
-            xAlign: Clutter.ActorAlign.FILL,
-            xExpand: true,
+            xAlign: Clutter.ActorAlign.CENTER,
             styleClass: 'search-entry-container',
             ...orientationCompatibility(false),
             trackHover: true,
@@ -3543,15 +3155,13 @@ let SearchBox = class SearchBox extends St.BoxLayout {
         this.settings = getCurrentExtensionSettings(ext);
         const themeContext = St.ThemeContext.get_for_stage(Shell.Global.get().get_stage());
         this.search = new St.Entry({
-            xAlign: Clutter.ActorAlign.CENTER,
-            xExpand: true,
             canFocus: true,
             hintText: _('Type to search, Tab to cycle'),
             naturalWidth: 300 * themeContext.scaleFactor,
             height: 40 * themeContext.scaleFactor,
             trackHover: true,
             primaryIcon: this.createSearchEntryIcon('edit-find-symbolic', 'search-entry-icon'),
-            secondaryIcon: this.createSearchEntryIcon('view-pin-symbolic', 'search-entry-fav-icon'),
+            secondaryIcon: this.createSearchEntryIcon('starred-symbolic', 'search-entry-fav-icon'),
         });
         themeContext.connect('notify::scale-factor', () => {
             this.search.naturalWidth = 300 * themeContext.scaleFactor;
@@ -3616,10 +3226,9 @@ let SearchBox = class SearchBox extends St.BoxLayout {
         this.settings.connect('changed::search-bar-font-size', this.setStyle.bind(this));
     }
     setStyle() {
-        const searchBarBackgroundColor = this.settings.get_string('search-bar-background-color');
         const searchBarFontFamily = this.settings.get_string('search-bar-font-family');
         const searchBarFontSize = this.settings.get_int('search-bar-font-size');
-        this.search.set_style(`background-color: ${searchBarBackgroundColor}; font-family: ${searchBarFontFamily}; font-size: ${searchBarFontSize}px;`);
+        this.search.set_style(`font-family: ${searchBarFontFamily}; font-size: ${searchBarFontSize}px;`);
     }
     toggleItemType(hasShift) {
         const panoItemTypes = getPanoItemTypes(this.ext);
@@ -3663,10 +3272,10 @@ let SearchBox = class SearchBox extends St.BoxLayout {
             icon.set_gicon(iconNameOrProto);
         }
         icon.connect('enter-event', () => {
-            Shell.Global.get().display.set_cursor(Meta.Cursor.POINTING_HAND);
+            Shell.Global.get().display.set_cursor(MetaCursorPointer);
         });
         icon.connect('motion-event', () => {
-            Shell.Global.get().display.set_cursor(Meta.Cursor.POINTING_HAND);
+            Shell.Global.get().display.set_cursor(MetaCursorPointer);
         });
         icon.connect('leave-event', () => {
             Shell.Global.get().display.set_cursor(Meta.Cursor.DEFAULT);
@@ -3735,105 +3344,72 @@ let PanoWindow = class PanoWindow extends St.BoxLayout {
         this.setAlignment();
         const themeContext = St.ThemeContext.get_for_stage(Shell.Global.get().get_stage());
         this.setWindowDimensions(themeContext.scaleFactor);
-        themeContext.connect('notify::scale-factor', () => this.setWindowDimensions(themeContext.scaleFactor));
-        this.settings.connect('changed::item-width', () => this.setWindowDimensions(themeContext.scaleFactor));
-        this.settings.connect('changed::item-height', () => this.setWindowDimensions(themeContext.scaleFactor));
-        this.settings.connect('changed::header-style', () => this.setWindowDimensions(themeContext.scaleFactor));
-        this.settings.connect('changed::compact-mode', () => this.setWindowDimensions(themeContext.scaleFactor));
+        themeContext.connect('notify::scale-factor', () => {
+            this.setWindowDimensions(themeContext.scaleFactor);
+        });
+        this.settings.connect('changed::item-size', () => {
+            this.setWindowDimensions(themeContext.scaleFactor);
+        });
         this.settings.connect('changed::window-position', () => {
             this.setWindowDimensions(themeContext.scaleFactor);
             this.setAlignment();
-            this.setStyle();
         });
-        this.settings.connect('changed::window-height', () => this.setWindowDimensions(themeContext.scaleFactor));
-        this.settings.connect('changed::window-floating', this.setStyle.bind(this));
-        this.settings.connect('changed::window-margin-left', this.setStyle.bind(this));
-        this.settings.connect('changed::window-margin-right', this.setStyle.bind(this));
-        this.settings.connect('changed::window-margin-top', this.setStyle.bind(this));
-        this.settings.connect('changed::window-margin-bottom', this.setStyle.bind(this));
-        this.settings.connect('changed::window-background-color', this.setStyle.bind(this));
-        this.settings.connect('changed::incognito-window-background-color', this.setStyle.bind(this));
-        this.settings.connect('changed::is-in-incognito', this.setStyle.bind(this));
-        this.setStyle();
+        this.settings.connect('changed::window-background-color', () => {
+            if (this.settings.get_boolean('is-in-incognito')) {
+                this.set_style(`background-color: ${this.settings.get_string('incognito-window-background-color')} !important;`);
+            }
+            else {
+                this.set_style(`background-color: ${this.settings.get_string('window-background-color')}`);
+            }
+        });
+        this.settings.connect('changed::incognito-window-background-color', () => {
+            if (this.settings.get_boolean('is-in-incognito')) {
+                this.set_style(`background-color: ${this.settings.get_string('incognito-window-background-color')} !important;`);
+            }
+            else {
+                this.set_style(`background-color: ${this.settings.get_string('window-background-color')}`);
+            }
+        });
         this.monitorBox = new MonitorBox();
         this.searchBox = new SearchBox(ext);
         this.scrollView = new PanoScrollView(ext, clipboardManager, this.searchBox);
-        // Add incognito mode icon
-        this.searchBox.set_style(`background-image: url(file:///${ext.path}/images/incognito-mode.svg);`);
         this.setupMonitorBox();
         this.setupScrollView();
         this.setupSearchBox();
         this.add_child(this.searchBox);
         this.add_child(this.scrollView);
+        this.settings.connect('changed::is-in-incognito', () => {
+            if (this.settings.get_boolean('is-in-incognito')) {
+                this.add_style_class_name('incognito');
+                this.set_style(`background-color: ${this.settings.get_string('incognito-window-background-color')} !important;`);
+            }
+            else {
+                this.remove_style_class_name('incognito');
+                this.set_style(`background-color: ${this.settings.get_string('window-background-color')}`);
+            }
+        });
+        if (this.settings.get_boolean('is-in-incognito')) {
+            this.add_style_class_name('incognito');
+            this.set_style(`background-color: ${this.settings.get_string('incognito-window-background-color')} !important;`);
+        }
+        else {
+            this.set_style(`background-color: ${this.settings.get_string('window-background-color')}`);
+        }
     }
     setWindowDimensions(scaleFactor) {
         this.remove_style_class_name('vertical');
         if (isVertical(this.settings.get_uint('window-position'))) {
             this.add_style_class_name('vertical');
-            this.set_width((this.settings.get_int('item-width') + 32) * scaleFactor);
-            if (this.settings.get_uint('window-position') == WINDOW_POSITIONS.POINTER) {
-                this.set_height(this.settings.get_int('window-height') * scaleFactor);
-            }
+            this.set_width((this.settings.get_int('item-size') + 20) * scaleFactor);
         }
         else {
-            const mult = this.settings.get_boolean('compact-mode') ? 0.5 : 1;
-            const header = getHeaderHeight(this.settings.get_uint('header-style'));
-            this.set_height((Math.floor(this.settings.get_int('item-height') * mult) + 76 + header) * scaleFactor);
+            this.set_height((this.settings.get_int('item-size') + 90) * scaleFactor);
         }
     }
     setAlignment() {
         const [x_align, y_align] = getAlignment(this.settings.get_uint('window-position'));
         this.set_x_align(x_align);
         this.set_y_align(y_align);
-    }
-    setStyle() {
-        let backgroundColor;
-        if (this.settings.get_boolean('is-in-incognito')) {
-            this.add_style_class_name('incognito');
-            backgroundColor = this.settings.get_string('incognito-window-background-color');
-        }
-        else {
-            this.remove_style_class_name('incognito');
-            backgroundColor = this.settings.get_string('window-background-color');
-        }
-        let margins;
-        if (this.settings.get_uint('window-position') == WINDOW_POSITIONS.POINTER) {
-            this.add_style_class_name('floating');
-            margins = '0px';
-        }
-        else if (this.settings.get_boolean('window-floating')) {
-            this.add_style_class_name('floating');
-            const left = this.settings.get_int('window-margin-left');
-            const right = this.settings.get_int('window-margin-right');
-            const top = this.settings.get_int('window-margin-top');
-            const bottom = this.settings.get_int('window-margin-bottom');
-            margins = `${top}px ${right}px ${bottom}px ${left}px`;
-        }
-        else {
-            this.remove_style_class_name('floating');
-            margins = '0px';
-        }
-        this.set_style(`background-color: ${backgroundColor}; margin: ${margins}`);
-    }
-    setPositionConstraints(at_pointer) {
-        if (this.settings.get_uint('window-position') == WINDOW_POSITIONS.POINTER) {
-            const [px, py, _] = getPointer();
-            const monitor = getMonitors()[getMonitorIndexForPointer()];
-            const left = this.settings.get_int('window-margin-left');
-            const top = this.settings.get_int('window-margin-top');
-            const x = Math.max(Math.min(at_pointer ? px + 1 : left, monitor.x + monitor.width - this.width), monitor.x);
-            const y = Math.max(Math.min(at_pointer ? py + 1 : top, monitor.y + monitor.height - this.height), monitor.y);
-            this.add_constraint(new Clutter.BindConstraint({
-                source: Shell.Global.get().stage,
-                coordinate: Clutter.BindCoordinate.X,
-                offset: x,
-            }));
-            this.add_constraint(new Clutter.BindConstraint({
-                source: Shell.Global.get().stage,
-                coordinate: Clutter.BindCoordinate.Y,
-                offset: y,
-            }));
-        }
     }
     setupMonitorBox() {
         this.monitorBox.connect('hide_window', () => this.hide());
@@ -3882,14 +3458,13 @@ let PanoWindow = class PanoWindow extends St.BoxLayout {
             this.searchBox.appendText(text);
         });
     }
-    toggle(at_pointer = true) {
-        this.is_visible() ? this.hide() : this.show(at_pointer);
+    toggle() {
+        this.is_visible() ? this.hide() : this.show();
     }
-    show(at_pointer = true) {
+    show() {
         this.clear_constraints();
         this.setAlignment();
         this.add_constraint(getMonitorConstraint());
-        this.setPositionConstraints(at_pointer);
         super.show();
         if (this.settings.get_boolean('keep-search-entry')) {
             this.searchBox.selectAll();
@@ -3977,7 +3552,7 @@ class PanoExtension extends Extension {
         this.setupResources();
         this.keyManager = new KeyManager(this);
         this.clipboardManager = new ClipboardManager(this);
-        this.indicator = new PanoIndicator(this, this.clearHistory.bind(this), () => this.panoWindow?.toggle(false));
+        this.indicator = new PanoIndicator(this, this.clearHistory.bind(this), () => this.panoWindow?.toggle());
         this.start();
         this.indicator.enable();
         this.enableDbus();

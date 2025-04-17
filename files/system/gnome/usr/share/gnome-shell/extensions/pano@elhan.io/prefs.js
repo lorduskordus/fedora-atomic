@@ -19,21 +19,6 @@ typeof SuppressedError === "function" ? SuppressedError : function (error, suppr
     return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
 };
 
-const createSwitchRow = (title, subtitle, settings, schemaKey) => {
-    const switchRow = new Adw.ActionRow({
-        title,
-        subtitle,
-    });
-    const switchControl = new Gtk.Switch({
-        active: settings.get_boolean(schemaKey),
-        valign: Gtk.Align.CENTER,
-        halign: Gtk.Align.CENTER,
-    });
-    settings.bind(schemaKey, switchControl, 'active', Gio.SettingsBindFlags.DEFAULT);
-    switchRow.add_suffix(switchControl);
-    switchRow.set_activatable_widget(switchControl);
-    return switchRow;
-};
 const createColorRow = (title, subtitle, settings, schemaKey) => {
     const colorRow = new Adw.ActionRow({
         title,
@@ -362,28 +347,6 @@ function gettext(ext) {
     return ext.gettext.bind(ext);
 }
 
-let FloatingStyleGroup = class FloatingStyleGroup extends Adw.ExpanderRow {
-    settings;
-    constructor(ext) {
-        const _ = gettext(ext);
-        super({
-            title: _('Floating'),
-            subtitle: _('You can change the floating style'),
-            showEnableSwitch: true,
-        });
-        this.settings = getCurrentExtensionSettings(ext);
-        this.enableExpansion = this.settings.get_boolean('window-floating');
-        this.settings.bind('window-floating', this, 'enable-expansion', Gio.SettingsBindFlags.DEFAULT);
-        this.add_row(createSpinRow(_('Left Margin'), _('You can change the left margin'), this.settings, 'window-margin-left', 5, 0, 1000));
-        this.add_row(createSpinRow(_('Right Margin'), _('You can change the right margin'), this.settings, 'window-margin-right', 5, 0, 1000));
-        this.add_row(createSpinRow(_('Top Margin'), _('You can change the top margin'), this.settings, 'window-margin-top', 5, 0, 1000));
-        this.add_row(createSpinRow(_('Bottom Margin'), _('You can change the bottom margin'), this.settings, 'window-margin-bottom', 5, 0, 1000));
-    }
-};
-FloatingStyleGroup = __decorate([
-    registerGObjectClass
-], FloatingStyleGroup);
-
 let CommonStyleGroup = class CommonStyleGroup extends Adw.PreferencesGroup {
     settings;
     constructor(ext) {
@@ -396,22 +359,15 @@ let CommonStyleGroup = class CommonStyleGroup extends Adw.PreferencesGroup {
             _('Default Icons'),
             _('Legacy Icons'),
         ]));
-        this.add(createSpinRow(_('Item Width'), _('You can change the item width'), this.settings, 'item-width', 5, 200, 1000));
-        this.add(createSpinRow(_('Item Height'), _('You can change the item height'), this.settings, 'item-height', 5, 100, 1000));
-        this.add(createDropdownRow(_('Header Style'), _('Controls the style of the clipboard item headers'), this.settings, 'header-style', [_('Hidden'), _('Visible'), _('Compact')]));
-        this.add(createSwitchRow(_('Compact Mode'), _('Controls the compactness of the clipboard item.'), this.settings, 'compact-mode'));
-        this.add(createDropdownRow(_('Window Position'), _('You can change position of the Pano'), this.settings, 'window-position', [_('Top'), _('Right'), _('Bottom'), _('Left'), _('Pointer')]));
-        this.add(createSpinRow(_('Window Height'), _('You can change the height of the window if the position is "Pointer"'), this.settings, 'window-height', 1, 100, 4000));
-        this.add(new FloatingStyleGroup(ext));
+        this.add(createSpinRow(_('Item Size'), _('You can change the item size'), this.settings, 'item-size', 5, 200, 1000));
+        this.add(createDropdownRow(_('Window Position'), _('You can change position of the Pano'), this.settings, 'window-position', [_('Top'), _('Right'), _('Bottom'), _('Left')]));
         this.add(createColorRow(_('Window Background Color'), _('You can change the window background color'), this.settings, 'window-background-color'));
         this.add(createColorRow(_('Incognito Window Background Color'), _('You can change the incognito window background color'), this.settings, 'incognito-window-background-color'));
-        this.add(createColorRow(_('Search Bar Background Color'), _('You can change the background color of the search bar'), this.settings, 'search-bar-background-color'));
         this.add(createFontRow(_('Search Bar Font'), _('You can change the font of the search bar'), this.settings, 'search-bar-font'));
         this.add(createFontRow(_('Item Title Font'), _('You can change the font of the title'), this.settings, 'item-title-font'));
         this.add(createFontRow(_('Item Date Font'), _('You can change the font of the date'), this.settings, 'item-date-font'));
         this.add(createColorRow(_('Active Item Border Color'), _('You can change the active item border color'), this.settings, 'active-item-border-color'));
         this.add(createColorRow(_('Hovered Item Border Color'), _('You can change the hovered item border color'), this.settings, 'hovered-item-border-color'));
-        this.add(createSwitchRow(_('Show Controls on Hover'), _('When enabled, the controls will only show on hover'), this.settings, 'show-controls-on-hover'));
     }
 };
 CommonStyleGroup = __decorate([
@@ -485,6 +441,10 @@ let ColorItemStyleRow = class ColorItemStyleRow extends ItemExpanderRow {
         this.add_row(createColorRow(_('Header Background Color'), _('You can change the background color of the header'), this.settings, 'header-bg-color'));
         // create header text color row
         this.add_row(createColorRow(_('Header Text Color'), _('You can change the text color of the header'), this.settings, 'header-color'));
+        // create metadata background color row
+        this.add_row(createColorRow(_('Metadata Background Color'), _('You can change the background color of the metadata'), this.settings, 'metadata-bg-color'));
+        // create metadata text color row
+        this.add_row(createColorRow(_('Metadata Text Color'), _('You can change the text color of the metadata'), this.settings, 'metadata-color'));
         // create metadata font row
         this.add_row(createFontRow(_('Body Font'), _('You can change the font of the metadata'), this.settings, 'metadata-font'));
     }
@@ -525,22 +485,10 @@ let FileItemStyleRow = class FileItemStyleRow extends ItemExpanderRow {
         this.add_row(createColorRow(_('Header Text Color'), _('You can change the text color of the header'), this.settings, 'header-color'));
         // create body background color row
         this.add_row(createColorRow(_('Body Background Color'), _('You can change the background color of the body'), this.settings, 'body-bg-color'));
-        // create title text color row
-        this.add_row(createColorRow(_('Title Text Color'), _('You can change the text color of the title'), this.settings, 'title-color'));
-        // create title font row
-        this.add_row(createFontRow(_('Title Font'), _('You can change the font of the title'), this.settings, 'title-font'));
-        // create files preview background color row
-        this.add_row(createColorRow(_('Files Preview Background Color'), _('You can change the background color of the files preview'), this.settings, 'files-preview-bg-color'));
-        // create files preview text color row
-        this.add_row(createColorRow(_('Files Preview Text Color'), _('You can change the text color of the files preview'), this.settings, 'files-preview-color'));
-        // create files preview font row
-        this.add_row(createFontRow(_('Files Preview Font'), _('You can change the font of the files preview'), this.settings, 'files-preview-font'));
-        // create text preview background color row
-        this.add_row(createColorRow(_('Text Preview Background Color'), _('You can change the background color of the text preview'), this.settings, 'text-preview-bg-color'));
-        // create text preview text color row
-        this.add_row(createColorRow(_('Text Preview Text Color'), _('You can change the text color of the text preview'), this.settings, 'text-preview-color'));
-        // create text preview font row
-        this.add_row(createFontRow(_('Text Preview Font'), _('You can change the font of the text preview'), this.settings, 'text-preview-font'));
+        // create body text color row
+        this.add_row(createColorRow(_('Body Text Color'), _('You can change the text color of the body'), this.settings, 'body-color'));
+        // create body font row
+        this.add_row(createFontRow(_('Body Font'), _('You can change the font of the body'), this.settings, 'body-font'));
     }
 };
 FileItemStyleRow = __decorate([
@@ -557,6 +505,14 @@ let ImageItemStyleRow = class ImageItemStyleRow extends ItemExpanderRow {
         this.add_row(createColorRow(_('Header Background Color'), _('You can change the background color of the header'), this.settings, 'header-bg-color'));
         // create header text color row
         this.add_row(createColorRow(_('Header Text Color'), _('You can change the text color of the header'), this.settings, 'header-color'));
+        // create body background color row
+        this.add_row(createColorRow(_('Body Background Color'), _('You can change the background color of the body'), this.settings, 'body-bg-color'));
+        // create metadata background color row
+        this.add_row(createColorRow(_('Metadata Background Color'), _('You can change the background color of the metadata'), this.settings, 'metadata-bg-color'));
+        // create metadata text color row
+        this.add_row(createColorRow(_('Metadata Text Color'), _('You can change the text color of the metadata'), this.settings, 'metadata-color'));
+        // create metadata font row
+        this.add_row(createFontRow(_('Metadata Font'), _('You can change the font of the metadata'), this.settings, 'metadata-font'));
     }
 };
 ImageItemStyleRow = __decorate([
@@ -573,6 +529,8 @@ let LinkItemStyleRow = class LinkItemStyleRow extends ItemExpanderRow {
         this.add_row(createColorRow(_('Header Background Color'), _('You can change the background color of the header'), this.settings, 'header-bg-color'));
         // create header text color row
         this.add_row(createColorRow(_('Header Text Color'), _('You can change the text color of the header'), this.settings, 'header-color'));
+        // create body background color row
+        this.add_row(createColorRow(_('Body Background Color'), _('You can change the background color of the body'), this.settings, 'body-bg-color'));
         // create metadata background color row
         this.add_row(createColorRow(_('Metadata Background Color'), _('You can change the background color of the metadata'), this.settings, 'metadata-bg-color'));
         // create metadata title color row
@@ -1170,29 +1128,6 @@ PlayAudioOnCopyRow = __decorate([
     registerGObjectClass
 ], PlayAudioOnCopyRow);
 
-let RemoveOnMiddleClickRow = class RemoveOnMiddleClickRow extends Adw.ActionRow {
-    settings;
-    constructor(ext) {
-        const _ = gettext(ext);
-        super({
-            title: _('Remove on Middle Click'),
-            subtitle: _('Allow Pano to remove clipboard items on middle click'),
-        });
-        this.settings = getCurrentExtensionSettings(ext);
-        const removeOnMiddleClickSwitch = new Gtk.Switch({
-            active: this.settings.get_boolean('remove-on-middle-click'),
-            valign: Gtk.Align.CENTER,
-            halign: Gtk.Align.CENTER,
-        });
-        this.settings.bind('remove-on-middle-click', removeOnMiddleClickSwitch, 'active', Gio.SettingsBindFlags.DEFAULT);
-        this.add_suffix(removeOnMiddleClickSwitch);
-        this.set_activatable_widget(removeOnMiddleClickSwitch);
-    }
-};
-RemoveOnMiddleClickRow = __decorate([
-    registerGObjectClass
-], RemoveOnMiddleClickRow);
-
 let SendNotificationOnCopyRow = class SendNotificationOnCopyRow extends Adw.ActionRow {
     settings;
     constructor(ext) {
@@ -1419,7 +1354,6 @@ let GeneralGroup = class GeneralGroup extends Adw.PreferencesGroup {
         this.add(new IncognitoShortcutRow(ext));
         this.add(new SyncPrimaryRow(ext));
         this.add(new PasteOnSelectRow(ext));
-        this.add(new RemoveOnMiddleClickRow(ext));
         this.add(new SendNotificationOnCopyRow(ext));
         this.add(new PlayAudioOnCopyRow(ext));
         this.add(new KeepSearchEntryRow(ext));
@@ -1450,32 +1384,24 @@ GeneralPage = __decorate([
 ], GeneralPage);
 
 // compatibility functions to check if a specific gnome-shell is used
-function isGnomeVersion(version) {
-    const [major, _minor, _patch, ..._rest] = PACKAGE_VERSION.split('.').map((num) => {
-        const result = parseInt(num);
-        if (isNaN(result)) {
-            return undefined;
-        }
-        return result;
-    });
+const GNOME_VERSION = PACKAGE_VERSION.split('.').reduce((acc, str) => {
+    const result = parseInt(str);
+    if (isNaN(result)) {
+        return acc;
+    }
+    return [...acc, result];
+}, []);
+function isGnomeVersionOrHigher(version) {
+    if (GNOME_VERSION.length < 1) {
+        console.error('[pano] FATAL ERROR: gnome version not correctly detected (case 1)');
+        return false;
+    }
+    const major = GNOME_VERSION[0];
     if (major === undefined) {
-        return PACKAGE_VERSION.includes(version.toString());
+        console.error('[pano] FATAL ERROR: gnome version not correctly detected (case 2)');
+        return false;
     }
-    return major === version;
-}
-function isOneGnomeVersion(versions) {
-    for (const version of versions) {
-        const isVersion = isGnomeVersion(version);
-        if (isVersion) {
-            return true;
-        }
-    }
-    return false;
-}
-// compatibility check functions for gnome-shell 47
-// this check if it is gnome 47 or higher, which includes all supported versions above and inclusive gnome 47
-function isGnome47OrHigher() {
-    return isOneGnomeVersion([47, 48]);
+    return major >= version;
 }
 
 class PanoExtensionPreferences extends ExtensionPreferences {
@@ -1492,7 +1418,7 @@ class PanoExtensionPreferences extends ExtensionPreferences {
          * gnome 47 explicitly states, that we need to return a Promise, so we check the version at runtime and decide what to return, to support older versions of gnome shell, that don't expected a promise here
          * @see https://gitlab.gnome.org/GNOME/gnome-shell/-/blob/main/js/extensions/prefs.js#L34
          */
-        if (isGnome47OrHigher()) {
+        if (isGnomeVersionOrHigher(47)) {
             return Promise.resolve();
         }
         return;
