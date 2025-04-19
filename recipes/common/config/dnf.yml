@@ -9,5 +9,10 @@ install:
     - adw-gtk3-theme
     - rsms-inter-fonts
 
+    # Virtualization
+    - edk2-ovmf
+    - qemu
+    - libvirt
+
     - nm-connection-editor-desktop
     - micro
