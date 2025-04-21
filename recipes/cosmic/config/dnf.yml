@@ -1,16 +1,9 @@
-modules:
-
-  # Temporary fix
-  - type: script
-    snippets:
-      - "dnf install -y dnf-plugins-core"
-
-  - type: dnf
-    source: ghcr.io/blue-build/modules/dnf:dnf-module
-    repos:
-      copr:
-        - wiiznokes/cosmic-applets-unofficial
-    install:
-      packages:
-        - cosmic-ext-applet-clipboard-manager
-        - cosmic-ext-applet-external-monitor-brightness
+type: dnf
+source: ghcr.io/blue-build/modules/dnf:dnf-module
+repos:
+  copr:
+    - wiiznokes/cosmic-applets-unofficial
+install:
+  packages:
+    - cosmic-ext-applet-clipboard-manager
+    - cosmic-ext-applet-external-monitor-brightness
