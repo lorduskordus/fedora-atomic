@@ -27,8 +27,8 @@ jobs:
         recipe:
           #- cosmic/recipe-coreos.yml
           #- cosmic/recipe-coreos-nvidia.yml
-          - cosmic/recipe.yml
-          - cosmic/recipe-nvidia.yml
+          #- cosmic/recipe.yml
+          #- cosmic/recipe-nvidia.yml
 
           - gnome/recipe-coreos.yml
           - gnome/recipe-coreos-nvidia.yml
