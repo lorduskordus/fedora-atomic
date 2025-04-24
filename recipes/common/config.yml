@@ -5,4 +5,5 @@ modules:
   - from-file: common/config/files.yml
   - from-file: common/config/justfiles.yml
   - from-file: common/config/hide-app-launchers.yml
+  - from-file: common/config/scripts.yml
   - from-file: common/config/signing.yml
