@@ -1,5 +1,4 @@
 type: dnf
-source: ghcr.io/blue-build/modules/dnf:dnf-module
 remove:
   packages:
     - kate
