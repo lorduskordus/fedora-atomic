@@ -6,14 +6,16 @@ set -euo pipefail
 
 build-initramfs () {
     echo "- Building initramfs"
-    export KERNEL_FLAVOR=""
-    curl -s "https://raw.githubusercontent.com/ublue-os/hwe/refs/heads/main/build-initramfs.sh" | bash
+    KERNEL_SUFFIX=""
+    QUALIFIED_KERNEL="$(rpm -qa | grep -P 'kernel-(|'"$KERNEL_SUFFIX"'-)(\d+\.\d+\.\d+)' | sed -E 's/kernel-(|'"$KERNEL_SUFFIX"'-)//')"
+    /usr/bin/dracut --no-hostonly --kver "$QUALIFIED_KERNEL" --reproducible -v --add ostree -f "/lib/modules/$QUALIFIED_KERNEL/initramfs.img"
+    chmod 0600 "/lib/modules/$QUALIFIED_KERNEL/initramfs.img"
 }
 
 install-nvidia-drivers () {
     echo "- Installing drivers"
     export IMAGE_NAME=$(awk -F'/' '{print $3}' <<< "${BASE_IMAGE}" | cut -d'-' -f1)
-    curl -s "https://raw.githubusercontent.com/ublue-os/hwe/refs/heads/main/nvidia-install.sh" | bash
+    curl -s "https://raw.githubusercontent.com/ublue-os/main/refs/heads/main/build_files/nvidia-install.sh" | bash
 }
 
 echo "Kernel post-install script"
