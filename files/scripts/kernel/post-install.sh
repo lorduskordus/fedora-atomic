@@ -6,10 +6,7 @@ set -euo pipefail
 
 build-initramfs () {
     echo "- Building initramfs"
-    KERNEL_SUFFIX=""
-    QUALIFIED_KERNEL="$(rpm -qa | grep -P 'kernel-(|'"$KERNEL_SUFFIX"'-)(\d+\.\d+\.\d+)' | sed -E 's/kernel-(|'"$KERNEL_SUFFIX"'-)//')"
-    /usr/bin/dracut --no-hostonly --kver "$QUALIFIED_KERNEL" --reproducible -v --add ostree -f "/lib/modules/$QUALIFIED_KERNEL/initramfs.img"
-    chmod 0600 "/lib/modules/$QUALIFIED_KERNEL/initramfs.img"
+    curl -s "https://raw.githubusercontent.com/ublue-os/main/refs/heads/main/build_files/initramfs.sh" | bash
 }
 
 install-nvidia-drivers () {
