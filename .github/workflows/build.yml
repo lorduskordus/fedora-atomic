@@ -25,20 +25,10 @@ jobs:
       fail-fast: false
       matrix:
         recipe:
-          #- cosmic/recipe-coreos.yml
-          #- cosmic/recipe-coreos-nvidia.yml
           - cosmic/recipe.yml
           - cosmic/recipe-nvidia.yml
-
-          - gnome/recipe-coreos.yml
-          - gnome/recipe-coreos-nvidia.yml
           - gnome/recipe.yml
           - gnome/recipe-nvidia.yml
-
-          - kde/recipe-coreos.yml
-          - kde/recipe-coreos-nvidia.yml
-          - kde/recipe.yml
-          - kde/recipe-nvidia.yml
     steps:
       - name: Build Custom Image
         uses: blue-build/github-action@v1.8

@@ -1,7 +1,7 @@
 # ---------- CoreOS kernel ---------- #
 
 # Get the kernel & NVIDIA akmods
-COPY --from=ghcr.io/ublue-os/akmods-nvidia-open:coreos-stable-41 /rpms /kernel-rpms /tmp/akmods-rpms
+COPY --from=ghcr.io/ublue-os/akmods-nvidia-open:coreos-stable-42 /rpms /kernel-rpms /tmp/akmods-rpms
 
 # Install the kernel
 RUN --mount=type=cache,dst=/var/cache/libdnf5 \

@@ -3,13 +3,8 @@ description: Custom Fedora GNOME image based on uBlue, built with BlueBuild. (Ba
 
 base-image: ghcr.io/ublue-os/silverblue-main
 image-version: 42
-alt-tags:
-  - main
 
 modules:
-
-  # Kernel
-  - from-file: kernel/main.yml
 
   # Common
   - from-file: common/config.yml
