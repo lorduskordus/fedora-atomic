@@ -1,0 +1,4 @@
+modules:
+
+  - from-file: kde/config/dnf.yml
+  - from-file: kde/config/files.yml

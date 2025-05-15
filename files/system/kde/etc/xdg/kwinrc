@@ -1,0 +1,8 @@
+[NightColor]
+Active=true
+LatitudeFixed=50.07
+LongitudeFixed=14.41
+Mode=Location
+
+[Plugins]
+blurEnabled=true

@@ -172,7 +172,8 @@ switch-to-image WITH="bootc":
     }
 
     AVAILABLE_DESKTOPS="cosmic \
-                        gnome"
+                        gnome \
+                        kde"
 
     IMAGE_TOOL={{ WITH }}
     if [ "${IMAGE_TOOL}" != "bootc" ] && [ "${IMAGE_TOOL}" != "rpm-ostree" ]; then

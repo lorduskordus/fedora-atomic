@@ -29,6 +29,8 @@ jobs:
           - cosmic/recipe-nvidia.yml
           - gnome/recipe.yml
           - gnome/recipe-nvidia.yml
+          - kde/recipe.yml
+          - kde/recipe-nvidia.yml
     steps:
       - name: Build Custom Image
         uses: blue-build/github-action@v1.8
