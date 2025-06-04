@@ -3,7 +3,6 @@ notify: true
 system:
   repo-url: https://dl.flathub.org/repo/flathub.flatpakrepo
   repo-name: flathub-system
-  repo-title: "Flathub (system)"
   install:
     - org.mozilla.firefox
     - org.libreoffice.LibreOffice
@@ -13,7 +12,7 @@ system:
     - org.gnome.Loupe
     - org.gnome.Snapshot
     - org.gnome.SoundRecorder
-    - io.github.dvlv.boxbuddyrs
+    - com.ranfdev.DistroShelf
     - io.github.flattool.Warehouse
     - org.gnome.Calculator
     - org.gnome.Papers
@@ -24,4 +23,3 @@ system:
 user:
   repo-url: https://dl.flathub.org/repo/flathub.flatpakrepo
   repo-name: flathub-user
-  repo-title: "Flathub"
