@@ -1,4 +1,8 @@
 type: dnf
+group-install:
+  with-optional: true
+  packages:
+    - cosmic-desktop
 repos:
   copr:
     - wiiznokes/cosmic-applets-unofficial
