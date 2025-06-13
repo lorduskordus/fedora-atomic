@@ -10,3 +10,4 @@ install:
   packages:
     - cosmic-ext-applet-clipboard-manager
     - cosmic-ext-applet-external-monitor-brightness
+    - https://github.com/D-Brox/cosmic-ext-applet-privacy-indicator/releases/download/v0.1.2/cosmic-ext-applet-privacy-indicator-0.1.2-1.x86_64.rpm
