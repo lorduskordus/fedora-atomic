@@ -3,10 +3,14 @@ remove:
   packages:
     - firefox
     - firefox-langpacks
+repos:
+  files:
+    - https://pkgs.tailscale.com/stable/fedora/tailscale.repo
 install:
   packages:
     - adw-gtk3-theme
     - rsms-inter-fonts
 
+    - tailscale
     - nm-connection-editor-desktop
     - micro
