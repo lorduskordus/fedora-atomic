@@ -2,7 +2,7 @@
 
 # Kernel install script
 
-set -oue pipefail
+set -euo pipefail
 
 install-kernel() {
     echo "- Installing kernel"
