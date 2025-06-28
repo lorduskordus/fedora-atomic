@@ -172,7 +172,6 @@ switch-to-image WITH="bootc":
     }
 
     AVAILABLE_DESKTOPS="cosmic \
-                        gnome \
                         kde"
 
     IMAGE_TOOL={{ WITH }}
