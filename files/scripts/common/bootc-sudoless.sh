@@ -34,5 +34,5 @@ EOF
 
 # Sudoers rule
 cat << 'EOF' > /etc/sudoers.d/001-bootc
-%wheel ALL=(ALL) NOPASSWD: /usr/bin/bootc update, /usr/bin/bootc upgrade, /usr/bin/bootc status, /usr/bin/bootc status --booted
+%wheel ALL=(ALL) NOPASSWD: /usr/bin/bootc update, /usr/bin/bootc update --apply, /usr/bin/bootc upgrade, /usr/bin/bootc upgrade --apply, /usr/bin/bootc status, /usr/bin/bootc status --booted
 EOF
