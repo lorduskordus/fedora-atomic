@@ -1,0 +1,4 @@
+kargs = [
+  "rd.luks.options=discard",
+  "preempt=full"
+]
