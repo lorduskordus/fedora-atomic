@@ -1,4 +1,4 @@
-name: bluebuild
+name: Build Images
 
 on:
   schedule:
@@ -15,7 +15,7 @@ concurrency:
 
 jobs:
   bluebuild:
-    name: Build Custom Image
+    name: Build
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -32,7 +32,7 @@ jobs:
           - kde/recipe.yml
           - kde/recipe-nvidia.yml
     steps:
-      - name: Build Custom Image
+      - name: Build
         uses: blue-build/github-action@v1.8
         with:
           recipe: ${{ matrix.recipe }}
