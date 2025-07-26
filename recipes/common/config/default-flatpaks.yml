@@ -1,25 +1,28 @@
 type: default-flatpaks
-notify: true
-system:
-  repo-url: https://dl.flathub.org/repo/flathub.flatpakrepo
-  repo-name: flathub-system
-  install:
-    - org.mozilla.firefox
-    - org.libreoffice.LibreOffice
-    - org.videolan.VLC
-    - io.mpv.Mpv
-    - org.gnome.Lollypop
-    - org.gnome.Loupe
-    - org.gnome.Snapshot
-    - org.gnome.SoundRecorder
-    - com.ranfdev.DistroShelf
-    - io.github.flattool.Warehouse
-    - org.gnome.Calculator
-    - org.gnome.Papers
-    - net.nokyan.Resources
-    - com.tomjwatson.Emote
-    - org.mozilla.Thunderbird
-    - org.localsend.localsend_app
-user:
-  repo-url: https://dl.flathub.org/repo/flathub.flatpakrepo
-  repo-name: flathub-user
+configurations:
+  - scope: user
+    repo:
+      url: https://dl.flathub.org/repo/flathub.flatpakrepo
+      name: flathub-user
+  - scope: system
+    notify: true
+    repo:
+      url: https://dl.flathub.org/repo/flathub.flatpakrepo
+      name: flathub-system
+    install:
+      - org.mozilla.firefox
+      - org.libreoffice.LibreOffice
+      - org.videolan.VLC
+      - io.mpv.Mpv
+      - org.gnome.Lollypop
+      - org.gnome.Loupe
+      - org.gnome.Snapshot
+      - org.gnome.SoundRecorder
+      - com.ranfdev.DistroShelf
+      - io.github.flattool.Warehouse
+      - org.gnome.Calculator
+      - org.gnome.Papers
+      - net.nokyan.Resources
+      - com.tomjwatson.Emote
+      - org.mozilla.Thunderbird
+      - org.localsend.localsend_app
