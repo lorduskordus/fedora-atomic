@@ -1,11 +1,12 @@
 type: default-flatpaks
 configurations:
   - scope: user
+    notify: false
     repo:
       url: https://dl.flathub.org/repo/flathub.flatpakrepo
       name: flathub-user
   - scope: system
-    notify: true
+    notify: false
     repo:
       url: https://dl.flathub.org/repo/flathub.flatpakrepo
       name: flathub-system
