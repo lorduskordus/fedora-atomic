@@ -6,7 +6,7 @@ configurations:
       url: https://dl.flathub.org/repo/flathub.flatpakrepo
       name: flathub-user
   - scope: system
-    notify: false
+    notify: true
     repo:
       url: https://dl.flathub.org/repo/flathub.flatpakrepo
       name: flathub-system
