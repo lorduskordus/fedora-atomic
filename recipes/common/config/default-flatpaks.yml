@@ -4,12 +4,14 @@ configurations:
     notify: false
     repo:
       url: https://dl.flathub.org/repo/flathub.flatpakrepo
-      name: flathub-user
+      name: flathub
+      title: Flathub
   - scope: system
     notify: false
     repo:
       url: https://dl.flathub.org/repo/flathub.flatpakrepo
-      name: flathub-system
+      name: flathub
+      title: Flathub
     install:
       - org.mozilla.firefox
       - org.libreoffice.LibreOffice

@@ -2,7 +2,7 @@
 allow-updates=false
 download-updates=false
 download-updates-notify=false
-packaging-format-preference=['flatpak:flathub-user']
+packaging-format-preference=['flatpak:flathub']
 
 [org/gnome/TextEditor]
 highlight-current-line=true

@@ -2,6 +2,10 @@ type: default-flatpaks
 configurations:
   - scope: system
     notify: false
+    repo:
+      url: https://dl.flathub.org/repo/flathub.flatpakrepo
+      name: flathub
+      title: Flathub
     install:
       - com.mattjakeman.ExtensionManager
       - com.github.tchx84.Flatseal
