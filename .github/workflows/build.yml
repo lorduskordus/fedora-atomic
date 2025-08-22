@@ -1,20 +1,19 @@
 name: Build Images
 
 on:
-  schedule:
-    - cron: "35 04 * * *" # 04:35 UTC daily (30 minutes after ublue-os/main)
-  push:
-    paths-ignore:
-      - "**.md"
   pull_request:
   workflow_dispatch:
+  schedule:
+    - cron: "00 02 * * *"
+  push:
+    paths-ignore: ["**.md"]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
   cancel-in-progress: true
 
 jobs:
-  bluebuild:
+  build:
     name: Build
     runs-on: ubuntu-latest
     permissions:
