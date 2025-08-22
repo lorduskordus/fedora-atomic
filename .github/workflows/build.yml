@@ -26,8 +26,6 @@ jobs:
         recipe:
           - cosmic/recipe.yml
           - cosmic/recipe-nvidia.yml
-          # - gnome/recipe.yml
-          # - gnome/recipe-nvidia.yml
           - kde/recipe.yml
           - kde/recipe-nvidia.yml
     steps:

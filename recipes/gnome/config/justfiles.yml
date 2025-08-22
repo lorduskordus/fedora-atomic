@@ -1,6 +1,0 @@
-type: justfiles
-source: ghcr.io/lorduskordus/bluebuild-modules
-using-ujust: false
-validate: true
-include:
-  - gnome

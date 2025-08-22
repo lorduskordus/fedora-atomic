@@ -18,16 +18,6 @@ ostree-image-signed:docker://ghcr.io/lorduskordus/fedora-base-cosmic
 ```
 ostree-image-signed:docker://ghcr.io/lorduskordus/fedora-base-cosmic-nvidia
 ```
-<!--
-##### GNOME
-```
-ostree-image-signed:docker://ghcr.io/lorduskordus/fedora-base-gnome
-```
-##### GNOME (NVIDIA)
-```
-ostree-image-signed:docker://ghcr.io/lorduskordus/fedora-base-gnome-nvidia
-```
--->
 ##### KDE
 ```
 ostree-image-signed:docker://ghcr.io/lorduskordus/fedora-base-kde

@@ -1,8 +1,0 @@
-type: gnome-extensions
-install:
-  - ArcMenu
-  - Legacy (GTK3) Theme Scheme Auto Switcher
-  - Night Theme Switcher
-  - Tiling Assistant
-  - Just Perfection
-  #- Pano - Clipboard Manager
