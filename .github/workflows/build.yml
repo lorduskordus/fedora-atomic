@@ -30,7 +30,7 @@ jobs:
           - kde/recipe-nvidia.yml
     steps:
       - name: Build
-        uses: blue-build/github-action@v1.8
+        uses: blue-build/github-action@v1.9
         with:
           recipe: ${{ matrix.recipe }}
           cosign_private_key: ${{ secrets.SIGNING_SECRET }}
