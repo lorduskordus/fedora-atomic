@@ -8,9 +8,10 @@ repos:
     - https://pkgs.tailscale.com/stable/fedora/tailscale.repo
 install:
   packages:
-    - adw-gtk3-theme
     - rsms-inter-fonts
+    - adw-gtk3-theme
 
-    - tailscale
     - nm-connection-editor-desktop
+    - tailscale
+    - ddcutil
     - micro
