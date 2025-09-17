@@ -23,6 +23,7 @@ configurations:
       - org.gnome.SoundRecorder
       - com.ranfdev.DistroShelf
       - io.github.flattool.Warehouse
+      - com.github.tchx84.Flatseal
       - org.gnome.Calculator
       - org.gnome.Papers
       - net.nokyan.Resources
