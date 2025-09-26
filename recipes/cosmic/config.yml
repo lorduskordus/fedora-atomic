@@ -1,3 +1,4 @@
 modules:
 
   - from-file: cosmic/config/dnf.yml
+  - from-file: cosmic/config/flatpaks.yml
