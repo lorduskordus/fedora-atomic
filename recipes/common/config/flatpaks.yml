@@ -13,20 +13,32 @@ configurations:
       name: flathub
       title: Flathub
     install:
-      - org.mozilla.firefox
-      - org.libreoffice.LibreOffice
+      # Basics
+      - org.gnome.Calculator
+      - org.gnome.clocks
+
+      # App management
+      - net.nokyan.Resources
+      - it.mijorus.gearlever
+      - com.ranfdev.DistroShelf
+      - io.github.flattool.Warehouse
+      - com.github.tchx84.Flatseal
+
+      # Internet & Communication
+      - com.brave.Browser
+      - eu.betterbird.Betterbird
+      - org.localsend.localsend_app
+
+      # Documents
+      - org.onlyoffice.desktopeditors
+      - org.gnome.Papers
+
+      # Media
       - org.videolan.VLC
       - io.mpv.Mpv
       - org.gnome.Lollypop
       - org.gnome.Loupe
+
+      # Recording
       - org.gnome.Snapshot
       - org.gnome.SoundRecorder
-      - com.ranfdev.DistroShelf
-      - io.github.flattool.Warehouse
-      - com.github.tchx84.Flatseal
-      - org.gnome.Calculator
-      - org.gnome.Papers
-      - net.nokyan.Resources
-      - com.tomjwatson.Emote
-      - org.mozilla.Thunderbird
-      - org.localsend.localsend_app
