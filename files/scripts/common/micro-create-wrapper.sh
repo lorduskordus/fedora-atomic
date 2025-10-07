@@ -36,14 +36,13 @@ mv "$MICRO_WRAPPER" "$MICRO_RENAMED"
 
 # Create the wrapper
 echo "- Creating wrapper at '$MICRO_WRAPPER'"
-tee "$MICRO_WRAPPER" >/dev/null <<'EOF'
-#!/usr/bin/sh
-# A simple wrapper for 'micro' to always use '--colorscheme=simple' argument
-exec /usr/bin/micro-bin --colorscheme=simple "$@"
+cat << EOF > "$MICRO_WRAPPER"
+#!/bin/sh
+exec $MICRO_RENAMED --colorscheme=simple "\$@"
 EOF
 
 # Make the wrapper executable
 echo "- Setting executable permissions on wrapper"
-sudo chmod +x "$MICRO_WRAPPER"
+chmod +x "$MICRO_WRAPPER"
 
 echo "- Done."
