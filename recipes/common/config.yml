@@ -1,6 +1,7 @@
 modules:
 
   - from-file: common/config/kernel.yml
+  - from-file: common/config/kargs.yml
   - from-file: common/config/dnf.yml
   - from-file: common/config/brew.yml
   - from-file: common/config/flatpaks.yml

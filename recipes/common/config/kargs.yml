@@ -1,0 +1,4 @@
+type: kargs
+kargs:
+  - preempt=full              # Enable full kernel preemption
+  - rd.luks.options=discard   # Allow TRIM on encrypted LUKS volumes
