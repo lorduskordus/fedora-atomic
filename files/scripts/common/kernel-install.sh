@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 
-# Kernel install script
+# Installs a specified kernel and NVIDIA drivers if needed
 
 set -euo pipefail
 
 install-kernel() {
-    echo "- Installing kernel"
+    echo "- Replacing kernel"
 
     dnf5 -y remove kernel-{core,modules,modules-core,modules-extra,tools,tools-libs}
 
@@ -24,7 +24,7 @@ install-kernel() {
 }
 
 install-nvidia-drivers () {
-    echo "- Installing drivers"
+    echo "- Installing NVIDIA drivers"
     export IMAGE_NAME=$(awk -F'/' '{print $3}' <<< "${BASE_IMAGE}" | cut -d'-' -f1)
     curl -s "https://raw.githubusercontent.com/ublue-os/main/refs/heads/main/build_files/nvidia-install.sh" | bash
 }
@@ -34,28 +34,33 @@ build-initramfs () {
     curl -s "https://raw.githubusercontent.com/ublue-os/main/refs/heads/main/build_files/initramfs.sh" | bash
 }
 
-echo "Kernel install script"
+install () {
+    AKMODS_FLAVOR=${1:-"main"}
 
-AKMODS_FLAVOR="coreos-stable"
+    INFO_STRING="Installing kernel (${AKMODS_FLAVOR})"
 
-if [[ "${IMAGE_NAME}" == *"nvidia-closed"* ]]; then
-    echo "Image: NVIDIA (closed)"
-    AKMODS_TYPE="akmods-nvidia"
-    NEEDS_NVIDIA=1
-elif [[ "${IMAGE_NAME}" == *"nvidia"* ]]; then
-    echo "Image: NVIDIA (open)"
-    AKMODS_TYPE="akmods-nvidia-open"
-    NEEDS_NVIDIA=1
-else
-    echo "Image: MAIN"
-    AKMODS_TYPE="akmods"
-    NEEDS_NVIDIA=0
-fi
+    if [[ "${IMAGE_NAME}" == *"nvidia-closed"* ]]; then
+        INFO_STRING+=" and NVIDIA drivers (closed)"
+        AKMODS_TYPE="akmods-nvidia"
+        NEEDS_NVIDIA=1
+    elif [[ "${IMAGE_NAME}" == *"nvidia"* ]]; then
+        INFO_STRING+=" and NVIDIA drivers (open)"
+        AKMODS_TYPE="akmods-nvidia-open"
+        NEEDS_NVIDIA=1
+    else
+        AKMODS_TYPE="akmods"
+        NEEDS_NVIDIA=0
+    fi
 
-install-kernel
+    echo "${INFO_STRING}"
 
-if [[ "${NEEDS_NVIDIA}" -eq 1 ]]; then
-    install-nvidia-drivers
-fi
+    install-kernel
 
-build-initramfs
+    if [[ "${NEEDS_NVIDIA}" -eq 1 ]]; then
+        install-nvidia-drivers
+    fi
+
+    build-initramfs
+}
+
+install "coreos-stable"
