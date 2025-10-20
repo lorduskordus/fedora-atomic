@@ -7,7 +7,7 @@ set -euo pipefail
 echo "Apply a fix for Flatpaked Vulkan apps trying to use NVIDIA"
 
 if [[ "${IMAGE_NAME}" != *"nvidia"* ]]; then
-    echo "- Not a NVIDIA image. Exiting."
+    echo "- Not a NVIDIA image. Skipping."
     exit 0
 fi
 
