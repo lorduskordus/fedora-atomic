@@ -41,8 +41,8 @@ cat << EOF > "$MICRO_WRAPPER"
 exec $MICRO_RENAMED --colorscheme=simple "\$@"
 EOF
 
-# Make the wrapper executable
-echo "- Setting executable permissions on wrapper"
-chmod +x "$MICRO_WRAPPER"
+# Ensure wrapper has the right permissions
+echo "- Setting permissions on wrapper"
+chmod 755 "$MICRO_WRAPPER"
 
 echo "- Done."
