@@ -54,13 +54,22 @@ flatpak ACTION="prompt":
     }
 
     install-codecs () {
-        RUNTIME_VERSION="$(flatpak info --show-runtime org.mozilla.firefox | awk -F/ '{print $NF}')"
+        DEFAULT_BROWSER="$(xdg-settings get default-web-browser 2> /dev/null | sed 's/\.desktop$//')"
+        RUNTIME_VERSION="$(flatpak info --show-runtime ${DEFAULT_BROWSER} 2> /dev/null | awk -F/ '{print $NF}')"
+        if [ -z "${RUNTIME_VERSION}" ]; then
+            echo "Codec runtimes are determined from the default browser. Either it isn't set or the browser is not packaged in Flatpak."
+            exit 0
+        fi
         CODECS_STR="org.freedesktop.Platform.ffmpeg-full/x86_64/${RUNTIME_VERSION} org.freedesktop.Platform.VAAPI.Intel/x86_64/${RUNTIME_VERSION}"
         flatpak install --system ${CODECS_STR}
     }
 
     install-mangohud () {
-        RUNTIME_VERSION="$(flatpak info --show-runtime com.valvesoftware.Steam | awk -F/ '{print $NF}')"
+        RUNTIME_VERSION="$(flatpak info --show-runtime com.valvesoftware.Steam 2> /dev/null | awk -F/ '{print $NF}')"
+        if [ -z "${RUNTIME_VERSION}" ]; then
+            echo "MangoHud's runtime is determined from the Steam Flatpak, which is not installed."
+            exit 0
+        fi
         flatpak --system install org.freedesktop.Platform.VulkanLayer.MangoHud//${RUNTIME_VERSION}
     }
 
