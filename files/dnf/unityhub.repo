@@ -1,0 +1,7 @@
+[unityhub]
+name=Unity Hub
+baseurl=https://hub.unity3d.com/linux/repos/rpm/stable
+enabled=1
+gpgcheck=1
+gpgkey=https://hub.unity3d.com/linux/repos/rpm/stable/repodata/repomd.xml.key
+repo_gpgcheck=1

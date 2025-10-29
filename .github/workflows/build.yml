@@ -24,10 +24,10 @@ jobs:
       fail-fast: false
       matrix:
         recipe:
-          - cosmic/recipe.yml
-          - cosmic/recipe-nvidia.yml
-          - kde/recipe.yml
-          - kde/recipe-nvidia.yml
+          - base/cosmic/recipe.yml
+          - base/kde/recipe.yml
+          - next/cosmic/recipe.yml
+          - next/kde/recipe.yml
     steps:
       - name: Build
         uses: blue-build/github-action@v1.9

@@ -1,0 +1,8 @@
+brew "fastfetch"
+brew "ncdu"
+brew "ranger"
+brew "make"
+brew "meson"
+brew "gcc"
+brew "gdb"
+brew "dotnet"

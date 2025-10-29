@@ -1,0 +1,29 @@
+modules:
+
+  - type: dnf
+    repos:
+      copr:
+        - ryanabx/cosmic-epoch
+    install:
+      packages:
+        - cosmic-desktop
+        - gnome-keyring-pam
+        - gvfs*
+
+  - type: default-flatpaks
+    configurations:
+      - scope: user
+        notify: false
+        repo:
+          url: https://apt.pop-os.org/cosmic/cosmic.flatpakrepo
+          name: cosmic
+          title: COSMIC
+      - scope: system
+        notify: false
+        repo:
+          url: https://apt.pop-os.org/cosmic/cosmic.flatpakrepo
+          name: cosmic
+          title: COSMIC
+        install:
+          - io.github.cosmic_utils.cosmic-ext-applet-clipboard-manager
+          - io.github.cosmic_utils.cosmic-ext-applet-external-monitor-brightness

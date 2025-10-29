@@ -1,0 +1,3 @@
+type: script
+scripts:
+  - base/kde/fix-flatpak-nvidia-vulkan.sh

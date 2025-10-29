@@ -1,0 +1,10 @@
+name: fedora-base-kde
+description: Customized Fedora KDE Atomic
+
+base-image: ghcr.io/ublue-os/kinoite-main
+image-version: 43
+
+modules:
+
+  - from-file: base/common/config.yml
+  - from-file: base/kde/config.yml

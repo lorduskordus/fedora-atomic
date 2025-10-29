@@ -1,0 +1,11 @@
+name: justfiles
+shortdesc: The justfiles module makes it easy to include just recipes from multiple files. 
+example: |
+  type: justfiles
+  using-ujust: false
+  validate: true
+  include:
+    - common
+    - gnome/monitors.just
+    - shared/flatpak/fix-theming.just
+    - justfile1.just

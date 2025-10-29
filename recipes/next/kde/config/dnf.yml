@@ -1,0 +1,9 @@
+type: dnf
+repos:
+  copr:
+    - matinlotfali/KDE-Rounded-Corners
+    - hazel-bunny/ricing
+install:
+  packages:
+    - kwin-effect-roundcorners
+    - kwin-effects-forceblur

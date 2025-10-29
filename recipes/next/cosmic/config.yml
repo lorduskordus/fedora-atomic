@@ -1,0 +1,4 @@
+modules:
+
+  - from-file: base/cosmic/config.yml
+  

@@ -1,0 +1,6 @@
+type: justfiles
+source: local
+using-ujust: false
+validate: true
+include:
+  - next/common
