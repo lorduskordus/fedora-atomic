@@ -1,6 +1,16 @@
-# Fedora Atomic &nbsp; [![build-ublue](https://github.com/lorduskordus/fedora-atomic/actions/workflows/build.yml/badge.svg)](https://github.com/lorduskordus/fedora-atomic/actions/workflows/build.yml)
+<h1 align="center">
+    Fedora Atomic
+    <br>
+    <a href="https://github.com/lorduskordus/fedora-atomic/actions/workflows/build.yml">
+        <img src="https://github.com/lorduskordus/fedora-atomic/actions/workflows/build.yml/badge.svg" alt="build-images">
+    </a>
+</h1>
 
-Customized [Fedora Atomic Desktop](https://fedoraproject.org/atomic-desktops/) built with [BlueBuild](https://blue-build.org/) on top of [Universal Blue](https://universal-blue.org/).
+<h3 align="center">
+    Customized <a href="https://fedoraproject.org/atomic-desktops">Fedora Atomic Desktop</a> built with <a href="https://blue-build.org">BlueBuild</a> on top of <a href="https://universal-blue.org">Universal Blue</a>
+</h3>
+
+<br>
 
 ## Base Images (kinda generic)
 
@@ -12,6 +22,8 @@ ostree-image-signed:docker://ghcr.io/lorduskordus/fedora-base-cosmic
 ```
 ostree-image-signed:docker://ghcr.io/lorduskordus/fedora-base-kde
 ```
+
+<br>
 
 ## Next Images (more opinionated, experimental)
 
