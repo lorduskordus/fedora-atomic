@@ -7,9 +7,6 @@ repos:
   keys:
     - https://packages.microsoft.com/keys/microsoft.asc
     - https://hub.unity3d.com/linux/repos/rpm/stable/repodata/repomd.xml.key
-  copr:
-    # F42 doesn't have eza, this COPR does
-    - alternateved/eza
 group-install:
   packages:
     - virtualization
@@ -20,10 +17,6 @@ install:
     - containerd.io
     - docker-buildx-plugin
     - docker-compose-plugin
-
-    - fish
-    - bat
-    - eza
 
     - android-tools
 

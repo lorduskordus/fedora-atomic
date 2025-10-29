@@ -6,12 +6,19 @@ remove:
 repos:
   files:
     - https://pkgs.tailscale.com/stable/fedora/tailscale.repo
+  copr:
+    - alternateved/eza
 install:
   packages:
     - rsms-inter-fonts
     - adw-gtk3-theme
 
+    - micro
+    - fish
+    - bat
+    - eza
+
+    - ddcutil
+
     - nm-connection-editor-desktop
     - tailscale
-    - ddcutil
-    - micro

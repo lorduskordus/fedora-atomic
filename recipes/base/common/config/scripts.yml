@@ -1,5 +1,5 @@
 type: script
 scripts:
-  - shared/micro-wrapper-default.sh
-  - shared//brave-enable-flags.sh
-  - shared/bootc-sudoless.sh
+  - base/common/bootc-sudoless.sh
+  - base/common/micro-wrapper-default.sh
+  - base/common/brave-enable-flags.sh
