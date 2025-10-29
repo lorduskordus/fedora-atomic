@@ -39,8 +39,8 @@ fi
 
 # Fish
 if command -v fish &> /dev/null; then
-    if [ ! -f /etc/fish/conf.d/bootc.fish ]; then
-        cat << 'EOF' > /etc/fish/conf.d/bootc.fish
+    if [ ! -f /usr/share/fish/vendor_conf.d/bootc.fish ]; then
+        cat << 'EOF' > /usr/share/fish/vendor_conf.d/bootc.fish
 if test (id -u) -ne 0
     function bootc
         if test (id -u) -eq 0
