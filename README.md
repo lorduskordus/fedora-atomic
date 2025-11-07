@@ -1,3 +1,7 @@
+<div align="center">
+    <img src="assets/fedora-transparent.svg" width="150" title="Fedora logo">
+</div>
+
 <h1 align="center">
     Fedora Atomic
     <br>
