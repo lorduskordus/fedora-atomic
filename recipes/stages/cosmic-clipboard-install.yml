@@ -1,0 +1,6 @@
+modules:
+
+  - type: copy
+    from: cosmic-clipboard
+    src: /out
+    dest: /usr

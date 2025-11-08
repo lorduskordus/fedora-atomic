@@ -25,5 +25,4 @@ modules:
           name: cosmic
           title: COSMIC
         install:
-          - io.github.cosmic_utils.cosmic-ext-applet-clipboard-manager
           - io.github.cosmic_utils.cosmic-ext-applet-external-monitor-brightness

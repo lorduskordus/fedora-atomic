@@ -1,0 +1,6 @@
+modules:
+
+  - type: copy
+    from: kde-rounded-corners
+    src: /out
+    dest: /usr

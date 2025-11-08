@@ -1,0 +1,6 @@
+name: kde-rounded-corners
+from: ghcr.io/ublue-os/kinoite-main
+modules:
+  - type: script
+    scripts:
+      - stages/kde-rounded-corners-build.sh

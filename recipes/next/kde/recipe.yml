@@ -4,7 +4,15 @@ description: Customized Fedora KDE Atomic
 base-image: ghcr.io/ublue-os/kinoite-main
 image-version: 43
 
+stages:
+
+  - from-file: stages/kde-rounded-corners-build.yml
+  - from-file: stages/cosmic-clipboard-build.yml
+
 modules:
+
+  - from-file: stages/kde-rounded-corners-install.yml
+  - from-file: stages/cosmic-clipboard-install.yml
 
   - from-file: next/common/config.yml
   - from-file: next/kde/config.yml

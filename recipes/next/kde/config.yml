@@ -1,6 +1,4 @@
 modules:
 
   - from-file: base/kde/config.yml
-
-  - from-file: next/kde/config/dnf.yml
   

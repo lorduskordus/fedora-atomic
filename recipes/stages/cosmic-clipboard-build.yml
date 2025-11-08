@@ -1,0 +1,6 @@
+name: cosmic-clipboard
+from: ghcr.io/ublue-os/base-main
+modules:
+  - type: script
+    scripts:
+      - stages/cosmic-clipboard-build.sh

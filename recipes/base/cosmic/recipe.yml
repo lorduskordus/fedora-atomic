@@ -4,7 +4,13 @@ description: Customized Fedora COSMIC Atomic
 base-image: ghcr.io/ublue-os/base-main
 image-version: 43
 
+stages:
+
+  - from-file: stages/cosmic-clipboard-build.yml
+
 modules:
+
+  - from-file: stages/cosmic-clipboard-install.yml
 
   - from-file: base/common/config.yml
   - from-file: base/cosmic/config.yml
