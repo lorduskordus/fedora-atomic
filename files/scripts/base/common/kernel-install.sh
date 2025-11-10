@@ -43,7 +43,7 @@ install () {
         INFO_STRING+=" and NVIDIA drivers (closed)"
         AKMODS_TYPE="akmods-nvidia"
         NEEDS_NVIDIA=1
-    elif [[ "${IMAGE_NAME}" == *"nvidia"* ]]; then
+    elif [[ "${IMAGE_NAME}" == *"nvidia"* || "${IMAGE_NAME}" == *"next"* ]]; then
         INFO_STRING+=" and NVIDIA drivers (open)"
         AKMODS_TYPE="akmods-nvidia-open"
         NEEDS_NVIDIA=1
@@ -62,12 +62,5 @@ install () {
 
     build-initramfs
 }
-
-# I want to keep my image name clean and this script 'generic', so this temporarily
-# appends '-nvidia' to 'next' images, so that they are detected as NVIDIA images.
-# -------------------------------------------------------------------------------- #
-if [[ "${IMAGE_NAME}" == *"next"* ]]; then
-    IMAGE_NAME+="-nvidia"
-fi
 
 install "main"
