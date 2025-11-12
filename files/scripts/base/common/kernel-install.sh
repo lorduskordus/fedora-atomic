@@ -63,4 +63,4 @@ install () {
     build-initramfs
 }
 
-install "main"
+install "coreos-stable"
