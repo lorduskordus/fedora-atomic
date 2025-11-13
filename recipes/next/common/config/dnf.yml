@@ -4,6 +4,7 @@ repos:
     - vscode.repo
     - unityhub.repo
     - https://download.docker.com/linux/fedora/docker-ce.repo
+    - https://download.opensuse.org/repositories/home:mkittler/Fedora_%OS_VERSION%/home:mkittler.repo
   keys:
     - https://packages.microsoft.com/keys/microsoft.asc
     - https://hub.unity3d.com/linux/repos/rpm/stable/repodata/repomd.xml.key
@@ -24,6 +25,7 @@ install:
     - wireshark
 
     - syncthing
+    - syncthingtray
     - nextcloud-client
     
     - code
