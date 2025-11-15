@@ -16,26 +16,55 @@
 
 <br>
 
-## Base Images (kinda generic)
+## Images
 
-##### COSMIC
-```
-ostree-image-signed:docker://ghcr.io/lorduskordus/fedora-base-cosmic
-```
-##### KDE
-```
-ostree-image-signed:docker://ghcr.io/lorduskordus/fedora-base-kde
-```
+### Base (kinda generic)
 
-<br>
+- ##### COSMIC
+  ```
+  ghcr.io/lorduskordus/fedora-base-cosmic
+  ```
+- ##### KDE
+  ```
+  ghcr.io/lorduskordus/fedora-base-kde
+  ```
 
-## Next Images (more opinionated, experimental)
+### Next (more opinionated, experimental)
 
-##### COSMIC (NVIDIA)
-```
-ostree-image-signed:docker://ghcr.io/lorduskordus/fedora-next-cosmic
-```
-##### KDE (NVIDIA)
-```
-ostree-image-signed:docker://ghcr.io/lorduskordus/fedora-next-kde
+- ##### COSMIC (NVIDIA)
+  ```
+  ghcr.io/lorduskordus/fedora-next-cosmic
+  ```
+- ##### KDE (NVIDIA)
+  ```
+  ghcr.io/lorduskordus/fedora-next-kde
+  ```
+
+## Installation
+
+To rebase an existing [Fedora Atomic Desktop](https://fedoraproject.org/atomic-desktops) installation to the latest build:
+
+- ##### First rebase to the unsigned image, to get the proper signing keys and policies installed:
+  ```
+  bootc switch ghcr.io/lorduskordus/fedora-base-kde:latest
+  ```
+- ##### Reboot to complete the rebase:
+  ```
+  systemctl reboot
+  ```
+- ##### Then rebase to the signed image, like so:
+  ```
+  bootc switch --enforce-container-sigpolicy ghcr.io/lorduskordus/fedora-base-kde:latest
+  ```
+- ##### Reboot again to complete the installation
+  ```
+  systemctl reboot
+  ```
+
+## Verification
+
+These images are signed with [Sigstore](https://www.sigstore.dev/)'s [cosign](https://github.com/sigstore/cosign). You can verify the signature by downloading the `cosign.pub` file from this repo and running the following command:
+
+```bash
+cosign verify --key cosign.pub ghcr.io/lorduskordus/fedora-base-kde:latest
 ```
