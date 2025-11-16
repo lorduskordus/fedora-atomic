@@ -1,0 +1,3 @@
+type: script
+scripts:
+  - kde/fix-flatpak-nvidia-vulkan.sh

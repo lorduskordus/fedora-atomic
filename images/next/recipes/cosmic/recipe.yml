@@ -1,0 +1,10 @@
+name: fedora-next-cosmic
+description: Customized Fedora COSMIC Atomic
+
+base-image: ghcr.io/lorduskordus/fedora-base-cosmic-nvidia
+image-version: latest
+
+modules:
+
+  - from-file: common/config.yml
+  # - from-file: cosmic/config.yml

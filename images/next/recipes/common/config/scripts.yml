@@ -1,0 +1,4 @@
+type: script
+scripts:
+  - common/containers-add-wrappers.sh
+  - common/unity-use-discrete-gpu.sh

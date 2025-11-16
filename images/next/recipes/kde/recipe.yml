@@ -1,0 +1,13 @@
+name: fedora-next-kde
+description: Customized Fedora KDE Atomic
+
+base-image: ghcr.io/lorduskordus/fedora-base-kde-nvidia
+image-version: latest
+
+modules:
+
+  - from-file: common/config.yml
+  - from-file: kde/config.yml
+
+  # Temporarily install COSMIC DE
+  - from-file: addons/cosmic-desktop.yml

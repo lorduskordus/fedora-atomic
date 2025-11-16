@@ -1,5 +1,0 @@
-type: hide-app-launchers
-source: local
-hide:
-  - nvtop
-  - htop

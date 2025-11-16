@@ -5,8 +5,8 @@
 <h1 align="center">
     Fedora Atomic
     <br>
-    <a href="https://github.com/lorduskordus/fedora-atomic/actions/workflows/build.yml">
-        <img src="https://github.com/lorduskordus/fedora-atomic/actions/workflows/build.yml/badge.svg" alt="build-images">
+    <a href="https://github.com/lorduskordus/fedora-atomic/actions/workflows/build-all.yml">
+        <img src="https://github.com/lorduskordus/fedora-atomic/actions/workflows/build-all.yml/badge.svg" alt="build-all">
     </a>
 </h1>
 
@@ -24,9 +24,17 @@
   ```
   ghcr.io/lorduskordus/fedora-base-cosmic
   ```
+- ##### COSMIC (NVIDIA)
+  ```
+  ghcr.io/lorduskordus/fedora-base-cosmic-nvidia
+  ```
 - ##### KDE
   ```
   ghcr.io/lorduskordus/fedora-base-kde
+  ```
+- ##### KDE (NVIDIA)
+  ```
+  ghcr.io/lorduskordus/fedora-base-kde-nvidia
   ```
 
 ### Next (more opinionated, experimental)
@@ -63,7 +71,7 @@ To rebase an existing [Fedora Atomic Desktop](https://fedoraproject.org/atomic-d
 
 ## Verification
 
-These images are signed with [Sigstore](https://www.sigstore.dev/)'s [cosign](https://github.com/sigstore/cosign). You can verify the signature by downloading the `cosign.pub` file from this repo and running the following command:
+These images are signed with [Sigstore](https://www.sigstore.dev/)'s [cosign](https://github.com/sigstore/cosign). You can verify the signature by downloading the `cosign.pub` file from this repo (under the images folder) and running the following command:
 
 ```bash
 cosign verify --key cosign.pub ghcr.io/lorduskordus/fedora-base-kde:latest

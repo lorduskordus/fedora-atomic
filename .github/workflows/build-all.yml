@@ -1,0 +1,27 @@
+name: Build All
+
+on:
+  pull_request:
+  workflow_dispatch:
+  schedule:
+    - cron: "00 02 * * *"
+  push:
+    paths-ignore:
+      - "**.md"
+      - "assets/**"
+
+permissions:
+  contents: read
+  packages: write
+  id-token: write
+
+jobs:
+  cosmic:
+    name: COSMIC
+    uses: ./.github/workflows/build-cosmic.yml
+    secrets: inherit
+
+  kde:
+    name: KDE
+    uses: ./.github/workflows/build-kde.yml
+    secrets: inherit
