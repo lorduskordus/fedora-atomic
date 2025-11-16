@@ -1,4 +1,7 @@
 type: systemd
 system:
+  masked:
+    - rpm-ostreed-automatic.timer
   enabled:
     - disable-intel-turboboost.service
+    - bootc-fetch-apply-updates.timer
