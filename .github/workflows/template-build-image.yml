@@ -1,4 +1,4 @@
-name: Build Template
+name: Template - Build Image
 
 on:
   workflow_call:

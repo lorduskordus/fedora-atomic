@@ -1,0 +1,37 @@
+name: Template - Build Desktop
+
+on:
+  workflow_call:
+    inputs:
+      desktop:
+        required: true
+        type: string
+
+jobs:
+  base:
+    name: Base
+    uses: ./.github/workflows/template-build-image.yml
+    secrets: inherit
+    with:
+      pretty_name: "Base"
+      working_directory: images/base
+      recipe: ${{ inputs.desktop }}/recipe.yml
+
+  base-nvidia:
+    name: Base
+    uses: ./.github/workflows/template-build-image.yml
+    secrets: inherit
+    with:
+      pretty_name: "Base NVIDIA"
+      working_directory: images/base
+      recipe: ${{ inputs.desktop }}/recipe-nvidia.yml
+
+  next:
+    needs: base-nvidia
+    name: Next
+    uses: ./.github/workflows/template-build-image.yml
+    secrets: inherit
+    with:
+      pretty_name: "Next"
+      working_directory: images/next
+      recipe: ${{ inputs.desktop }}/recipe.yml

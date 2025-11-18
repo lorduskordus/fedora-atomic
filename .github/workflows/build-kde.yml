@@ -10,30 +10,9 @@ permissions:
   id-token: write
 
 jobs:
-  base:
-    name: Base
-    uses: ./.github/workflows/build-template.yml
+  build:
+    name: KDE
+    uses: ./.github/workflows/template-build-desktop.yml
     secrets: inherit
     with:
-      pretty_name: "Base"
-      working_directory: images/base
-      recipe: kde/recipe.yml
-
-  base-nvidia:
-    name: Base
-    uses: ./.github/workflows/build-template.yml
-    secrets: inherit
-    with:
-      pretty_name: "Base NVIDIA"
-      working_directory: images/base
-      recipe: kde/recipe-nvidia.yml
-
-  next:
-    needs: base-nvidia
-    name: Next
-    uses: ./.github/workflows/build-template.yml
-    secrets: inherit
-    with:
-      pretty_name: "Next"
-      working_directory: images/next
-      recipe: kde/recipe.yml
+      desktop: kde
