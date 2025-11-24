@@ -52,15 +52,15 @@
 
 To rebase an existing [Fedora Atomic Desktop](https://fedoraproject.org/atomic-desktops) installation to the latest build:
 
-- ##### First rebase to the unsigned image, to get the proper signing keys and policies installed:
+- ##### First rebase to the unsigned image, to get the proper signing keys and policies installed
   ```
   bootc switch ghcr.io/lorduskordus/fedora-base-kde:latest
   ```
-- ##### Reboot to complete the rebase:
+- ##### Reboot to complete the rebase
   ```
   systemctl reboot
   ```
-- ##### Then rebase to the signed image, like so:
+- ##### Then rebase to the signed image
   ```
   bootc switch --enforce-container-sigpolicy ghcr.io/lorduskordus/fedora-base-kde:latest
   ```
