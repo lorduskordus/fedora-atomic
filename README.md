@@ -1,20 +1,17 @@
 <div align="center">
     <img src="assets/fedora-transparent.svg" width="150" title="Fedora logo">
-</div>
-
-<h1 align="center">
-    Fedora Atomic
+    <h1>
+        Fedora Atomic
+        <br>
+        <a href="https://github.com/lorduskordus/fedora-atomic/actions/workflows/build-all.yml">
+            <img src="https://github.com/lorduskordus/fedora-atomic/actions/workflows/build-all.yml/badge.svg" alt="build-all">
+        </a>
+    </h1>
+    <h3>
+        Customized <a href="https://fedoraproject.org/atomic-desktops">Fedora Atomic Desktop</a> built with <a href="https://blue-build.org">BlueBuild</a> on top of <a href="https://universal-blue.org">Universal Blue</a>
+    </h3>
     <br>
-    <a href="https://github.com/lorduskordus/fedora-atomic/actions/workflows/build-all.yml">
-        <img src="https://github.com/lorduskordus/fedora-atomic/actions/workflows/build-all.yml/badge.svg" alt="build-all">
-    </a>
-</h1>
-
-<h3 align="center">
-    Customized <a href="https://fedoraproject.org/atomic-desktops">Fedora Atomic Desktop</a> built with <a href="https://blue-build.org">BlueBuild</a> on top of <a href="https://universal-blue.org">Universal Blue</a>
-</h3>
-
-<br>
+</div>
 
 ## Images
 
