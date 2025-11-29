@@ -23,7 +23,6 @@ install:
 
     - syncthing
     - syncthingtray
-    - nextcloud-client
     
     - code
     - unityhub

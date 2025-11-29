@@ -21,4 +21,5 @@ install:
     - ddcutil
 
     - nm-connection-editor-desktop
+    - nextcloud-client
     - tailscale
