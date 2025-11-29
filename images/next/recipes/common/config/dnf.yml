@@ -19,9 +19,6 @@ install:
     - docker-buildx-plugin
     - docker-compose-plugin
 
-    - android-tools
-
-    - nmap
     - wireshark
 
     - syncthing
