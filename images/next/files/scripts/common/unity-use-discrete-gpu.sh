@@ -50,6 +50,8 @@ if grep -qF "$ORIGINAL_EXEC_STR" "$DESKTOP_FILE"; then
     echo "  - Found correct Exec string in the launcher."
     echo "  - Enabling it."
     sed -i "s:$ORIGINAL_EXEC_STR:$NEW_EXEC_STR:" "$DESKTOP_FILE"
+elif grep -qF "$NEW_EXEC_STR" "$DESKTOP_FILE"; then
+    echo "  - Already enabled."
 else
     echo "  - Error: Could not find Exec string '$ORIGINAL_EXEC_STR' in the launcher."
     echo "      - Someone upstream probably f'd up and changed the string."
