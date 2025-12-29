@@ -1,22 +1,4 @@
 type: dnf
-repos:
-  copr:
-    - ryanabx/cosmic-epoch
-install:
+group-install:
   packages:
-    - cosmic-desktop
-
-    # GNOME keyring (included in official builds)
-    - gnome-keyring-pam # Pulls 'gnome-keyring' as a dependency
-
-    # GVFS backends (included in official builds)
-    - gvfs-nfs      # Network File System       - NFS shares
-    - gvfs-smb      # Server Message Block      - Windows/Samba shares
-    - gvfs-fuse     # FUSE bridge               - GVFS mounts visible as folders
-
-    # GVFS backends (not included, might not be needed)
-    - gvfs-afc      # Apple File Connection     - iOS devices over USB
-    - gvfs-afp      # Apple Filing Protocol     - older Mac shares
-    - gvfs-archive  # Archive handler           - browse ZIP/TAR/ISO files
-    - gvfs-gphoto2  # Picture Transfer Protocol - digital cameras
-    - gvfs-mtp      # Media Transfer Protocol   - Android/media devices
+    - cosmic-desktop-environment
