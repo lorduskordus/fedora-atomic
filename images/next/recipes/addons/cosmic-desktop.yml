@@ -4,6 +4,7 @@ modules:
     repos:
       copr:
         - ryanabx/cosmic-epoch
+        - kordus/cosmic-applets
     install:
       packages:
         - cosmic-desktop
@@ -23,6 +24,9 @@ modules:
         - gvfs-gphoto2  # Picture Transfer Protocol - digital cameras
         - gvfs-mtp      # Media Transfer Protocol   - Android/media devices
 
+        # Clipboard Manager RPM from my COPR
+        - cosmic-ext-applet-clipboard-manager
+
   - type: default-flatpaks
     configurations:
       - scope: user
@@ -38,5 +42,4 @@ modules:
           name: cosmic
           title: COSMIC
         install:
-          - io.github.cosmic_utils.cosmic-ext-applet-clipboard-manager
           - io.github.cosmic_utils.cosmic-ext-applet-external-monitor-brightness

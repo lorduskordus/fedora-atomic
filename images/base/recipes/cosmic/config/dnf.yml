@@ -1,4 +1,11 @@
 type: dnf
+repos:
+  copr:
+    - kordus/cosmic-applets
 group-install:
   packages:
     - cosmic-desktop-environment
+install:
+  packages:
+    # Clipboard Manager RPM from my COPR
+    - cosmic-ext-applet-clipboard-manager
