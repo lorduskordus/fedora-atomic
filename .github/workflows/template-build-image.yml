@@ -33,3 +33,4 @@ jobs:
           verify_install: true
           maximize_build_space: true
           build_chunked_oci: true
+          cli_version: v0.9.27
