@@ -1,4 +1,3 @@
 type: script
 scripts:
   - common/containers-add-wrappers.sh
-  - common/nix-support.sh

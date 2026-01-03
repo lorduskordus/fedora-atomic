@@ -1,7 +1,6 @@
 modules:
 
   - from-file: common/config/dnf.yml
-  - from-file: common/config/soar.yml
   - from-file: common/config/files.yml
   - from-file: common/config/justfiles.yml
   - from-file: common/config/services.yml
