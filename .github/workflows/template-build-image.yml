@@ -30,6 +30,7 @@ jobs:
           registry_token: ${{ github.token }}
           pr_event_number: ${{ github.event.number || '' }}
           working_directory: ${{ inputs.working_directory }}
+          retry_push_count: 3
           verify_install: true
           maximize_build_space: true
           build_chunked_oci: true
