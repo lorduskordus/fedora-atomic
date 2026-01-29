@@ -1,9 +1,4 @@
 type: dnf
-remove:
-  packages:
-    - kate
-    - kate-plugins
-    - kate-krunner-plugin
 repos:
   copr:
     # Includes Koi
