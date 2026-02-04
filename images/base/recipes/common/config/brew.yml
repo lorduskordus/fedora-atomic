@@ -1,1 +1,2 @@
 type: brew
+direct-pull: true # Temporary fix
