@@ -9,3 +9,4 @@ install:
   packages:
     # Clipboard Manager RPM from my COPR
     - cosmic-ext-applet-clipboard-manager
+    - cosmic-applet-clippy-land

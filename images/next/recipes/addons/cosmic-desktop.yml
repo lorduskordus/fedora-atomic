@@ -26,6 +26,7 @@ modules:
 
         # Clipboard Manager RPM from my COPR
         - cosmic-ext-applet-clipboard-manager
+        - cosmic-applet-clippy-land
 
   - type: default-flatpaks
     configurations:
