@@ -1,0 +1,146 @@
+#!/usr/bin/env bash
+
+# Installs the 'am' AppImage package manager
+
+set -euo pipefail
+
+########################################
+# Install 'am' AppImage manager (main branch)
+########################################
+
+# echo -e "\e[1m\e[38;5;214mInstalling 'am' AppImage manager from 'main' branch\e[0m"
+
+# # Download latest main branch archive
+# curl -fLs --create-dirs \
+#   https://github.com/ivan-hc/AM/archive/refs/heads/main.zip \
+#   -o /tmp/am.zip
+
+# # Create temporary directory
+# mkdir -p /tmp/am
+
+# # Extract archive
+# unzip -q /tmp/am.zip -d /tmp/am/
+
+# # Install main executable
+# cp /tmp/am/AM-main/APP-MANAGER /usr/bin/am
+# chmod +x /usr/bin/am
+
+# # Install modules
+# mkdir -p /usr/lib/am/modules/
+# cp /tmp/am/AM-main/modules/* /usr/lib/am/modules/
+# chmod +x /usr/lib/am/modules/*
+
+# # Cleanup
+# rm -r /tmp/am/
+# rm /tmp/am.zip
+
+
+########################################
+# Install 'am' AppImage manager (latest release)
+########################################
+
+echo -e "\e[1m\e[38;5;214mInstalling 'am' AppImage manager\e[0m"
+
+# Get the latest version
+VER=$(basename $(curl -Ls -o /dev/null -w %{url_effective} https://github.com/ivan-hc/AM/releases/latest))
+
+# Download latest version archive
+curl -fLs --create-dirs \
+  https://github.com/ivan-hc/AM/archive/refs/tags/${VER}.zip \
+  -o /tmp/am.zip
+
+# Create temporary directory
+mkdir -p /tmp/am
+
+# Extract archive
+unzip -q /tmp/am.zip -d /tmp/am/
+
+# Install main executable
+cp /tmp/am/AM-${VER}/APP-MANAGER /usr/bin/am
+chmod +x /usr/bin/am
+
+# Install modules
+mkdir -p /usr/lib/am/modules/
+cp /tmp/am/AM-${VER}/modules/* /usr/lib/am/modules/
+chmod +x /usr/lib/am/modules/*
+
+# Cleanup
+rm -r /tmp/am/
+rm /tmp/am.zip
+
+########################################
+# Install 'am' bash completion
+########################################
+
+echo -e "\e[1m\e[38;5;214mInstalling 'am' bash completion\e[0m"
+
+mkdir -p "/usr/share/bash-completion/completions/"
+echo 'complete -W "$(cat "${XDG_DATA_HOME:-$HOME/.local/share}/AM/list" 2>/dev/null)" am' \
+  > "/usr/share/bash-completion/completions/am"
+
+
+########################################
+# Disable 'am' update notifications by default
+########################################
+
+echo -e "\e[1;31mDisabling 'am' update notifications\e[0m"
+
+mkdir -p /etc/skel/.local/share/AM/
+touch /etc/skel/.local/share/AM/disable-notifications
+
+
+########################################
+# Create & enable systemd auto-update timer for AM
+########################################
+
+echo -e "\e[1m\e[38;5;214mWriting & enabling 'am' AppImages auto-update timer\e[0m"
+
+# Write systemd user service
+echo -e "[Unit]
+Description=AM Automatic Update
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+Environment=\"NO_COLOR=1\"
+ExecCondition=/bin/bash -c 'if ps aux | grep -v grep | grep -E -q \" /sbin/am | /bin/am | /usr/sbin/am | /usr/bin/am | am \"; then exit 1; else exit 0; fi'
+ExecCondition=/bin/bash -c '[[ \"\$(busctl get-property org.freedesktop.NetworkManager /org/freedesktop/NetworkManager org.freedesktop.NetworkManager Metered | cut -c 3-)\" == @(2|4) ]]'
+ExecStart=/usr/bin/am update" \
+> /usr/lib/systemd/user/am-update.service
+
+
+# Write systemd user timer
+echo -e "[Unit]
+Description=AM Automatic Update Trigger
+
+[Timer]
+RandomizedDelaySec=10m
+OnBootSec=2m
+OnCalendar=*-*-* 4:00:00
+Persistent=true
+
+[Install]
+WantedBy=timers.target" \
+> /usr/lib/systemd/user/am-update.timer
+
+# Enable timer globally
+systemctl --global enable am-update.timer
+
+
+########################################
+# Install appimageupdatetool for diff updates
+########################################
+
+echo -e "\e[1m\e[38;5;214mInstalling 'appimageupdatetool' for AppImage diff updates\e[0m"
+
+# Get latest release version tag
+VER=$(basename $(curl -Ls -o /dev/null -w %{url_effective} \
+  https://github.com/pkgforge-dev/AppImageUpdate-Enhanced-Edition/releases/latest))
+
+# Download tool and make executable
+curl -fLs --create-dirs \
+  https://github.com/pkgforge-dev/AppImageUpdate-Enhanced-Edition/releases/download/${VER}/appimageupdatetool+validate-x86_64.AppImage \
+  -o /usr/bin/appimageupdatetool
+
+chmod +x /usr/bin/appimageupdatetool
