@@ -1,4 +1,7 @@
 type: dnf
+remove:
+  packages:
+    - kwrite
 repos:
   copr:
     # Includes Koi
