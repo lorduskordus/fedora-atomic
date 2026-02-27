@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+
+# Convert input time (e.g. 1h30m20s, 20m, 45s, 2h) into total seconds
+parse_time() {
+    local input="$1"
+    local total=0
+
+    # Extract hours
+    if [[ $input =~ ([0-9]+)h ]]; then
+        total=$(( total + ${BASH_REMATCH[1]} * 3600 ))
+    fi
+
+    # Extract minutes
+    if [[ $input =~ ([0-9]+)m ]]; then
+        total=$(( total + ${BASH_REMATCH[1]} * 60 ))
+    fi
+
+    # Extract seconds
+    if [[ $input =~ ([0-9]+)s ]]; then
+        total=$(( total + ${BASH_REMATCH[1]} ))
+    fi
+
+    # If no suffix, assume seconds
+    if [[ $total -eq 0 && $input =~ ^[0-9]+$ ]]; then
+        total=$input
+    fi
+
+    echo "$total"
+}
+
+if [[ -z "$1" ]]; then
+    echo "Usage: countdown <duration>"
+    exit 1
+fi
+
+TOTAL_SECONDS=$(parse_time "$1")
+
+if [[ "$TOTAL_SECONDS" -le 0 ]]; then
+    echo "Invalid duration. Valid examples: 2h, 3m, 10s, 2h30m10s"
+    exit 1
+fi
+
+SECONDS_LEFT=$TOTAL_SECONDS
+
+while [[ $SECONDS_LEFT -gt 0 ]]; do
+    printf "\rRemaining time: %02d:%02d:%02d" \
+        $((SECONDS_LEFT/3600)) \
+        $(((SECONDS_LEFT%3600)/60)) \
+        $((SECONDS_LEFT%60))
+    sleep 1
+    ((SECONDS_LEFT--))
+done
+
+printf "\rRemaining time: 00:00:00\n"
