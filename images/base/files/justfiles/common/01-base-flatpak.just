@@ -60,8 +60,19 @@ flatpak ACTION="prompt":
             echo "Codec runtimes are determined from the default browser. Either it isn't set or the browser is not packaged in Flatpak."
             exit 0
         fi
-        CODECS_STR="org.freedesktop.Platform.ffmpeg-full/x86_64/${RUNTIME_VERSION} org.freedesktop.Platform.VAAPI.Intel/x86_64/${RUNTIME_VERSION}"
-        flatpak install --system ${CODECS_STR}
+
+        REMOTE="flathub"
+        FFMPEG_ID="org.freedesktop.Platform.ffmpeg-full"
+        VAAPI_ID="org.freedesktop.Platform.VAAPI.Intel"
+
+        if ! flatpak install -y --system ${REMOTE} ${FFMPEG_ID}/x86_64/${RUNTIME_VERSION}; then
+            echo "Version '${RUNTIME_VERSION}' does not exist for '${FFMPEG_ID}'. Choose one manually."
+            flatpak install --system ${REMOTE} ${FFMPEG_ID}
+        fi
+        if ! flatpak install -y --system ${REMOTE} ${VAAPI_ID}/x86_64/${RUNTIME_VERSION}; then
+            echo "Version '${RUNTIME_VERSION}' does not exist for '${VAAPI_ID}'. Choose one manually."
+            flatpak install --system ${REMOTE} ${VAAPI_ID}
+        fi
     }
 
     install-mangohud () {
@@ -118,9 +129,45 @@ flatpak ACTION="prompt":
         echo "Done. KDE Plasma browser integration set up for '${DST_APP_ID}'."
     }
 
+    toggle-default-flatpaks () {
+        local TIMER_USER="user-flatpak-setup.timer"
+        local TIMER_SYSTEM="system-flatpak-setup.timer"
+
+        # Prioritize SYSTEM for the state
+        local DF_STATE=$(systemctl --system is-enabled ${TIMER_SYSTEM})
+
+        local DF_INFO="BlueBuild's 'default-flatpaks' timer status: "
+
+        if [ "${DF_STATE}" == "enabled" ]; then
+            CONFIRM_STR="mask"
+            DF_INFO+="${green}${DF_STATE}${normal}"
+        else
+            CONFIRM_STR="unmask"
+            DF_INFO+="${red}${DF_STATE}${normal}"
+        fi
+
+        echo "${DF_INFO}"
+        while [ "${ACTION_VAR}" != "mask" ] && [ "${ACTION_VAR}" != "unmask" ] && [ "${ACTION_VAR}" != "cancel" ]; do
+            local ACTION_VAR=$(ugum choose "${CONFIRM_STR}" "cancel")
+        done
+
+        echo ${ACTION_VAR}
+
+        if [ "${ACTION_VAR}" == "cancel" ]; then
+            echo "No changes applied."
+            exit 0
+        else
+            if ! systemctl --system ${ACTION_VAR} ${TIMER_SYSTEM}; then
+                echo "No changes applied."
+                exit 0
+            fi
+            systemctl --user ${ACTION_VAR} ${TIMER_USER}
+        fi
+    }
+
     OPTION={{ ACTION }}
     if [ "${OPTION}" == "prompt" ]; then
-        OPTION=$(ugum choose "fix-theming" "enable-wayland-socket" "install-codecs" "install-mangohud" "brave-plasma-integration")
+        OPTION=$(ugum choose "fix-theming" "enable-wayland-socket" "install-codecs" "install-mangohud" "brave-plasma-integration" "toggle-default-flatpaks")
     fi
 
     if [ "${OPTION}" == "fix-theming" ]; then
@@ -133,6 +180,8 @@ flatpak ACTION="prompt":
         install-mangohud
     elif [ "${OPTION}" == "brave-plasma-integration" ]; then
         brave-plasma-integration
+    elif [ "${OPTION}" == "toggle-default-flatpaks" ]; then
+        toggle-default-flatpaks
     else
         echo "No changes applied."
         exit 0
