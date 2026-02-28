@@ -1,0 +1,9 @@
+type: dnf
+repos:
+  copr:
+    - kordus/cosmic-applets
+install:
+  packages:
+    # Clipboard Manager RPMs from my COPR
+    - cosmic-ext-applet-clipboard-manager
+    - cosmic-applet-clippy-land
