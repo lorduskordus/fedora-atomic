@@ -17,6 +17,10 @@ install:
     - rsms-inter-fonts
     - adw-gtk3-theme
 
+    - edk2-ovmf
+    - qemu
+    - libvirt
+
     - micro
     - fish
     - bat
