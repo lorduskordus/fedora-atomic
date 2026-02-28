@@ -3,3 +3,4 @@ system:
   enabled:
     - enable-intel-powercap-read.service
     - docker.service
+    - libvirtd.service
