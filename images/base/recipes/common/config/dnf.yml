@@ -17,9 +17,9 @@ install:
     - rsms-inter-fonts
     - adw-gtk3-theme
 
-    - edk2-ovmf
-    - qemu
-    - libvirt
+    # Virtualization support
+    - qemu     # Pulls 'edk2-ovmf' as dependency
+    - libvirt  # Pulls 'libvirt-daemon-config-network' as dependency
 
     - micro
     - fish
