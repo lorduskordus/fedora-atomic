@@ -1,4 +1,0 @@
-modules:
-
-  - from-file: kde/config/dnf.yml
-  

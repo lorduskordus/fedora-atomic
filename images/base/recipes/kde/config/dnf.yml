@@ -1,17 +1,20 @@
 type: dnf
 remove:
   packages:
+    # Has a bug where files are not opened in tabs
+    # and one editor is enough
     - kwrite
 repos:
   copr:
-    # Includes Koi
     - birkch/Koi
+    - matinlotfali/KDE-Rounded-Corners
 install:
   packages:
-    - Koi # Automatic themes switcher
+    - Koi # Automatic theme switcher
+    - kwin-effect-roundcorners
 
     # KDE Calendar
     - merkuro
-    - kdepim-addons  # For system integration
-    - kdepim-runtime # For accounts support
+    - kdepim-addons  # System integration
+    - kdepim-runtime # Accounts support
     - qt6-qtlocation # Missing dependency

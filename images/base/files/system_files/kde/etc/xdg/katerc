@@ -1,7 +1,46 @@
 [General]
+Allow Tab Scrolling=true
 Auto Hide Tabs=true
+Close After Last=true
+Close documents with window=true
+Cycle To First Tab=true
+Days Meta Infos=30
+Diagnostics Limit=12000
+Diff Show Style=0
+Elide Tab Text=false
+Enable Context ToolView=false
 Expand Tabs=false
+Icon size for left and right sidebar buttons=32
+Modified Notification=false
+Mouse back button action=0
+Mouse forward button action=0
+Open New Tab To The Right Of Current=false
+Output History Limit=100
+Output With Date=false
+PinnedDocuments=
+Quickopen Filter Mode=0
+Quickopen List Mode=true
+Recent File List Entry Count=10
+Restore Window Configuration=true
+SDI Mode=false
+Save Meta Infos=true
+Show Full Path in Title=false
 Show Menu Bar=false
+Show Status Bar=false
+Show Symbol In Navigation Bar=true
+Show Tab Bar=true
+Show Tabs Close Button=true
+Show Url Nav Bar=false
+Show output view for message type=1
+Show text for left and right sidebar=false
+Show welcome view for new window=false
+Startup Session=manual
+Stash new unsaved files=true
+Stash unsaved file changes=false
+Sync section size with tab positions=false
+Tab Double Click New Document=true
+Tab Middle Click Close Document=true
+Tabbar Tab Limit=0
 
 [KTextEditor Renderer]
 Animate Bracket Matching=false
@@ -26,6 +65,7 @@ Bracket Match Preview=false
 Chars To Enclose Selection=<>(){}[]'"
 Cycle Through Bookmarks=true
 Default Mark Type=1
+Disable bracket match highlight if inactive=false
 Disable current line highlight if inactive=false
 Dynamic Word Wrap=true
 Dynamic Word Wrap Align Indent=80
@@ -55,7 +95,7 @@ Scroll Bar Mini Map Width=60
 Scroll Bar MiniMap=false
 Scroll Bar Preview=true
 Scroll Past End=false
-Search/Replace Flags=140
+Search/Replace Flags=141
 Shoe Line Ending Type in Statusbar=false
 Show Documentation With Completion=true
 Show File Encoding=true
@@ -87,8 +127,19 @@ RunPrefix=
 SetEditor=false
 
 [MainWindow]
-2560x1440 screen: Height=754
-2560x1440 screen: Width=1108
+2560x1440 screen: Height=871
+2560x1440 screen: Width=1549
+
+[filetree]
+editShade=123,237,142
+listMode=false
+middleClickToClose=false
+shadingEnabled=true
+showCloseButton=false
+showFullPathOnRoots=false
+showToolbar=true
+sortRole=0
+viewShade=211,190,222
 
 [lspclient]
 AllowedServerCommandLines=

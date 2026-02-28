@@ -1,7 +1,0 @@
-type: dnf
-repos:
-  copr:
-    - matinlotfali/KDE-Rounded-Corners
-install:
-  packages:
-    - kwin-effect-roundcorners
