@@ -144,3 +144,14 @@ curl -fLs --create-dirs \
   -o /usr/bin/appimageupdatetool
 
 chmod +x /usr/bin/appimageupdatetool
+
+########################################
+# Replace wget2 with wget1
+########################################
+
+echo -e "\e[1m\e[38;5;214mReplacing 'wget2' with wget1\e[0m"
+
+dnf5 -y remove \
+  wget2 wget2-wget
+dnf5 -y install \
+  wget1 wget1-wget
