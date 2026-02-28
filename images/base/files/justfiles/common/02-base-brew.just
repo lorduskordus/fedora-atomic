@@ -5,6 +5,12 @@ brew ACTION="prompt":
 
     install-all-packages () {
         BREWFILE_PATH="/etc/brew/cli.Brewfile"
+
+        if [ ! -s "${BREWFILE_PATH}" ]; then
+            echo "Error: Missing or empty '${BREWFILE_PATH}'. Cannot proceed."
+            exit 1
+        fi
+
         export HOMEBREW_BUNDLE_NO_LOCKFILE_WRITE_WARNING=1
         brew bundle install --file "${BREWFILE_PATH}"
     }
@@ -12,6 +18,11 @@ brew ACTION="prompt":
     remove-all-packages () {
         brew remove --force $(brew list --formula) --ignore-dependencies
     }
+
+    if ! command -v brew &> /dev/null; then
+        echo "Brew package manager is not installed. Cannot proceed."
+        exit 1
+    fi
 
     OPTION={{ ACTION }}
     if [ "${OPTION}" == "prompt" ]; then
