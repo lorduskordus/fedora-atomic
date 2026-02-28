@@ -1,3 +1,39 @@
+#!/usr/bin/env bash
+
+# Makes fish shell more ready
+#  - disables useless greeting
+#  - makes it container aware
+
+set -euo pipefail
+
+# Setup only if fish is installed
+if ! command -v fish &> /dev/null; then
+    echo "Package 'fish' is not installed. Skipping."
+    exit 0
+fi
+
+# Make sure directory exists
+FISH_VENDOR_FUNCTIONS="/usr/share/fish/vendor_functions.d"
+mkdir -p "${FISH_VENDOR_FUNCTIONS}"
+
+# Disable useless fish greeting
+echo "Disabling useless fish greeting"
+
+cat << 'EOF' > "${FISH_VENDOR_FUNCTIONS}/fish_greeting.fish"
+#!/usr/bin/fish
+#shellcheck disable=all
+
+function fish_greeting
+    if set -q fish_private_mode
+        echo "fish is running in private mode, history will not be persisted."
+    end
+end
+EOF
+
+# Make fish container aware
+echo "Making fish container aware"
+
+cat << 'EOF' > "${FISH_VENDOR_FUNCTIONS}/fish_prompt.fish"
 function fish_prompt --description 'Default prompt with container detection'
     set -l last_pipestatus $pipestatus
     set -lx __fish_last_status $status # Export for __fish_print_pipestatus.
@@ -39,3 +75,4 @@ function fish_prompt --description 'Default prompt with container detection'
 
     echo -n -s $prefix_icon (set_color $fish_color_user) "$USER" $normal "@" $prompt_host' ' (set_color $color_cwd) (prompt_pwd) $normal (fish_vcs_prompt) $normal " "$prompt_status $suffix " "
 end
+EOF
