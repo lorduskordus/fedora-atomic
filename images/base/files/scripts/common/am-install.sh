@@ -69,7 +69,7 @@ rm -r /tmp/am/
 rm /tmp/am.zip
 
 ########################################
-# Install 'am' bash completion
+# Install 'am' bash and fish completion
 ########################################
 
 echo -e "\e[1m\e[38;5;214mInstalling 'am' bash completion\e[0m"
@@ -78,6 +78,21 @@ mkdir -p "/usr/share/bash-completion/completions/"
 echo 'complete -W "$(cat "${XDG_DATA_HOME:-$HOME/.local/share}/AM/list" 2>/dev/null)" am' \
   > "/usr/share/bash-completion/completions/am"
 
+# Only install fish completion if it's installed
+if command -v fish &> /dev/null; then
+
+echo -e "\e[1m\e[38;5;214mInstalling 'am' fish completion\e[0m"
+
+mkdir -p "/usr/share/fish/vendor_completions.d/"
+cat << 'EOF' > "/usr/share/fish/vendor_completions.d/am"
+set data_home "$XDG_DATA_HOME"
+if test -z "$data_home"
+    set data_home "$HOME/.local/share"
+end
+complete -c am -f -a "(cat "$data_home/AM/list" 2>/dev/null)"
+EOF
+
+fi
 
 ########################################
 # Disable 'am' update notifications by default
