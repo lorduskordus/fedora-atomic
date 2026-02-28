@@ -23,7 +23,7 @@ ideapad-conservation-mode ACTION="prompt":
     fi
 
     if [ "${OPTION}" == "setup" ]; then
-        echo "ALL ALL=(ALL) NOPASSWD: /usr/bin/tee /sys/bus/platform/drivers/ideapad_acpi/VPC????\:??/conservation_mode" > /tmp/ideapad
+        echo "ALL ALL=(ALL) NOPASSWD: /usr/bin/tee ${STATE_FILE}" > /tmp/ideapad
         if /usr/bin/pkexec install -o root -g root -m 0440 /tmp/ideapad /etc/sudoers.d/ideapad; then
             echo "Conservation mode successfuly set up."
             exit 0
