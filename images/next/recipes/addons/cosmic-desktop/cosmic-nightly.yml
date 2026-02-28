@@ -1,5 +1,6 @@
 type: dnf
 repos:
+  cleanup: true
   copr:
     - ryanabx/cosmic-epoch
 install:

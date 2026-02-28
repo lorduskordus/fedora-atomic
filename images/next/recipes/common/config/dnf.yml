@@ -1,5 +1,6 @@
 type: dnf
 repos:
+  cleanup: true
   files:
     - vscode.repo
     - https://download.docker.com/linux/fedora/docker-ce.repo
