@@ -3,6 +3,10 @@ remove:
   packages:
     - firefox
     - firefox-langpacks
+
+    - fedora-third-party
+    - fedora-flathub-remote
+    - fedora-workstation-repositories
 repos:
   files:
     - https://pkgs.tailscale.com/stable/fedora/tailscale.repo
