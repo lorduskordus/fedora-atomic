@@ -1,3 +1,19 @@
+#!/usr/bin/env bash
+
+# Sets up fish completions for brew if both are installed
+
+set -euo pipefail
+
+if [[ ! -d "/usr/share/homebrew" ]] || ! command -v fish &> /dev/null; then
+    echo "Either 'brew' or 'fish' is not installed. Skipping."
+    exit 0
+fi
+
+echo -e "\e[1m\e[38;5;214mInstalling 'brew' fish completion\e[0m"
+
+FISH_VENDOR_DIR="/usr/share/fish/vendor_conf.d"
+mkdir -p "${FISH_VENDOR_DIR}"
+cat << 'EOF' > "${FISH_VENDOR_DIR}/brew.fish"
 #!/usr/bin/fish
 #shellcheck disable=all
 
@@ -12,3 +28,4 @@ if status --is-interactive
         end
     end
 end
+EOF

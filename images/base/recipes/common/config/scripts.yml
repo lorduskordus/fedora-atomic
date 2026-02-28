@@ -1,5 +1,6 @@
 type: script
 scripts:
+  - common/brew-fish-completions.sh
   - common/am-install.sh
   - common/bootc-sudoless.sh
   - common/micro-wrapper-default.sh
