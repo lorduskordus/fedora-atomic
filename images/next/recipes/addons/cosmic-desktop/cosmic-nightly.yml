@@ -10,3 +10,5 @@ install:
     # Missing dependencies
     - gnome-keyring-pam # Pulls 'gnome-keyring'
     - gvfs-mtp
+    - gvfs-afc
+    - gvfs-gphoto2

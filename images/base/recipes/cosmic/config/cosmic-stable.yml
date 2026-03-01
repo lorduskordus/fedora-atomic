@@ -6,3 +6,5 @@ install:
   packages:
     # Missing dependencies
     - gvfs-mtp
+    - gvfs-afc
+    - gvfs-gphoto2

@@ -18,6 +18,12 @@ Packages:
 - **gvfs-mtp**
   - Media Transfer Protocol - Android/media devices
 
+- **gvfs-afc**
+  - Apple File Connection - iOS devices over USB
+
+- **gvfs-gphoto2**
+  - Picture Transfer Protocol - digital cameras
+
 ### GVFS Backends ( Needed: ✅ )
 
 Installed: Stable ✅ | Nightly ✅
@@ -39,14 +45,8 @@ Installed: Stable ❌ | Nightly ❌
 
 Packages:
 
-- **gvfs-afc**
-  - Apple File Connection - iOS devices over USB
-
 - **gvfs-afp**
   - Apple Filing Protocol - older Mac shares
 
 - **gvfs-archive**
   - Archive handler - browse ZIP/TAR/ISO files
-
-- **gvfs-gphoto2**
-  - Picture Transfer Protocol - digital cameras
