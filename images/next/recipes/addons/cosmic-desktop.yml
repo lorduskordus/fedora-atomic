@@ -1,5 +1,5 @@
 modules:
 
-  - from-file: addons/cosmic-desktop/cosmic-stable.yml
+  - from-file: addons/cosmic-desktop/cosmic-nightly.yml
   - from-file: addons/cosmic-desktop/dnf.yml
   - from-file: addons/cosmic-desktop/flatpaks.yml  

@@ -1,5 +1,5 @@
 modules:
 
-  - from-file: cosmic/config/cosmic-stable.yml
+  - from-file: cosmic/config/cosmic-nightly.yml
   - from-file: cosmic/config/dnf.yml
   - from-file: cosmic/config/flatpaks.yml
