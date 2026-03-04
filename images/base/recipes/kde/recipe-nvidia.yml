@@ -8,3 +8,6 @@ modules:
 
   - from-file: common/config.yml
   - from-file: kde/config.yml
+
+  # Install 'supergfxctl' for Hybrid GPU control
+  - from-file: kde/config/supergfxctl.yml

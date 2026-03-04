@@ -1,0 +1,8 @@
+type: dnf
+repos:
+  cleanup: true
+  copr:
+    - jhyub/supergfxctl-plasmoid
+install:
+  packages:
+    - supergfxctl-plasmoid
