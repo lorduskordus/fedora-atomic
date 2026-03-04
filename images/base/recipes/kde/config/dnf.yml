@@ -5,6 +5,7 @@ remove:
     # and one editor is enough
     - kwrite
 repos:
+  cleanup: true
   copr:
     - birkch/Koi
     - matinlotfali/KDE-Rounded-Corners

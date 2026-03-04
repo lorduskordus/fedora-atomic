@@ -8,6 +8,7 @@ remove:
     - fedora-flathub-remote
     - fedora-workstation-repositories
 repos:
+  cleanup: true
   files:
     - https://pkgs.tailscale.com/stable/fedora/tailscale.repo
   copr:
