@@ -151,8 +151,6 @@ flatpak ACTION="prompt":
             local ACTION_VAR=$(ugum choose "${CONFIRM_STR}" "cancel")
         done
 
-        echo ${ACTION_VAR}
-
         if [ "${ACTION_VAR}" == "cancel" ]; then
             echo "No changes applied."
             exit 0
