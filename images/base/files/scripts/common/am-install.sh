@@ -161,6 +161,69 @@ curl -fLs --create-dirs \
 chmod +x /usr/bin/appimageupdatetool
 
 ########################################
+# Install simple-appimage-sandbox (sas)
+########################################
+
+echo -e "\e[1m\e[38;5;214mInstalling 'simple-appimage-sandbox', aka 'sas' sandboxing tool for AppImages\e[0m"
+
+# Download sandbox script (script version avoids SUID libfuse dependency from the AppImage build)
+curl -fLs --create-dirs \
+  https://raw.githubusercontent.com/Samueru-sama/simple-appimage-sandbox/refs/heads/main/sas.sh \
+  -o /usr/bin/simple-appimage-sandbox
+
+chmod +x /usr/bin/simple-appimage-sandbox
+
+# Create convenient alias command
+ln -sf /usr/bin/simple-appimage-sandbox /usr/bin/sas
+
+########################################
+# Install missing dependencies for sas
+########################################
+
+# Install dwarfs
+curl -fLs --create-dirs \
+  https://pkgs.pkgforge.dev/dl/bincache/x86_64-linux/dwarfs/standalone/dwarfs/raw.dl \
+  -o /usr/bin/dwarfs
+
+chmod +x /usr/bin/dwarfs
+
+# Install squashfuse
+curl -fLs --create-dirs \
+  https://pkgs.pkgforge.dev/dl/bincache/x86_64-linux/squashfuse/nixpkgs/squashfuse/raw.dl \
+  -o /usr/bin/squashfuse
+
+chmod +x /usr/bin/squashfuse
+
+########################################
+# Install am-gui, a GUI store
+########################################
+
+echo -e "\e[1m\e[38;5;214mInstalling 'am-gui' (GUI store)\e[0m"
+
+# Get latest release version tag
+VER=$(basename $(curl -Ls -o /dev/null -w %{url_effective} \
+  https://github.com/Shikakiben/AM-GUI/releases/latest))
+
+VER_SHORT=$(cut -d@ -f1 <<< ${VER})
+
+# Download tool and make executable
+curl -fLs --create-dirs \
+  https://github.com/Shikakiben/AM-GUI/releases/download/${VER}/AM-GUI-${VER_SHORT}-anylinux-x86_64.AppImage \
+  -o /usr/bin/am-gui
+
+chmod +x /usr/bin/am-gui
+
+# Get the launcher .desktop file
+curl -fLs --create-dirs \
+  https://raw.githubusercontent.com/Shikakiben/AM-GUI/refs/heads/main/AM-GUI.desktop \
+  -o /usr/share/applications/AM-GUI.desktop
+
+# Get the launcher icon file
+curl -fLs --create-dirs \
+  https://raw.githubusercontent.com/Shikakiben/AM-GUI/refs/heads/main/AM-GUI.png \
+  -o /usr/share/icons/hicolor/512x512/apps/AM-GUI.png
+
+########################################
 # Replace wget2 with wget1
 ########################################
 
