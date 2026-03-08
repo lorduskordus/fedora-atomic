@@ -4,16 +4,20 @@
 
 set -euo pipefail
 
-install-kernel() {
-    echo "- Replacing kernel"
-
-    dnf5 -y remove kernel-{core,modules,modules-core,modules-extra,tools,tools-libs}
-
+get-akmods() {
     skopeo copy --retry-times 3 docker://ghcr.io/ublue-os/"${AKMODS_TYPE}":"${AKMODS_FLAVOR}"-"$(rpm -E %fedora)" dir:/tmp/akmods-rpms
     AKMODS_TARGZ=$(jq -r '.layers[].digest' </tmp/akmods-rpms/manifest.json | cut -d : -f 2)
     tar -xvzf /tmp/akmods-rpms/"$AKMODS_TARGZ" -C /tmp/
     mv /tmp/rpms/* /tmp/akmods-rpms/
     # NOTE: kernel-rpms should auto-extract into correct location
+}
+
+install-kernel() {
+    echo "- Replacing kernel"
+
+    get-akmods
+
+    dnf5 -y remove kernel-{core,modules,modules-core,modules-extra,tools,tools-libs}
 
     dnf5 -y install \
       /tmp/kernel-rpms/kernel-[0-9]*.rpm \
@@ -25,8 +29,17 @@ install-kernel() {
 
 install-nvidia-drivers () {
     echo "- Installing NVIDIA drivers"
+    
     export IMAGE_NAME=$(awk -F'/' '{print $3}' <<< "${BASE_IMAGE}" | cut -d'-' -f1)
-    curl -fLs "https://raw.githubusercontent.com/ublue-os/main/refs/heads/main/build_files/nvidia-install.sh" | bash
+
+    # curl -fLs "https://raw.githubusercontent.com/ublue-os/main/refs/heads/main/build_files/nvidia-install.sh" | bash
+
+    NVIDIA_INSTALL="/tmp/akmods-rpms/ublue-os/nvidia-install.sh"
+    if [ ! -f "${NVIDIA_INSTALL}" ]; then
+        get-akmods
+    fi
+
+    ${NVIDIA_INSTALL}
 }
 
 build-initramfs () {
