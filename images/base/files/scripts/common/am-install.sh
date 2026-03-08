@@ -253,7 +253,6 @@ install() {
 
   replace-wget
   disable-notifications
-  set-english-locale # Temporary fix
 }
 
 install
