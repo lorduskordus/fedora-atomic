@@ -26,12 +26,12 @@ install-kernel() {
 install-nvidia-drivers () {
     echo "- Installing NVIDIA drivers"
     export IMAGE_NAME=$(awk -F'/' '{print $3}' <<< "${BASE_IMAGE}" | cut -d'-' -f1)
-    curl -s "https://raw.githubusercontent.com/ublue-os/main/refs/heads/main/build_files/nvidia-install.sh" | bash
+    curl -fLs "https://raw.githubusercontent.com/ublue-os/main/refs/heads/main/build_files/nvidia-install.sh" | bash
 }
 
 build-initramfs () {
     echo "- Building initramfs"
-    curl -s "https://raw.githubusercontent.com/ublue-os/main/refs/heads/main/build_files/initramfs.sh" | bash
+    curl -fLs "https://raw.githubusercontent.com/ublue-os/main/refs/heads/main/build_files/initramfs.sh" | bash
 }
 
 install () {
