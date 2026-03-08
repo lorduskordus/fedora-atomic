@@ -3,20 +3,20 @@
 # Sets up, installs and fully integrates the AM package manager
 #
 # Stuff installed
-#  - 'am'                   - AppImage package manager
-#  - 'appimageupdatetool'   - Support for diff updates
-#  - 'sas'                  - Simple AppImage Sandbox (deps: 'dwarfs', 'squashfuse')
-#  - 'am-gui'               - GUI Store for AM
+#  - 'am'                  - AppImage Manager
+#  - 'appimageupdatetool'  - Support for AppImage diff updates
+#  - 'sas'                 - Simple AppImage Sandbox (deps: 'dwarfs', 'squashfuse')
+#  - 'am-gui'              - GUI Store for AM
 #
 # Stuff set up
-#  - Automatic updates - systemd timer & service
+#  - Automatic updates (systemd timer & service)
 #  - Disables update notifications
 
 set -euo pipefail
 
-# Installs 'am' AppImage Manager (main branch)
+# Installs 'am' (AppImage Manager) (main branch)
 install-am-main() {
-  echo -e "\e[1m\e[38;5;214mInstalling 'am' AppImage manager from 'main' branch\e[0m"
+  echo -e "\e[1m\e[38;5;214mInstalling 'am' (AppImage Manager) from 'main' branch\e[0m"
 
   # Download latest main branch archive
   curl -fLs --create-dirs \
@@ -43,9 +43,9 @@ install-am-main() {
   rm /tmp/am.zip
 }
 
-# Installs 'am' AppImage Manager (latest release)
+# Installs 'am' (AppImage Manager) (latest release)
 install-am-release() {
-  echo -e "\e[1m\e[38;5;214mInstalling 'am' AppImage manager\e[0m"
+  echo -e "\e[1m\e[38;5;214mInstalling 'am' (AppImage Manager)\e[0m"
 
   # Get the latest version
   VER=$(basename $(curl -Ls -o /dev/null -w %{url_effective} https://github.com/ivan-hc/AM/releases/latest))
@@ -91,7 +91,7 @@ install-update-tool() {
   chmod +x /usr/bin/appimageupdatetool
 }
 
-# Installs 'simple-appimage-sandbox' (sas)
+# Installs 'sas' (Simple AppImage Sandbox)
 install-sas() {
   echo -e "\e[1m\e[38;5;214mInstalling 'simple-appimage-sandbox', aka 'sas' sandboxing tool for AppImages\e[0m"
 
@@ -109,14 +109,14 @@ install-sas() {
   # Install missing dependencies for 'sas'
   ########################################
 
-  # Install dwarfs
+  # Install 'dwarfs'
   curl -fLs --create-dirs \
     https://pkgs.pkgforge.dev/dl/bincache/x86_64-linux/dwarfs/standalone/dwarfs/raw.dl \
     -o /usr/bin/dwarfs
 
   chmod +x /usr/bin/dwarfs
 
-  # Install squashfuse
+  # Install 'squashfuse'
   curl -fLs --create-dirs \
     https://pkgs.pkgforge.dev/dl/bincache/x86_64-linux/squashfuse/nixpkgs/squashfuse/raw.dl \
     -o /usr/bin/squashfuse
@@ -124,9 +124,9 @@ install-sas() {
   chmod +x /usr/bin/squashfuse
 }
 
-# Install 'am-gui' (GUI store)
+# Installs 'am-gui' (GUI store for AM)
 install-gui() {
-  echo -e "\e[1m\e[38;5;214mInstalling 'am-gui' (GUI store)\e[0m"
+  echo -e "\e[1m\e[38;5;214mInstalling 'am-gui' (GUI store for AM)\e[0m"
 
   # Get latest release version tag
   VER=$(basename $(curl -Ls -o /dev/null -w %{url_effective} \
@@ -134,7 +134,7 @@ install-gui() {
 
   VER_SHORT=$(cut -d@ -f1 <<< ${VER})
 
-  # Download tool and make executable
+  # Download the app and make it executable
   curl -fLs --create-dirs \
     https://github.com/Shikakiben/AM-GUI/releases/download/${VER}/AM-GUI-${VER_SHORT}-anylinux-x86_64.AppImage \
     -o /usr/bin/am-gui
@@ -152,7 +152,7 @@ install-gui() {
     -o /usr/share/icons/hicolor/512x512/apps/AM-GUI.png
 }
 
-# Installs 'am' bash and fish completion
+# Sets up 'am' completion for 'bash' and 'fish'
 setup-completion() {
   echo -e "\e[1m\e[38;5;214mInstalling 'am' bash completion\e[0m"
 
@@ -160,7 +160,7 @@ setup-completion() {
   echo 'complete -W "$(cat "${XDG_DATA_HOME:-$HOME/.local/share}/AM/list" 2>/dev/null)" am' \
     > "/usr/share/bash-completion/completions/am"
 
-  # Only install fish completion if it's installed
+  # Proceed only if 'fish' is installed
   if command -v fish &> /dev/null; then
     echo -e "\e[1m\e[38;5;214mInstalling 'am' fish completion\e[0m"
 
@@ -177,7 +177,7 @@ EOF
   fi
 }
 
-# Creates & enables systemd auto-update timer for AM
+# Sets up automatic updates for 'am' by creating & enabling a systemd timer & service
 setup-auto-updates() {
   echo -e "\e[1m\e[38;5;214mWriting & enabling 'am' AppImages auto-update timer\e[0m"
 
@@ -215,9 +215,9 @@ EOF
   systemctl --global enable am-update.timer
 }
 
-# Replaces wget2 with wget1 (better progress indicators)
+# Replaces 'wget2' with 'wget1' (better 'am' progress indicators)
 replace-wget() {
-  echo -e "\e[1m\e[38;5;214mReplacing 'wget2' with wget1\e[0m"
+  echo -e "\e[1m\e[38;5;214mReplacing 'wget2' with 'wget1' for better 'am' progress indicators\e[0m"
 
   dnf5 -y remove \
     wget2 wget2-wget
@@ -233,7 +233,7 @@ disable-notifications() {
   touch /etc/skel/.local/share/AM/disable-notifications
 }
 
-# Sets locale to English as a temporary fix for 'AM-GUI'
+# Sets locale to English as a temporary fix for AM-GUI
 set-english-locale() {
   echo -e "\e[1;31mSetting English locale for 'am' to fix AM-GUI\e[0m"
 
