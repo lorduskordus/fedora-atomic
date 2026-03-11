@@ -16,6 +16,5 @@ install:
 
     # KDE Calendar
     - merkuro
-    - kdepim-addons  # System integration
-    - kdepim-runtime # Accounts support
-    - qt6-qtlocation # Missing dependency
+    - kdepim-addons   # System integration
+    - kdepim-runtime  # Accounts support
