@@ -1,5 +1,0 @@
-type: script
-scripts:
-  - common/intel-fix-sound-popping.sh
-  - common/just-local.sh
-  - common/containers-add-wrappers.sh

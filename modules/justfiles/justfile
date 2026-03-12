@@ -1,0 +1,5 @@
+_default:
+    #!/usr/bin/bash
+    /usr/bin/bjust --list --list-heading $'Available commands:\n' --list-prefix $' - '
+
+# Imports

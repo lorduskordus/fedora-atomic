@@ -1,0 +1,5 @@
+modules:
+
+  - from-file: kde/base/config/dnf.yml
+  - from-file: kde/base/config/files.yml
+  - from-file: kde/base/config/scripts.yml

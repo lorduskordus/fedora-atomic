@@ -1,0 +1,5 @@
+type: script
+scripts:
+  - shared/next/intel-fix-sound-popping.sh
+  - shared/next/just-local.sh
+  - shared/next/containers-add-wrappers.sh

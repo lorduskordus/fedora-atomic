@@ -1,0 +1,9 @@
+type: script
+scripts:
+  - shared/base/am-install.sh
+  - shared/base/brew-fish-completions.sh
+  - shared/base/fish-improvements.sh
+  - shared/base/modern-unix-aliases.sh
+  - shared/base/bootc-sudoless.sh
+  - shared/base/micro-wrapper-default.sh
+  - shared/base/brave-enable-flags.sh

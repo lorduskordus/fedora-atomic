@@ -1,0 +1,9 @@
+modules:
+
+  - from-file: shared/base/config.yml
+
+  - from-file: shared/next/config/dnf.yml
+  - from-file: shared/next/config/files.yml
+  - from-file: shared/next/config/justfiles.yml
+  - from-file: shared/next/config/services.yml
+  - from-file: shared/next/config/scripts.yml

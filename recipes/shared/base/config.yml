@@ -1,0 +1,13 @@
+modules:
+
+  - from-file: shared/base/config/kernel.yml
+  - from-file: shared/base/config/kargs.yml
+  - from-file: shared/base/config/dnf.yml
+  - from-file: shared/base/config/brew.yml
+  - from-file: shared/base/config/flatpaks.yml
+  - from-file: shared/base/config/files.yml
+  - from-file: shared/base/config/justfiles.yml
+  - from-file: shared/base/config/hide-app-launchers.yml
+  - from-file: shared/base/config/services.yml
+  - from-file: shared/base/config/scripts.yml
+  - from-file: shared/base/config/signing.yml

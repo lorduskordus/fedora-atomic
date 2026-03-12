@@ -1,0 +1,13 @@
+name: fedora-next-kde-nvidia
+description: Customized Fedora KDE Atomic
+
+base-image: ghcr.io/ublue-os/kinoite-main
+image-version: 43
+
+modules:
+
+  - from-file: shared/next/config.yml
+  - from-file: kde/next/config.yml
+
+  # Temporarily install COSMIC DE
+  - from-file: cosmic/base/config.yml

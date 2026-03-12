@@ -1,9 +1,0 @@
-type: script
-scripts:
-  - common/am-install.sh
-  - common/brew-fish-completions.sh
-  - common/fish-improvements.sh
-  - common/modern-unix-aliases.sh
-  - common/bootc-sudoless.sh
-  - common/micro-wrapper-default.sh
-  - common/brave-enable-flags.sh
