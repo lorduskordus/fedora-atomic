@@ -1,4 +1,4 @@
-name: fedora-base-cosmic
+name: fedora-lenovo-cosmic
 description: Customized Fedora COSMIC Atomic
 
 base-image: ghcr.io/ublue-os/base-main
@@ -6,5 +6,5 @@ image-version: 43
 
 modules:
 
-  - from-file: shared/base/config.yml
-  - from-file: cosmic/base/config.yml
+  - from-file: shared/lenovo/config.yml
+  - from-file: cosmic/lenovo/config.yml

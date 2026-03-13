@@ -1,4 +1,4 @@
-name: fedora-base-kde
+name: fedora-lenovo-kde
 description: Customized Fedora KDE Atomic
 
 base-image: ghcr.io/ublue-os/kinoite-main
@@ -6,5 +6,5 @@ image-version: 43
 
 modules:
 
-  - from-file: shared/base/config.yml
-  - from-file: kde/base/config.yml
+  - from-file: shared/lenovo/config.yml
+  - from-file: kde/lenovo/config.yml

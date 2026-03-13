@@ -8,18 +8,18 @@ on:
         type: string
 
 jobs:
-  base:
-    name: Base
+  lenovo:
+    name: Lenovo
     uses: ./.github/workflows/template-build-image.yml
     secrets: inherit
     with:
-      pretty_name: "Base"
-      recipe: ${{ inputs.desktop }}/base/recipe.yml
+      pretty_name: "Lenovo"
+      recipe: ${{ inputs.desktop }}/lenovo/recipe.yml
 
-  next:
+  next-nvidia:
     name: Next
     uses: ./.github/workflows/template-build-image.yml
     secrets: inherit
     with:
-      pretty_name: "Next"
+      pretty_name: "Next (NVIDIA)"
       recipe: ${{ inputs.desktop }}/next/recipe.yml

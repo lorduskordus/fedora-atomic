@@ -13,56 +13,24 @@
     <br>
 </div>
 
-## Images
-
-### Base (kinda generic)
-
-- ##### COSMIC
-  ```
-  ghcr.io/lorduskordus/fedora-base-cosmic
-  ```
-- ##### COSMIC (NVIDIA)
-  ```
-  ghcr.io/lorduskordus/fedora-base-cosmic-nvidia
-  ```
-- ##### KDE
-  ```
-  ghcr.io/lorduskordus/fedora-base-kde
-  ```
-- ##### KDE (NVIDIA)
-  ```
-  ghcr.io/lorduskordus/fedora-base-kde-nvidia
-  ```
-
-### Next (more opinionated, experimental)
-
-- ##### COSMIC (NVIDIA)
-  ```
-  ghcr.io/lorduskordus/fedora-next-cosmic
-  ```
-- ##### KDE (NVIDIA)
-  ```
-  ghcr.io/lorduskordus/fedora-next-kde
-  ```
-
 ## Installation
 
 To rebase an existing [Fedora Atomic Desktop](https://fedoraproject.org/atomic-desktops) installation to the latest build:
 
 - ##### First rebase to the unsigned image, to get the proper signing keys and policies installed
-  ```
-  bootc switch ghcr.io/lorduskordus/fedora-base-kde:latest
+  ```sh
+  bootc switch ghcr.io/lorduskordus/<IMAGE>
   ```
 - ##### Reboot to complete the rebase
-  ```
+  ```sh
   systemctl reboot
   ```
 - ##### Then rebase to the signed image
-  ```
-  bootc switch --enforce-container-sigpolicy ghcr.io/lorduskordus/fedora-base-kde:latest
+  ```sh
+  bootc switch --enforce-container-sigpolicy ghcr.io/lorduskordus/<IMAGE>
   ```
 - ##### Reboot again to complete the installation
-  ```
+  ```sh
   systemctl reboot
   ```
 
@@ -70,6 +38,6 @@ To rebase an existing [Fedora Atomic Desktop](https://fedoraproject.org/atomic-d
 
 These images are signed with [Sigstore](https://www.sigstore.dev/)'s [cosign](https://github.com/sigstore/cosign). You can verify the signature by downloading the `cosign.pub` file from this repo (under the images folder) and running the following command:
 
-```bash
-cosign verify --key cosign.pub ghcr.io/lorduskordus/fedora-base-kde:latest
+```sh
+cosign verify --key cosign.pub ghcr.io/lorduskordus/<IMAGE>
 ```
