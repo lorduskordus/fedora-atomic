@@ -219,9 +219,15 @@ switch-to-image WITH="bootc":
     IMAGE=$(echo ${CUR_IMAGE_NO_PREFIX} | cut -d'/' -f3 | cut -d':' -f1)
     TAG=$(cut -d':' -f2 <<< ${CUR_IMAGE_NO_PREFIX})
 
-    IMAGE_TYPE=$(cut -d'-' -f1-2 <<< ${IMAGE})
-    for desktop in ${AVAILABLE_DESKTOPS}; do
-        AVAILABLE_IMAGES+="${IMAGE_TYPE}-${desktop} "
+    IMAGE_TYPE=$(cut -d'-' -f1-2 <<< "${IMAGE}")
+    IMAGE_SUFFIX=$(cut -d'-' -f4- <<< "${IMAGE}")
+
+    if [ -n "$IMAGE_SUFFIX" ]; then
+        IMAGE_SUFFIX="-${IMAGE_SUFFIX}"
+    fi
+
+    for desktop in $AVAILABLE_DESKTOPS; do
+        AVAILABLE_IMAGES+="${IMAGE_TYPE}-${desktop}${IMAGE_SUFFIX} "
     done
 
     show_info "Current image:" "Choose your new ${bold}IMAGE${normal}."
