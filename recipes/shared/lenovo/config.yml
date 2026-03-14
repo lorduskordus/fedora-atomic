@@ -3,3 +3,4 @@ modules:
   - from-file: shared/base/config.yml
 
   - from-file: shared/lenovo/config/justfiles.yml
+  - from-file: shared/lenovo/config/scripts.yml
