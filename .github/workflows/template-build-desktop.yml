@@ -23,3 +23,4 @@ jobs:
     with:
       pretty_name: "Next (NVIDIA)"
       recipe: ${{ inputs.desktop }}/next/recipe.yml
+      rechunk_clear_plan: true # Temporary fix for broken NVIDIA builds
