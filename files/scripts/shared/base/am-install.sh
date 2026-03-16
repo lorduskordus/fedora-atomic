@@ -11,6 +11,8 @@
 # Stuff set up
 #  - Automatic updates (systemd timer & service)
 #  - Disables update notifications
+#  - Completion for bash and fish
+#  - Replaces wget2 with wget1 (better status indicators)
 
 set -euo pipefail
 
@@ -48,7 +50,8 @@ install-am-release() {
   echo -e "\e[1m\e[38;5;214mInstalling 'am' (AppImage Manager)\e[0m"
 
   # Get the latest version
-  VER=$(basename $(curl -Ls -o /dev/null -w %{url_effective} https://github.com/ivan-hc/AM/releases/latest))
+  VER=$(basename $(curl -Ls -o /dev/null -w %{url_effective} \
+    https://github.com/ivan-hc/AM/releases/latest))
 
   # Download latest version archive
   curl -fLs --create-dirs \
@@ -92,7 +95,7 @@ install-update-tool() {
 }
 
 # Installs 'sas' (Simple AppImage Sandbox)
-install-sas() {
+install-sandbox() {
   echo -e "\e[1m\e[38;5;214mInstalling 'simple-appimage-sandbox', aka 'sas' sandboxing tool for AppImages\e[0m"
 
   # Download sandbox script (script version avoids SUID libfuse dependency from the AppImage build)
@@ -161,12 +164,12 @@ setup-completion() {
     > "/usr/share/bash-completion/completions/am"
 
   # Proceed only if 'fish' is installed
-  if command -v fish &> /dev/null; then
-    echo -e "\e[1m\e[38;5;214mInstalling 'am' fish completion\e[0m"
+  command -v fish >/dev/null || return 0
 
-    mkdir -p "/usr/share/fish/vendor_completions.d/"
+  echo -e "\e[1m\e[38;5;214mInstalling 'am' fish completion\e[0m"
 
-cat << 'EOF' > "/usr/share/fish/vendor_completions.d/am"
+  mkdir -p "/usr/share/fish/vendor_completions.d/"
+  cat << 'EOF' > "/usr/share/fish/vendor_completions.d/am"
 set data_home "$XDG_DATA_HOME"
 if test -z "$data_home"
     set data_home "$HOME/.local/share"
@@ -174,15 +177,14 @@ end
 complete -c am -f -a "(cat "$data_home/AM/list" 2>/dev/null)"
 EOF
 
-  fi
 }
 
 # Sets up automatic updates for 'am' by creating & enabling a systemd timer & service
 setup-auto-updates() {
   echo -e "\e[1m\e[38;5;214mWriting & enabling 'am' AppImages auto-update timer\e[0m"
 
-# Write systemd user service
-cat << 'EOF' > /usr/lib/systemd/user/am-update.service
+  # Write systemd user service
+  cat << 'EOF' > /usr/lib/systemd/user/am-update.service
 [Unit]
 Description=AM Automatic Update
 Wants=network-online.target
@@ -196,8 +198,8 @@ ExecCondition=/bin/bash -c '[[ "$(busctl get-property org.freedesktop.NetworkMan
 ExecStart=/usr/bin/am update
 EOF
 
-# Write systemd user timer
-cat << 'EOF' > /usr/lib/systemd/user/am-update.timer
+  # Write systemd user timer
+  cat << 'EOF' > /usr/lib/systemd/user/am-update.timer
 [Unit]
 Description=AM Automatic Update Trigger
 
@@ -221,6 +223,7 @@ replace-wget() {
 
   dnf5 -y remove \
     wget2 wget2-wget
+
   dnf5 -y install \
     wget1 wget1-wget
 }
@@ -245,7 +248,7 @@ set-english-locale() {
 install() {
   install-am-release
   install-update-tool
-  install-sas
+  install-sandbox
   install-gui
 
   setup-completion
