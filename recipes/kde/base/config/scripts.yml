@@ -1,3 +1,4 @@
 type: script
 scripts:
   - kde/base/fix-flatpak-nvidia-vulkan.sh
+  - kde/base/install-applet-appgrid.sh
