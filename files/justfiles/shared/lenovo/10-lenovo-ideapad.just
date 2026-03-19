@@ -3,56 +3,87 @@ ideapad-conservation-mode ACTION="prompt":
     #!/usr/bin/env bash
     source /usr/lib/ujust/ujust.sh
 
-    VENDOR=$(cat /sys/class/dmi/id/sys_vendor)
-    if [ "${VENDOR}" != "LENOVO" ]; then
+    # Sets up rootless conservation mode toggling
+    # Can't check if already set up due to permissions on the sudoers.d dir
+    setup-rootless() {
+        if echo "${SUDOERS_LINE}" | /usr/bin/pkexec tee "${SUDOERS_FILE}" &> /dev/null; then
+            echo "Successfuly set up rootless ideapad conservation mode."
+        else
+            echo "Failed to setup rootless ideapad conservation mode."
+        fi
+    }
+
+    # Enables conservation mode
+    enable() {
+        if [ "${CUR_STATE}" == "enabled" ]; then
+            echo "Already enabled."
+            exit 0
+        fi
+
+        if echo 1 | sudo tee ${STATE_FILE} &> /dev/null; then
+            echo "Successfuly enabled."
+        else
+            echo "Failed to enable."
+        fi
+    }
+
+    # Disables conservation mode
+    disable() {
+        if [ "${CUR_STATE}" == "disabled" ]; then
+            echo "Already disabled."
+            exit 0
+        fi
+
+        if echo 0 | sudo tee ${STATE_FILE} &> /dev/null; then
+            echo "Successfuly disabled."
+        else
+            echo "Failed to disable."
+        fi
+    }
+
+    # Get vendor, if not LENOVO, exit
+    if [ "$(cat /sys/class/dmi/id/sys_vendor)" != "LENOVO" ]; then
         echo "This PC is not LENOVO, cannot continue."
-        exit 1
+        exit 0
     fi
 
-    STATE_FILE=/sys/bus/platform/drivers/ideapad_acpi/VPC????\:??/conservation_mode
-    if [ "$(cat ${STATE_FILE})" == "1" ]; then
+    # Get the current state of conservation mode
+    STATE_FILE="/sys/bus/platform/drivers/ideapad_acpi/VPC????:??/conservation_mode"
+    if [ "$(cat ${STATE_FILE} 2> /dev/null)" == "1" ]; then
         CUR_STATE="enabled"
+        CUR_STATE_DISPLAY="${green}${CUR_STATE}${normal}"
     else
         CUR_STATE="disabled"
+        CUR_STATE_DISPLAY="${red}${CUR_STATE}${normal}"
+    fi
+
+    # Prepare sudoers
+    SUDOERS_LINE="ALL ALL=(ALL) NOPASSWD: /usr/bin/tee /sys/bus/platform/drivers/ideapad_acpi/VPC????\\:??/conservation_mode"
+    SUDOERS_DIR="/etc/sudoers.d"
+    SUDOERS_FILENAME="010-ideapad-conservation_mode"
+    SUDOERS_FILE="${SUDOERS_DIR}/${SUDOERS_FILENAME}"
+
+    # Prepare options (except setup-rootless, unfortunate limitation)
+    OPTIONS="setup-rootless "
+    if [ "${CUR_STATE}" == "disabled" ]; then
+        OPTIONS+="enable "
+    fi
+    if [ "${CUR_STATE}" == "enabled" ]; then
+        OPTIONS+="disable "
     fi
 
     OPTION={{ ACTION }}
     if [ "${OPTION}" == "prompt" ]; then
-        echo "Current state: ${CUR_STATE}"
-        OPTION=$(ugum choose setup enable disable)
+        echo "Conservation mode: ${CUR_STATE_DISPLAY}"
+        OPTION=$(ugum choose ${OPTIONS})
     fi
 
-    if [ "${OPTION}" == "setup" ]; then
-        echo "ALL ALL=(ALL) NOPASSWD: /usr/bin/tee ${STATE_FILE}" > /tmp/ideapad
-        if /usr/bin/pkexec install -o root -g root -m 0440 /tmp/ideapad /etc/sudoers.d/ideapad-conservation_mode; then
-            echo "Conservation mode successfuly set up."
-            exit 0
-        else
-            echo "Failed to setup ideapad conservation mode."
-            exit 1
-        fi
+    if [ "${OPTION}" == "setup-rootless" ]; then
+        setup-rootless
     elif [ "${OPTION}" == "enable" ]; then
-        if [ "${CUR_STATE}" == "enabled" ]; then
-            echo "Already enabled."
-            exit 0
-        else
-            if echo 1 | sudo tee ${STATE_FILE} &> /dev/null; then
-                echo "Successfuly enabled."
-            else
-                echo "Failed to enable."
-            fi
-        fi
+        enable
     elif [ "${OPTION}" == "disable" ]; then
-        if [ "${CUR_STATE}" == "disabled" ]; then
-            echo "Already disabled."
-            exit 0
-        else
-            if echo 0 | sudo tee ${STATE_FILE} &> /dev/null; then
-                echo "Successfuly disabled."
-            else
-                echo "Failed to disable."
-            fi
-        fi
+        disable
     else
         echo "No changes applied."
     fi
