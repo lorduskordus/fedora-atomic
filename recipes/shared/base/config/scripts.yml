@@ -7,3 +7,4 @@ scripts:
   - shared/base/bootc-sudoless.sh
   - shared/base/micro-wrapper-default.sh
   - shared/base/brave-enable-flags.sh
+  - shared/base/flatpak-finder-install.sh
