@@ -12,5 +12,7 @@ install:
     - docker-buildx-plugin
     - docker-compose-plugin
 
+    - podman-compose
+
     - syncthing
     - syncthingtray
