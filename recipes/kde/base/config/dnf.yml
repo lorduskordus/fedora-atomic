@@ -9,10 +9,12 @@ repos:
   copr:
     - birkch/Koi
     - matinlotfali/KDE-Rounded-Corners
+    - infinality/kwin-effects-better-blur-dx
 install:
   packages:
     - Koi # Automatic theme switcher
     - kwin-effect-roundcorners
+    - kwin-effects-better-blur-dx
 
     # KDE Calendar
     - merkuro
