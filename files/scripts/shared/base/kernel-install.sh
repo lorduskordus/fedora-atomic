@@ -29,7 +29,7 @@ install-kernel() {
 
 install-nvidia-drivers () {
     echo "- Installing NVIDIA drivers"
-    
+
     export IMAGE_NAME=$(awk -F'/' '{print $3}' <<< "${BASE_IMAGE}" | cut -d'-' -f1)
 
     # curl -fLs "https://raw.githubusercontent.com/ublue-os/main/refs/heads/main/build_files/nvidia-install.sh" | bash
@@ -75,5 +75,11 @@ install () {
 
     build-initramfs
 }
+
+# TEMP for Fedora 44 until 'coreos-stable' is available
+if [ "$(rpm -E %fedora)" = "44" ]; then
+    install "main"
+    exit 0
+fi
 
 install "coreos-stable"

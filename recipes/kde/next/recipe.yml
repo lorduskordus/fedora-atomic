@@ -2,7 +2,7 @@ name: fedora-next-kde-nvidia
 description: Customized Fedora KDE Atomic
 
 base-image: ghcr.io/ublue-os/kinoite-main
-image-version: 43
+image-version: 44
 
 modules:
 

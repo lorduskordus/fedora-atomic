@@ -14,5 +14,13 @@ VER=$(basename $(curl -Ls -o /dev/null -w %{url_effective} \
     | cut -d'v' -f2-)
 
 # Install
+
+# TEMP for Fedora 44
+if [ "$(rpm -E %fedora)" = "44" ]; then
+    dnf5 -y install \
+        ${URL}/releases/download/v${VER}/plasma-applet-appgrid-${VER}-1.fc43.x86_64.rpm
+    exit 0
+fi
+
 dnf5 -y install \
     ${URL}/releases/download/v${VER}/plasma-applet-appgrid-${VER}-1.fc$(rpm -E %fedora).x86_64.rpm
