@@ -36,7 +36,7 @@ To rebase an existing [Fedora Atomic Desktop](https://fedoraproject.org/atomic-d
 
 ## Verification
 
-These images are signed with [Sigstore](https://www.sigstore.dev/)'s [cosign](https://github.com/sigstore/cosign). You can verify the signature by downloading the `cosign.pub` file from this repo (under the images folder) and running the following command:
+These images are signed with [Sigstore](https://www.sigstore.dev/)'s [cosign](https://github.com/sigstore/cosign). You can verify the signature by downloading the `cosign.pub` file from this repository and running the following command:
 
 ```sh
 cosign verify --key cosign.pub ghcr.io/lorduskordus/<IMAGE>
