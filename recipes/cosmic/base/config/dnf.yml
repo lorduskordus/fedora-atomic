@@ -3,8 +3,9 @@ repos:
   cleanup: true
   copr:
     - kordus/cosmic-applets
+    - kordus/cosmic-apps
 install:
   packages:
-    # Clipboard Manager RPMs from my COPR
     - cosmic-ext-applet-clipboard-manager
     - cosmic-applet-clippy-land
+    - snappea
