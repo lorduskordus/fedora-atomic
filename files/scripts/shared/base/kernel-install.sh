@@ -76,10 +76,4 @@ install () {
     build-initramfs
 }
 
-# TEMP for Fedora 44 until 'coreos-stable' is available
-if [ "$(rpm -E %fedora)" = "44" ]; then
-    install "main"
-    exit 0
-fi
-
 install "coreos-stable"
