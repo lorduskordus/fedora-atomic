@@ -8,11 +8,13 @@ repos:
   cleanup: true
   copr:
     - birkch/Koi
+    - scujas/plasma-applet-appgrid
     - matinlotfali/KDE-Rounded-Corners
     - infinality/kwin-effects-better-blur-dx
 install:
   packages:
     - Koi # Automatic theme switcher
+    - plasma-applet-appgrid
     - kwin-effect-roundcorners
     - kwin-effects-better-blur-dx
 
