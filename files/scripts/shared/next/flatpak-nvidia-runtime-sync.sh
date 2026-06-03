@@ -12,8 +12,8 @@ SERVICE_NAME="ublue-nvidia-flatpak-runtime-sync.service"
 SCRIPT_DST="/usr/libexec/${SCRIPT_NAME}"
 SERVICE_DST="/usr/lib/systemd/system/${SERVICE_NAME}"
 
-SCRIPT_URL="https://raw.githubusercontent.com/projectbluefin/common/refs/heads/main/system_files/nvidia${SCRIPT_DST}"
-SERVICE_URL="https://raw.githubusercontent.com/projectbluefin/common/refs/heads/main/system_files/nvidia${SERVICE_DST}"
+SCRIPT_URL="https://raw.githubusercontent.com/ublue-os/aurorafin-shared/refs/heads/main/system_files/nvidia${SCRIPT_DST}"
+SERVICE_URL="https://raw.githubusercontent.com/ublue-os/aurorafin-shared/refs/heads/main/system_files/nvidia${SERVICE_DST}"
 
 echo -e "\e[1m\e[38;5;214mInstalling 'nvidia-flatpak-runtime-sync' script & service\e[0m"
 
