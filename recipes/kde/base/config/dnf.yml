@@ -9,12 +9,14 @@ repos:
   copr:
     - birkch/Koi
     - scujas/plasma-applet-appgrid
+    - deltacopy/plasma6-applets-kara
     - matinlotfali/KDE-Rounded-Corners
     - infinality/kwin-effects-better-blur-dx
 install:
   packages:
     - Koi # Automatic theme switcher
     - plasma-applet-appgrid
+    - plasma6-applets-kara
     - kwin-effect-roundcorners
     - kwin-effects-better-blur-dx
 
