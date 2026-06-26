@@ -76,4 +76,10 @@ install () {
     build-initramfs
 }
 
+# Temporarily use 'main' kernel on Next builds
+if [[ "${IMAGE_NAME}" == *"next"* ]]; then
+    install "main"
+    exit 0
+fi
+
 install "coreos-stable"
