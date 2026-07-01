@@ -14,5 +14,7 @@ install:
 
     - podman-compose
 
+    - virt-manager
+
     - syncthing
     - syncthingtray
