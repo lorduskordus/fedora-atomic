@@ -1,5 +1,6 @@
 modules:
 
   - from-file: cosmic/base/config/cosmic-nightly.yml
+  - from-file: cosmic/base/config/hide-app-launchers.yml
   - from-file: cosmic/base/config/dnf.yml
   - from-file: cosmic/base/config/flatpaks.yml
