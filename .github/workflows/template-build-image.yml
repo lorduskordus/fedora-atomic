@@ -13,10 +13,6 @@ on:
       recipe:
         required: true
         type: string
-      rechunk_clear_plan:
-        required: false
-        type: boolean
-        default: false
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref || github.run_id }}-${{ inputs.working_directory }}/${{ inputs.recipe }}
@@ -38,5 +34,4 @@ jobs:
           retry_push_count: 3
           verify_install: true
           maximize_build_space: true
-          build_chunked_oci: true
-          rechunk_clear_plan: ${{ inputs.rechunk_clear_plan }} # Temporary fix for broken NVIDIA builds
+          chunkah: true
