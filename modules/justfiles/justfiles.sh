@@ -17,7 +17,7 @@ if [ ! -d "${CONFIG_FOLDER}" ]; then
 fi
 
 # If USING_UJUST is specified, validate it
-# else 
+# else
 # Determine ujust usage from the presence of justfile and import line
 if [ "${USING_UJUST}" != "null" ]; then
     if [[ "${USING_UJUST}" != "true" && "${USING_UJUST}" != "false" ]]; then
@@ -37,7 +37,7 @@ fi
 
 # Install just if not present
 echo "Checking if package 'just' is installed"
-if ! rpm -q just &> /dev/null; then
+if ! command -v just &>/dev/null; then
     echo "- Package is not installed, installing..."
     dnf5 install -y just
 else
@@ -51,7 +51,7 @@ if [ "${USING_UJUST}" == "false" ]; then
     IMPORT_FILE="${DEST_FOLDER}/justfile"
 
     mkdir -p "${DEST_FOLDER}"
-    
+
     if [ ! -f "${IMPORT_FILE}" ]; then
         cp "${MODULE_FOLDER}/justfile" "${IMPORT_FILE}"
     fi
@@ -61,7 +61,7 @@ if [ "${USING_UJUST}" == "false" ]; then
     fi
 else
     IMPORT_FILE="/usr/share/ublue-os/just/60-custom.just"
-    
+
     if [ ! -f "${IMPORT_FILE}" ]; then
         mkdir -p "$(dirname "${IMPORT_FILE}")"
         touch "${IMPORT_FILE}"
@@ -123,7 +123,7 @@ for SELECTED in "${CONFIG_SELECTION[@]}"; do
 
         # Create an import line
         IMPORT_LINE="import \"${DEST_FOLDER}/${JUSTFILE}\""
-        
+
         # Skip the import line if it already exists, else append it to import file
         if grep -wq "${IMPORT_LINE}" "${IMPORT_FILE}"; then
             echo "- Skipped: '${IMPORT_LINE}' (already present)"
@@ -135,3 +135,23 @@ for SELECTED in "${CONFIG_SELECTION[@]}"; do
     done
 
 done
+
+# Ensure uBlue's stuff is included
+if [[ -x /usr/bin/ugum ]] && [[ -d /usr/lib/ujust ]]; then
+    echo "Universal Blue justfile deps are already installed"
+else
+    echo "Installing Universal Blue justfile deps"
+
+    curl -fLs --create-dirs \
+        https://github.com/ublue-os/packages/archive/refs/heads/main.zip \
+        -o /tmp/ublue-config/packages.zip
+
+    unzip -q /tmp/ublue-config/packages.zip -d /tmp/ublue-config/
+    rm /tmp/ublue-config/packages.zip
+
+    cp /tmp/ublue-config/packages-main/packages/ublue-os-just/src/ugum /usr/bin/ugum
+    chmod 755 /usr/bin/ugum
+
+    mkdir -p /usr/lib/ujust/
+    cp /tmp/ublue-config/packages-main/packages/ublue-os-just/src/lib-ujust/* /usr/lib/ujust/
+fi
