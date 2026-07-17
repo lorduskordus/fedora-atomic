@@ -76,9 +76,9 @@ install () {
     build-initramfs
 }
 
-# Temporarily use 'main' kernel on Next builds
+# Temporarily use 'ogc' kernel on Next builds
 if [[ "${IMAGE_NAME}" == *"next"* ]]; then
-    install "main"
+    install "ogc"
     exit 0
 fi
 
