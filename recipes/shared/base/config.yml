@@ -1,5 +1,6 @@
 modules:
 
+  - from-file: shared/base/config/core.yml
   - from-file: shared/base/config/kernel.yml
   - from-file: shared/base/config/kargs.yml
   - from-file: shared/base/config/dnf.yml

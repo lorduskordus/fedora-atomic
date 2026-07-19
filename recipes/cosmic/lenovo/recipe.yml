@@ -1,7 +1,7 @@
 name: fedora-lenovo-cosmic
 description: Customized Fedora COSMIC Atomic
 
-base-image: ghcr.io/ublue-os/base-main
+base-image: quay.io/fedora-ostree-desktops/cosmic-atomic
 image-version: 44
 
 modules:

@@ -8,7 +8,7 @@
         </a>
     </h1>
     <h3>
-        Customized <a href="https://fedoraproject.org/atomic-desktops">Fedora Atomic Desktop</a> built with <a href="https://blue-build.org">BlueBuild</a> on top of <a href="https://universal-blue.org">Universal Blue</a>
+        Customized <a href="https://fedoraproject.org/atomic-desktops">Fedora Atomic Desktop</a> images built with <a href="https://blue-build.org">BlueBuild</a>
     </h3>
     <br>
 </div>
