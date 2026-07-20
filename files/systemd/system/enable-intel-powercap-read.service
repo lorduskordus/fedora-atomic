@@ -1,12 +1,13 @@
 [Unit]
-Description=Make Intel CPU's power readable
+Description=Make Intel CPU's power property readable
 After=systemd-udevd.service
 After=tuned.service
 ConditionPathExists=/sys/class/powercap/intel-rapl:0/energy_uj
 
 [Service]
 Type=oneshot
-ExecStart=chmod a+r /sys/class/powercap/intel-rapl:0/energy_uj
+ExecStart=/usr/bin/chmod a+r /sys/class/powercap/intel-rapl:0/energy_uj
+ExecStop=/usr/bin/chmod a-r /sys/class/powercap/intel-rapl:0/energy_uj
 RemainAfterExit=yes
 
 [Install]
