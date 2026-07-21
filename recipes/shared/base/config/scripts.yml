@@ -1,6 +1,7 @@
 type: script
 scripts:
   - shared/base/am-install.sh
+  - shared/base/tuned-disable-cpu-boost.sh
   - shared/base/brew-fish-completions.sh
   - shared/base/fish-improvements.sh
   - shared/base/modern-unix-aliases.sh
