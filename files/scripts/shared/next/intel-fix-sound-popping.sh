@@ -19,12 +19,12 @@ EOF
 TUNED_DIR="/etc/tuned"
 mkdir -p "${TUNED_DIR}"
 cat << 'EOF' > "${TUNED_DIR}/post_loaded_profile"
-overrides
+intel-disable-powersave
 EOF
 
-TUNED_OVERRIDES="${TUNED_DIR}/profiles/overrides"
-mkdir -p "${TUNED_OVERRIDES}"
-cat << 'EOF' > "${TUNED_OVERRIDES}/tuned.conf"
+TUNED_OVERRIDE="${TUNED_DIR}/profiles/intel-disable-powersave"
+mkdir -p "${TUNED_OVERRIDE}"
+cat << 'EOF' > "${TUNED_OVERRIDE}/tuned.conf"
 [audio]
 timeout=0
 EOF

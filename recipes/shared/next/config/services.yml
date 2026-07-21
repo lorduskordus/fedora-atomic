@@ -1,6 +1,6 @@
 type: systemd
 system:
   enabled:
-    - enable-intel-powercap-read.service
+    - intel-enable-powercap-read.service
     - docker.service
     - libvirtd.service
