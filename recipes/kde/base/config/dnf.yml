@@ -12,6 +12,7 @@ repos:
     - deltacopy/plasma6-applets-kara
     - matinlotfali/KDE-Rounded-Corners
     - infinality/kwin-effects-better-blur-dx
+    - greve/opencloud-desktop
 install:
   packages:
     - Koi # Automatic theme switcher
@@ -19,6 +20,7 @@ install:
     - plasma6-applets-kara
     - kwin-effect-roundcorners
     - kwin-effects-better-blur-dx
+    - opencloud-desktop-dolphin
 
     # KDE Calendar
     - merkuro
