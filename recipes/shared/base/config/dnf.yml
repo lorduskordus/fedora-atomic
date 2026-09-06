@@ -23,6 +23,8 @@ install:
     - qemu     # Pulls 'edk2-ovmf' as dependency
     - libvirt  # Pulls 'libvirt-daemon-config-network' as dependency
 
+    - davfs2   # Mount WebDAV remotes as a disk
+
     - micro
     - fish
     - bat
