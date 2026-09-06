@@ -17,4 +17,4 @@ install:
     - virt-manager
 
     - syncthing
-    - syncthingtray
+    - syncthingtray-qt6

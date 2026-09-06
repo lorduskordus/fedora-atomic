@@ -1,0 +1,9 @@
+type: dnf
+repos:
+  cleanup: true
+  files:
+    - https://download.opensuse.org/repositories/home:mkittler/Fedora_%OS_VERSION%/home:mkittler.repo
+install:
+  packages:
+    - syncthingfileitemaction-qt6 # Dolphin integration
+    - syncthingplasmoid-qt6
