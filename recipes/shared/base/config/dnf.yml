@@ -13,7 +13,6 @@ repos:
     - https://pkgs.tailscale.com/stable/fedora/tailscale.repo
   copr:
     - alternateved/eza
-    - greve/opencloud-desktop
 install:
   packages:
     - rsms-inter-fonts
@@ -33,5 +32,4 @@ install:
     - ddcutil
 
     - nm-connection-editor-desktop
-    - opencloud-desktop
     - tailscale

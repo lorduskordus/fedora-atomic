@@ -14,6 +14,8 @@ repos:
     - infinality/kwin-effects-better-blur-dx
     - greve/opencloud-desktop
 install:
+  exclude:
+    - opencloud-desktop # A weak dependency, using AppImage instead
   packages:
     - Koi # Automatic theme switcher
     - plasma-applet-appgrid
