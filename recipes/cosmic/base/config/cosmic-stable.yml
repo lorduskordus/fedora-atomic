@@ -5,7 +5,7 @@ group-install:
 install:
   packages:
     # Missing in 'cosmic-desktop'
-    - cosmic-monitor
+    - cosmic-osk
 
     # Missing dependencies
     - gvfs-mtp
