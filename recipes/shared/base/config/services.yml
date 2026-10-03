@@ -1,6 +1,10 @@
 type: systemd
+user:
+  enabled:
+    - flatpak-user-update.timer
 system:
   masked:
     - rpm-ostreed-automatic.timer
   enabled:
     - bootc-fetch-apply-updates.timer
+    - flatpak-system-update.timer
