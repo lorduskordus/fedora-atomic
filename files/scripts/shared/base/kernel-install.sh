@@ -52,33 +52,36 @@ install () {
 
     INFO_STRING="Installing kernel (${AKMODS_FLAVOR})"
 
-    if [[ "${IMAGE_NAME}" == *"nvidia-closed"* ]]; then
-        INFO_STRING+=" and NVIDIA drivers (closed)"
-        AKMODS_TYPE="akmods-nvidia"
-        NEEDS_NVIDIA=1
-    elif [[ "${IMAGE_NAME}" == *"nvidia"* ]]; then
-        INFO_STRING+=" and NVIDIA drivers (open)"
-        AKMODS_TYPE="akmods-nvidia-open"
-        NEEDS_NVIDIA=1
-    else
-        AKMODS_TYPE="akmods"
-        NEEDS_NVIDIA=0
-    fi
+    case "${IMAGE_NAME}" in
+        *nvidia-closed*)
+            INFO_STRING+=" and NVIDIA drivers (closed)"
+            AKMODS_TYPE="akmods-nvidia"
+            NEEDS_NVIDIA=1
+            ;;
+        *nvidia*)
+            INFO_STRING+=" and NVIDIA drivers (open)"
+            AKMODS_TYPE="akmods-nvidia-open"
+            NEEDS_NVIDIA=1
+            ;;
+        *)
+            AKMODS_TYPE="akmods"
+            NEEDS_NVIDIA=0
+            ;;
+    esac
 
     echo "${INFO_STRING}"
 
     install-kernel
 
-    if [[ "${NEEDS_NVIDIA}" -eq 1 ]]; then
+    if (( NEEDS_NVIDIA )); then
         install-nvidia-drivers
     fi
 
     build-initramfs
 }
 
-# Temporarily use 'ogc' kernel on Next builds
 if [[ "${IMAGE_NAME}" == *"next"* ]]; then
-    install "ogc"
+    install "main"
     exit 0
 fi
 
