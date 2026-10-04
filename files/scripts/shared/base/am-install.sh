@@ -183,8 +183,8 @@ EOF
 setup-auto-updates() {
   echo -e "\e[1m\e[38;5;214mWriting & enabling 'am' AppImages auto-update timer\e[0m"
 
-  # Write systemd user service
-  cat << 'EOF' > /usr/lib/systemd/user/am-update.service
+  # Write systemd service
+  cat << 'EOF' > /usr/lib/systemd/system/am-system-update.service
 [Unit]
 Description=AM Automatic Update
 Wants=network-online.target
@@ -194,27 +194,27 @@ After=network-online.target
 Type=oneshot
 Environment="NO_COLOR=1"
 ExecCondition=/bin/bash -c 'if ps aux | grep -v grep | grep -E -q " /sbin/am | /bin/am | /usr/sbin/am | /usr/bin/am | am "; then exit 1; else exit 0; fi'
-ExecCondition=/bin/bash -c '[[ "$(busctl get-property org.freedesktop.NetworkManager /org/freedesktop/NetworkManager org.freedesktop.NetworkManager Metered | cut -c 3-)" == @(2|4) ]]'
+# ExecCondition=/bin/bash -c '[[ "$(busctl get-property org.freedesktop.NetworkManager /org/freedesktop/NetworkManager org.freedesktop.NetworkManager Metered | cut -c 3-)" == @(2|4) ]]'
 ExecStart=/usr/bin/am update
 EOF
 
-  # Write systemd user timer
-  cat << 'EOF' > /usr/lib/systemd/user/am-update.timer
+  # Write systemd timer
+  cat << 'EOF' > /usr/lib/systemd/system/am-system-update.timer
 [Unit]
 Description=AM Automatic Update Trigger
 
 [Timer]
 RandomizedDelaySec=10m
 OnBootSec=2m
-OnCalendar=*-*-* 4:00:00
+OnCalendar=*-*-* 18:00
 Persistent=true
 
 [Install]
 WantedBy=timers.target
 EOF
 
-  # Enable timer globally
-  systemctl --global enable am-update.timer
+  # Enable timer
+  systemctl enable am-system-update.timer
 }
 
 # Replaces 'wget2' with 'wget1' (better 'am' progress indicators)
