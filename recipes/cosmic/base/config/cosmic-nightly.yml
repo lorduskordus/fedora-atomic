@@ -8,7 +8,7 @@ install:
     - cosmic-desktop
 
     # Missing in 'cosmic-desktop'
-    - cosmic-osk
+    - cosmic-viewer
 
     # Missing dependencies
     - gnome-keyring-pam # Pulls 'gnome-keyring'
