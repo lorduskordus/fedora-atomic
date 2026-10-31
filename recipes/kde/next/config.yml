@@ -1,5 +1,3 @@
 modules:
 
   - from-file: kde/base/config.yml
-
-  - from-file: kde/next/config/dnf.yml

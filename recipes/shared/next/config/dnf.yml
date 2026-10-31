@@ -3,7 +3,6 @@ repos:
   cleanup: true
   files:
     - https://download.docker.com/linux/fedora/docker-ce.repo
-    - https://download.opensuse.org/repositories/home:mkittler/Fedora_%OS_VERSION%/home:mkittler.repo
 install:
   packages:
     - docker-ce
@@ -17,4 +16,3 @@ install:
     - virt-manager
 
     - syncthing
-    - syncthingtray-qt6
