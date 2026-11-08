@@ -24,7 +24,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Build
-        uses: blue-build/github-action@v1.13.0
+        uses: blue-build/github-action@v1.13
         with:
           recipe: ${{ inputs.recipe }}
           working_directory: ${{ inputs.working_directory }}
@@ -32,7 +32,8 @@ jobs:
           registry_token: ${{ github.token }}
           pr_event_number: ${{ github.event.number || '' }}
           maximize_build_space: true
-          verify_install: false # Temporary false to fix builds
+          verify_install: true
           chunkah: true
           max_layers: 256
           retry_push_count: 3
+          cli_version: v0.9.41 # Temporary to fix builds
