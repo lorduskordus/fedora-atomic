@@ -36,4 +36,3 @@ jobs:
           chunkah: true
           max_layers: 256
           retry_push_count: 3
-          cli_version: v0.9.41 # Temporary to fix builds
