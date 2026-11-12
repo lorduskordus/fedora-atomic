@@ -24,7 +24,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Build
-        uses: blue-build/github-action@v1.13
+        uses: blue-build/github-action@v1.14
         with:
           recipe: ${{ inputs.recipe }}
           working_directory: ${{ inputs.working_directory }}
